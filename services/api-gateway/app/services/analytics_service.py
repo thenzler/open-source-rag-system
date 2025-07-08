@@ -1,5 +1,6 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
+from ..models.queries import QueryLog
 from datetime import datetime
 
 
@@ -14,8 +15,18 @@ class AnalyticsService:
         db: AsyncSession
     ):
         """Log a query for analytics."""
-        # Mock implementation
-        pass
+        query_log = QueryLog(
+            query=query,
+            user_id=user_id,
+            response_time_ms=response.get("processing_time_ms", 0),
+            total_sources=response.get("total_sources", 0),
+            confidence_score=response.get("confidence_score"),
+            retrieval_strategy=response.get("retrieval_strategy"),
+            created_at=datetime.utcnow()
+        )
+        
+        db.add(query_log)
+        await db.commit()
     
     async def get_system_stats(self, db: AsyncSession) -> Dict[str, Any]:
         """Get system statistics."""
@@ -29,36 +40,35 @@ class AnalyticsService:
             },
             "chunks": {
                 "total": 0,
-                "average_per_document": 0.0,
+                "average_per_document": 0,
                 "average_length_chars": 0
             },
             "queries": {
                 "total_today": 0,
                 "total_this_week": 0,
-                "average_response_time_ms": 0.0,
+                "average_response_time_ms": 0,
                 "most_common_topics": []
             },
             "storage": {
                 "documents_size_bytes": 0,
                 "vector_index_size_bytes": 0,
                 "database_size_bytes": 0,
-                "available_space_bytes": 1000000000
-            },
-            "system_health": {}
+                "available_space_bytes": 0
+            }
         }
     
     async def get_query_analytics(
         self,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: str = None,
+        end_date: str = None,
         granularity: str = "day",
         db: AsyncSession = None
     ) -> Dict[str, Any]:
-        """Get query analytics for a time period."""
+        """Get query analytics."""
         return {
             "period": {
-                "start_date": start_date,
-                "end_date": end_date,
+                "start": start_date,
+                "end": end_date,
                 "granularity": granularity
             },
             "metrics": [],

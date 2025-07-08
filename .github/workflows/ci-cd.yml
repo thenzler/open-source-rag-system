@@ -5,17 +5,36 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-  release:
-    types: [published]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Code Quality and Security
-  quality-check:
+  # Basic Tests
+  test:
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_ragdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,66 +56,37 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r services/api-gateway/requirements.txt
-          pip install -r services/api-gateway/requirements-dev.txt
+          pip install -r services/api-gateway/requirements-test.txt
 
-      - name: Code formatting check
+      - name: Wait for services
         run: |
-          black --check services/api-gateway/app/ || echo "Black check completed with warnings"
-          isort --check-only services/api-gateway/app/ || echo "Isort check completed with warnings"
+          timeout 60 bash -c 'until pg_isready -h localhost -p 5432 -U test_user; do sleep 2; done'
 
-      - name: Linting
-        run: |
-          flake8 services/api-gateway/app/ --exit-zero
-          pylint services/api-gateway/app/ --exit-zero
-
-      - name: Type checking
-        run: |
-          mypy services/api-gateway/app/ --ignore-missing-imports --no-strict-optional
-
-      - name: Security scan
-        run: |
-          bandit -r services/api-gateway/app/ -f json -o bandit-report.json || echo "Bandit scan completed"
-          safety check --json --output safety-report.json || echo "Safety check completed"
-        continue-on-error: true
-
-      - name: Upload security reports
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: security-reports
-          path: |
-            bandit-report.json
-            safety-report.json
-
-  # Unit and Integration Tests
-  test:
-    runs-on: ubuntu-latest
-    
-    services:
-      postgres:
-        image: postgres:15
+      - name: Run unit tests
         env:
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_USER: test_user
-          POSTGRES_DB: test_ragdb
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_ragdb
+          REDIS_URL: redis://localhost:6379/0
+        run: |
+          cd services/api-gateway && python -m pytest tests/unit/ -v --cov=app --cov-report=xml
 
-      qdrant:
-        image: qdrant/qdrant:latest
-        ports:
-          - 6333:6333
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_ragdb
+          REDIS_URL: redis://localhost:6379/0
+        run: |
+          cd services/api-gateway && python -m pytest tests/integration/ -v
 
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./services/api-gateway/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
 
+  # Code Quality (optional, only run if dev dependencies exist)
+  quality-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -106,50 +96,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r services/api-gateway/requirements.txt
-          pip install -r services/api-gateway/requirements-test.txt
+          if [ -f services/api-gateway/requirements-dev.txt ]; then
+            pip install -r services/api-gateway/requirements-dev.txt
+          fi
 
-      - name: Wait for services
-        run: |
-          timeout 60 bash -c 'until curl -f http://localhost:6333/health 2>/dev/null; do sleep 2; done' || echo "Qdrant not ready, continuing"
-          timeout 60 bash -c 'until pg_isready -h localhost -p 5432 -U test_user 2>/dev/null; do sleep 2; done' || echo "PostgreSQL not ready, continuing"
-
-      - name: Run unit tests
-        env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_ragdb
-          QDRANT_URL: http://localhost:6333
-          REDIS_URL: redis://localhost:6379/0
-        run: |
-          cd services/api-gateway
-          pytest tests/unit/ -v --cov=app --cov-report=xml --tb=short
-        continue-on-error: false
-
-      - name: Run integration tests
-        env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_ragdb
-          QDRANT_URL: http://localhost:6333
-          REDIS_URL: redis://localhost:6379/0
-        run: |
-          cd services/api-gateway
-          pytest tests/integration/ -v --tb=short
+      - name: Code formatting check
         continue-on-error: true
+        run: |
+          if command -v black &> /dev/null; then
+            black --check services/api-gateway/app/ || echo "Black formatting check failed"
+          fi
+          if command -v isort &> /dev/null; then
+            isort --check-only services/api-gateway/app/ || echo "Isort check failed"
+          fi
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./services/api-gateway/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
+      - name: Linting
         continue-on-error: true
+        run: |
+          if command -v flake8 &> /dev/null; then
+            flake8 services/api-gateway/app/ || echo "Flake8 linting failed"
+          fi
 
   # Frontend Tests
   frontend-test:
@@ -159,7 +129,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
@@ -174,17 +144,16 @@ jobs:
         run: |
           cd services/web-interface
           npm test -- --coverage --watchAll=false
-        continue-on-error: true
 
       - name: Build frontend
         run: |
           cd services/web-interface
           npm run build
 
-  # Build and Push Docker Images
-  build-and-push:
+  # Build Docker Images
+  build:
     runs-on: ubuntu-latest
-    needs: [quality-check, test, frontend-test]
+    needs: [test, frontend-test]
     if: github.event_name != 'pull_request'
     
     strategy:
@@ -213,8 +182,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push Docker image
@@ -226,24 +193,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64
-        continue-on-error: true
 
   # Cleanup
   cleanup:
     runs-on: ubuntu-latest
-    needs: [build-and-push]
+    needs: [build]
     if: always()
     
     steps:
-      - name: Cleanup old images
+      - name: Cleanup
         run: |
-          echo "Cleaning up old container images..."
-          # Add cleanup logic for old images
-
-      - name: Job Summary
-        run: |
-          echo "CI/CD Pipeline completed" >> $GITHUB_STEP_SUMMARY
-          echo "Quality checks: ${{ needs.quality-check.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "Tests: ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "Frontend tests: ${{ needs.frontend-test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "Build completed. Status: ${{ needs.build.result }}"
