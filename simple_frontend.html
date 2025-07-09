@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple RAG System</title>
+    <title>Simple RAG System with Ollama LLM</title>
     <style>
         * {
             margin: 0;
@@ -185,7 +185,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🤖 Simple RAG System</h1>
+        <h1>🤖 Simple RAG System with Ollama LLM</h1>
         
         <!-- Upload Section -->
         <div class="card">
@@ -205,8 +205,25 @@
             <h2>🔍 Search Documents</h2>
             <div class="search-section">
                 <input type="text" class="search-input" id="searchInput" placeholder="Enter your question here..." onkeypress="handleSearchKeyPress(event)">
-                <button class="btn" onclick="searchDocuments()">Search</button>
+                
+                <div style="margin: 10px 0;">
+                    <label>
+                        <input type="radio" name="searchMode" value="enhanced" checked> 
+                        🤖 AI Generated Answer (with Ollama)
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="searchMode" value="vector"> 
+                        📄 Document Chunks (vector search only)
+                    </label>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="searchDocuments()">Search</button>
+                    <button class="btn" onclick="checkSystemStatus()" style="background-color: #27ae60;">Check System Status</button>
+                </div>
             </div>
+            <div id="systemStatus"></div>
             <div id="searchResults"></div>
         </div>
 
@@ -274,24 +291,41 @@
                 return;
             }
 
-            resultsDiv.innerHTML = '<div class="loading">Searching documents...</div>';
+            // Get selected search mode
+            const searchMode = document.querySelector('input[name="searchMode"]:checked').value;
+            const isEnhanced = searchMode === 'enhanced';
+            
+            const loadingText = isEnhanced ? 
+                'Generating AI answer (this may take a few seconds)...' : 
+                'Searching documents...';
+            
+            resultsDiv.innerHTML = `<div class="loading">${loadingText}</div>`;
 
             try {
-                const response = await fetch(`${API_BASE}/api/v1/query`, {
+                const endpoint = isEnhanced ? 
+                    `${API_BASE}/api/v1/query/enhanced` : 
+                    `${API_BASE}/api/v1/query`;
+                
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         query: query,
-                        top_k: 5
+                        top_k: 5,
+                        use_llm: isEnhanced
                     })
                 });
 
                 const result = await response.json();
                 
                 if (response.ok) {
-                    displaySearchResults(result);
+                    if (isEnhanced) {
+                        displayEnhancedResults(result);
+                    } else {
+                        displaySearchResults(result);
+                    }
                 } else {
                     showSearchResults(`Error: ${result.detail}`, 'error');
                 }
@@ -300,7 +334,7 @@
             }
         }
 
-        // Display search results
+        // Display search results (legacy vector search)
         function displaySearchResults(result) {
             const resultsDiv = document.getElementById('searchResults');
             
@@ -310,7 +344,7 @@
             }
 
             let html = '<div class="results">';
-            html += `<h3>Found ${result.total_results} results for "${result.query}"</h3>`;
+            html += `<h3>📄 Found ${result.total_results} document chunks for "${result.query}"</h3>`;
             
             result.results.forEach(item => {
                 html += `
@@ -324,6 +358,120 @@
             
             html += '</div>';
             resultsDiv.innerHTML = html;
+        }
+
+        // Display enhanced results (LLM generated)
+        function displayEnhancedResults(result) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            let html = '<div class="results">';
+            
+            // Method indicator
+            const methodText = {
+                'llm_generated': '🤖 AI Generated Answer',
+                'vector_search': '📄 Document Search Results',
+                'vector_search_fallback': '📄 Document Search (LLM unavailable)',
+                'no_documents': '⚠️ No Documents',
+                'no_results': '❌ No Results'
+            };
+            
+            const method = methodText[result.method] || result.method;
+            html += `<div style="color: #2c3e50; font-weight: bold; margin-bottom: 10px;">${method}</div>`;
+            
+            // Show processing time
+            if (result.processing_time) {
+                html += `<div style="color: #7f8c8d; font-size: 12px; margin-bottom: 15px;">
+                    Processing time: ${result.processing_time.toFixed(2)}s
+                </div>`;
+            }
+            
+            // Main answer
+            html += `<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3498db;">
+                <h3 style="margin: 0 0 10px 0; color: #2c3e50;">Answer for: "${result.query}"</h3>
+                <div style="line-height: 1.6; color: #333; white-space: pre-wrap;">${result.answer}</div>
+            </div>`;
+            
+            // Sources
+            if (result.sources && result.sources.length > 0) {
+                html += `<h4>📚 Sources (${result.total_sources})</h4>`;
+                result.sources.forEach((source, index) => {
+                    html += `
+                        <div class="result-item" style="margin-bottom: 10px;">
+                            <div class="result-title">📄 ${source.source_document}</div>
+                            <div class="result-content">${source.content}</div>
+                            <div class="result-score">Similarity: ${(source.similarity_score * 100).toFixed(1)}%</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        // Check system status
+        async function checkSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            statusDiv.innerHTML = '<div class="loading">Checking system status...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/status`);
+                const status = await response.json();
+                
+                if (response.ok) {
+                    displaySystemStatus(status);
+                } else {
+                    statusDiv.innerHTML = '<div class="status error">Error checking system status</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="status error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Display system status
+        function displaySystemStatus(status) {
+            const statusDiv = document.getElementById('systemStatus');
+            
+            let html = '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">';
+            html += '<h4 style="margin: 0 0 10px 0;">🔧 System Status</h4>';
+            
+            // Overall status
+            const statusColor = status.status === 'healthy' ? '#27ae60' : '#e74c3c';
+            html += `<div style="color: ${statusColor}; font-weight: bold;">Status: ${status.status.toUpperCase()}</div>`;
+            
+            // Features
+            html += '<div style="margin: 10px 0;"><strong>Features:</strong></div>';
+            html += '<ul style="margin: 5px 0 0 20px;">';
+            html += `<li>Vector Search: ${status.features.vector_search ? '✅' : '❌'}</li>`;
+            html += `<li>LLM Generation: ${status.features.llm_generation ? '✅' : '❌'}</li>`;
+            html += `<li>Document Processing: ${status.features.document_processing ? '✅' : '❌'}</li>`;
+            html += '</ul>';
+            
+            // Statistics
+            html += '<div style="margin: 10px 0;"><strong>Statistics:</strong></div>';
+            html += '<ul style="margin: 5px 0 0 20px;">';
+            html += `<li>Documents: ${status.statistics.documents_uploaded}</li>`;
+            html += `<li>Text Chunks: ${status.statistics.total_chunks}</li>`;
+            html += `<li>Embeddings: ${status.statistics.embeddings_created}</li>`;
+            html += '</ul>';
+            
+            // Ollama status
+            if (status.ollama) {
+                html += '<div style="margin: 10px 0;"><strong>Ollama LLM:</strong></div>';
+                if (status.ollama.available) {
+                    html += `<div style="color: #27ae60;">✅ Available (${status.ollama.model})</div>`;
+                    if (status.ollama.models && status.ollama.models.length > 0) {
+                        html += `<div style="font-size: 12px; color: #7f8c8d;">Models: ${status.ollama.models.join(', ')}</div>`;
+                    }
+                } else {
+                    html += `<div style="color: #e74c3c;">❌ ${status.ollama.error || 'Not available'}</div>`;
+                }
+            }
+            
+            html += `<div style="font-size: 11px; color: #7f8c8d; margin-top: 10px;">Last checked: ${new Date().toLocaleTimeString()}</div>`;
+            html += '</div>';
+            
+            statusDiv.innerHTML = html;
         }
 
         // Load documents list
@@ -416,6 +564,7 @@
         // Load documents on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadDocuments();
+            checkSystemStatus(); // Auto-check system status on load
         });
     </script>
 </body>

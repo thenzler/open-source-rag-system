@@ -4,6 +4,7 @@ Simple FastAPI server for document uploads and basic RAG functionality
 """
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import List, Optional, Dict
 import logging
@@ -30,6 +31,14 @@ try:
 except ImportError as e:
     print(f"Some dependencies not installed: {e}")
     PDF_SUPPORT = False
+
+# Ollama integration
+try:
+    from ollama_client import get_ollama_client
+    OLLAMA_SUPPORT = True
+except ImportError as e:
+    print(f"Ollama client not available: {e}")
+    OLLAMA_SUPPORT = False
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -71,6 +80,23 @@ except Exception as e:
     logger.error(f"Failed to load embedding model: {e}")
     embedding_model = None
 
+# Initialize Ollama client
+ollama_client = None
+if OLLAMA_SUPPORT:
+    try:
+        ollama_client = get_ollama_client()
+        if ollama_client.is_available():
+            logger.info(f"Ollama client initialized successfully with model: {ollama_client.model}")
+        else:
+            logger.warning("Ollama client initialized but not available")
+    except Exception as e:
+        logger.error(f"Failed to initialize Ollama client: {e}")
+        ollama_client = None
+
+# Configuration
+USE_LLM_DEFAULT = True  # Try to use LLM by default
+MAX_CONTEXT_LENGTH = 4000  # Maximum context length for LLM
+
 class DocumentResponse(BaseModel):
     id: int
     filename: str
@@ -81,11 +107,20 @@ class DocumentResponse(BaseModel):
 class QueryRequest(BaseModel):
     query: str
     top_k: Optional[int] = 5
+    use_llm: Optional[bool] = None  # None = use default, True/False = override
 
 class QueryResponse(BaseModel):
     query: str
     results: List[dict]
     total_results: int
+
+class LLMQueryResponse(BaseModel):
+    query: str
+    answer: str
+    method: str  # "llm_generated" or "vector_search"
+    sources: List[dict]
+    total_sources: int
+    processing_time: Optional[float] = None
 
 # Document processing functions
 def extract_text_from_pdf(file_path: str) -> str:
@@ -199,6 +234,85 @@ def find_similar_chunks(query: str, top_k: int = 5) -> List[dict]:
         logger.error(f"Error finding similar chunks: {e}")
         return []
 
+def prepare_context_for_llm(similar_chunks: List[dict], max_length: int = MAX_CONTEXT_LENGTH) -> str:
+    """
+    Prepare context string for LLM from similar chunks
+    
+    Args:
+        similar_chunks: List of similar chunks with metadata
+        max_length: Maximum character length for context
+    
+    Returns:
+        str: Formatted context string
+    """
+    if not similar_chunks:
+        return ""
+    
+    context_parts = []
+    current_length = 0
+    
+    for chunk_data in similar_chunks:
+        if chunk_data['chunk_id'] < len(document_chunks):
+            chunk_info = document_chunks[chunk_data['chunk_id']]
+            
+            # Format: [Document: filename] content
+            chunk_text = f"[Document: {chunk_info['filename']}]\n{chunk_info['text']}\n"
+            
+            # Check if adding this chunk would exceed max length
+            if current_length + len(chunk_text) > max_length:
+                break
+            
+            context_parts.append(chunk_text)
+            current_length += len(chunk_text)
+    
+    return "\n".join(context_parts)
+
+def generate_llm_answer(query: str, context: str) -> Optional[str]:
+    """
+    Generate answer using Ollama LLM
+    
+    Args:
+        query: User's question
+        context: Prepared context from documents
+    
+    Returns:
+        Optional[str]: Generated answer or None if failed
+    """
+    if not ollama_client or not ollama_client.is_available():
+        logger.warning("Ollama not available for answer generation")
+        return None
+    
+    try:
+        answer = ollama_client.generate_answer(query, context)
+        return answer
+    except Exception as e:
+        logger.error(f"Error generating LLM answer: {e}")
+        return None
+
+def format_sources_for_response(similar_chunks: List[dict]) -> List[dict]:
+    """
+    Format source information for API response
+    
+    Args:
+        similar_chunks: List of similar chunks with metadata
+    
+    Returns:
+        List[dict]: Formatted source information
+    """
+    sources = []
+    for chunk_data in similar_chunks:
+        if chunk_data['chunk_id'] < len(document_chunks):
+            chunk_info = document_chunks[chunk_data['chunk_id']]
+            sources.append({
+                "document_id": chunk_info['document_id'],
+                "source_document": chunk_info['filename'],
+                "content": chunk_info['text'],
+                "similarity_score": chunk_data['similarity'],
+                "chunk_id": chunk_data['chunk_id']
+            })
+    
+    return sources
+
 @app.get("/")
 async def root():
     return {"message": "Simple RAG API is running", "frontend": "/simple_frontend.html", "docs": "/docs"}
@@ -215,6 +329,44 @@ async def get_frontend():
 @app.get("/health")
 async def health():
     return {"status": "healthy", "service": "simple-rag-api"}
+
+@app.get("/api/v1/status")
+async def get_system_status():
+    """Get comprehensive system status including LLM availability"""
+    status = {
+        "service": "simple-rag-api",
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "features": {
+            "vector_search": embedding_model is not None,
+            "llm_generation": False,
+            "document_processing": PDF_SUPPORT
+        },
+        "statistics": {
+            "documents_uploaded": len(documents),
+            "total_chunks": len(document_chunks),
+            "embeddings_created": len(document_embeddings)
+        }
+    }
+    
+    # Check Ollama status
+    if OLLAMA_SUPPORT and ollama_client:
+        try:
+            ollama_health = ollama_client.health_check()
+            status["features"]["llm_generation"] = ollama_health["available"]
+            status["ollama"] = ollama_health
+        except Exception as e:
+            status["ollama"] = {
+                "available": False,
+                "error": str(e)
+            }
+    else:
+        status["ollama"] = {
+            "available": False,
+            "error": "Ollama support not enabled"
+        }
+    
+    return status
 
 @app.get("/api/v1/analytics/stats")
 async def get_stats():
@@ -338,7 +490,7 @@ async def list_documents():
 
 @app.post("/api/v1/query", response_model=QueryResponse)
 async def query_documents(request: QueryRequest):
-    """Query documents using vector similarity search"""
+    """Query documents using vector similarity search (legacy endpoint)"""
     try:
         if not embedding_model:
             raise HTTPException(
@@ -382,6 +534,108 @@ async def query_documents(request: QueryRequest):
     except Exception as e:
         logger.error(f"Error querying documents: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error querying documents: {str(e)}")
+
+@app.post("/api/v1/query/enhanced", response_model=LLMQueryResponse)
+async def query_documents_enhanced(request: QueryRequest):
+    """Enhanced query with LLM answer generation and fallback to vector search"""
+    start_time = time.time()
+    
+    try:
+        if not embedding_model:
+            raise HTTPException(
+                status_code=500,
+                detail="Embedding model not available. Please install sentence-transformers."
+            )
+        
+        if not document_chunks:
+            return LLMQueryResponse(
+                query=request.query,
+                answer="No documents have been uploaded yet. Please upload some documents first.",
+                method="no_documents",
+                sources=[],
+                total_sources=0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Find similar chunks using vector search
+        similar_chunks = find_similar_chunks(request.query, request.top_k)
+        
+        if not similar_chunks:
+            return LLMQueryResponse(
+                query=request.query,
+                answer="I couldn't find any relevant information in the uploaded documents for your question.",
+                method="no_results",
+                sources=[],
+                total_sources=0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Determine whether to use LLM
+        use_llm = request.use_llm
+        if use_llm is None:
+            use_llm = USE_LLM_DEFAULT
+        
+        sources = format_sources_for_response(similar_chunks)
+        
+        # Try LLM generation if requested and available
+        if use_llm and ollama_client and ollama_client.is_available():
+            try:
+                # Prepare context for LLM
+                context = prepare_context_for_llm(similar_chunks)
+                
+                # Generate answer
+                llm_answer = generate_llm_answer(request.query, context)
+                
+                if llm_answer:
+                    logger.info(f"LLM query successful: '{request.query}'")
+                    return LLMQueryResponse(
+                        query=request.query,
+                        answer=llm_answer,
+                        method="llm_generated",
+                        sources=sources,
+                        total_sources=len(sources),
+                        processing_time=time.time() - start_time
+                    )
+                else:
+                    logger.warning("LLM generation failed, falling back to vector search")
+            
+            except Exception as e:
+                logger.error(f"LLM generation error: {e}, falling back to vector search")
+        
+        # Fallback to vector search results
+        if sources:
+            # Create a summary from the top chunks
+            top_chunks = [source["content"] for source in sources[:3]]
+            fallback_answer = f"Based on the uploaded documents, here are the most relevant excerpts:\n\n"
+            
+            for i, chunk in enumerate(top_chunks, 1):
+                source_doc = sources[i-1]["source_document"]
+                fallback_answer += f"{i}. From '{source_doc}':\n{chunk}\n\n"
+            
+            method = "vector_search_fallback" if use_llm else "vector_search"
+            
+            return LLMQueryResponse(
+                query=request.query,
+                answer=fallback_answer,
+                method=method,
+                sources=sources,
+                total_sources=len(sources),
+                processing_time=time.time() - start_time
+            )
+        
+        # No results found
+        return LLMQueryResponse(
+            query=request.query,
+            answer="I couldn't find relevant information to answer your question.",
+            method="no_results",
+            sources=[],
+            total_sources=0,
+            processing_time=time.time() - start_time
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in enhanced query: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
 
 @app.delete("/api/v1/documents/{document_id}")
 async def delete_document(document_id: int):
