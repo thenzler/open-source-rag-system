@@ -6,7 +6,8 @@ import os
 from typing import List, Optional
 from functools import lru_cache
 
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings
+from pydantic import Field
 
 
 class Settings(BaseSettings):
@@ -54,6 +55,7 @@ class Settings(BaseSettings):
     
     # File Upload
     max_file_size_mb: int = Field(default=100, env="MAX_FILE_SIZE_MB")
+    upload_directory: str = Field(default="/tmp/uploads", env="UPLOAD_DIRECTORY")
     allowed_mime_types: List[str] = Field(
         default=[
             "application/pdf",
@@ -102,9 +104,12 @@ class Settings(BaseSettings):
     enable_caching: bool = Field(default=True, env="ENABLE_CACHING")
     enable_metrics: bool = Field(default=True, env="ENABLE_METRICS")
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    # Pydantic v2 configuration
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": False,
+        "extra": "ignore"
+    }
 
 
 @lru_cache()
