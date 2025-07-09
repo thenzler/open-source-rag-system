@@ -57,6 +57,7 @@ nltk==3.8.1
 
 # Rate Limiting
 slowapi==0.1.9
+fastapi-limiter==0.1.5
 
 # Monitoring & Logging
 prometheus-fastapi-instrumentator==6.1.0
@@ -79,14 +80,13 @@ jsonschema==4.20.0
 # File Type Detection
 python-magic==0.4.27
 
-# Encryption
-cryptography==41.0.8
+# Encryption - Updated to compatible version
+cryptography==42.0.8
 
 # Configuration Management
 dynaconf==3.2.4
 
 # Background Tasks
-celery[redis]==5.3.4
 flower==2.0.1
 
 # Email (Optional)
@@ -106,9 +106,6 @@ fastapi-health==0.4.0
 
 # OpenAPI Documentation
 fastapi-openapi-docs==0.0.2
-
-# Database Migrations
-alembic==1.13.0
 
 # Testing Framework (for health checks)
 pytest-asyncio==0.21.1
