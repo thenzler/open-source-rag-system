@@ -5,7 +5,7 @@ Query Service - Handles semantic search and query processing
 import asyncio
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, text
