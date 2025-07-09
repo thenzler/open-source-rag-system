@@ -2,6 +2,7 @@
 Document service implementation with all required methods.
 """
 
+import asyncio
 import logging
 import uuid
 from typing import List, Optional, Dict, Any, Tuple
