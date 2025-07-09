@@ -9,8 +9,8 @@ sqlalchemy[asyncio]==2.0.23
 asyncpg==0.29.0
 alembic==1.13.0
 
-# Authentication & Security
-python-jose[cryptography]==3.3.0
+# Authentication & Security - Using pycryptodome backend for better compatibility
+python-jose[pycryptodome]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
 
