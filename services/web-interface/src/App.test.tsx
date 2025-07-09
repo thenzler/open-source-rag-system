@@ -4,50 +4,49 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 
-// Mock the useAppStore hook
-jest.mock('./store/useAppStore', () => ({
-  useAppStore: () => ({
-    isAuthenticated: false,
-    user: null,
-    isLoading: false,
-    theme: 'light',
-  }),
+// Mock the hooks and components that require external dependencies
+jest.mock('./hooks/useToast', () => ({
+  useToast: () => ({ toast: jest.fn() })
 }));
 
-// Mock the API client
 jest.mock('./lib/api', () => ({
   wsClient: {
     connect: jest.fn(),
     disconnect: jest.fn(),
     on: jest.fn(),
-  },
+  }
 }));
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
+jest.mock('./store/useAppStore', () => ({
+  useAppStore: (selector: any) => {
+    const mockState = {
+      isAuthenticated: false,
+      user: null,
+      isLoading: false,
+      theme: 'light'
+    };
+    return selector ? selector(mockState) : mockState;
+  }
+}));
 
-const renderWithProviders = (component: React.ReactElement) => {
+const renderWithProviders = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
   return render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {component}
+        {ui}
       </BrowserRouter>
     </QueryClientProvider>
   );
 };
 
-test('renders without crashing', () => {
+test('renders app without crashing', () => {
   renderWithProviders(<App />);
-});
-
-test('redirects to login when not authenticated', () => {
-  renderWithProviders(<App />);
-  // Since we're not authenticated, we should be redirected to login
-  // This test just ensures the app renders without errors
   expect(document.body).toBeInTheDocument();
 });
