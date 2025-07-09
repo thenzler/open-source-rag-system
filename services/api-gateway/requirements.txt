@@ -80,9 +80,6 @@ jsonschema==4.20.0
 # File Type Detection
 python-magic==0.4.27
 
-# Encryption - Updated to compatible version
-cryptography==42.0.8
-
 # Configuration Management
 dynaconf==3.2.4
 
