@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(docker:*)",
+      "Bash(python:*)",
+      "Bash(start-rag-system.bat)",
+      "Bash(cmd:*)",
+      "Bash(C:\\Python313\\python.exe -m venv services\\api-gateway\\venv)",
+      "Bash(where python)",
+      "Bash(pip install:*)",
+      "Bash(curl:*)",
+      "Bash(npm start)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(powershell:*)"
+    ],
+    "deny": []
+  }
+}
