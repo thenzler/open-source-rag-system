@@ -5,16 +5,19 @@ Simple FastAPI server for document uploads and basic RAG functionality
 import os
 import tempfile
 import time
+import re
 from pathlib import Path
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 import logging
 import json
 import hashlib
 from datetime import datetime
+from functools import lru_cache
+import pickle
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
@@ -96,6 +99,86 @@ if OLLAMA_SUPPORT:
 # Configuration
 USE_LLM_DEFAULT = True  # Try to use LLM by default
 MAX_CONTEXT_LENGTH = 4000  # Maximum context length for LLM
+
+# Performance Caching System
+class FastCache:
+    """Fast in-memory cache for embeddings and search results"""
+    def __init__(self, max_size=1000):
+        self.query_cache = {}
+        self.embedding_cache = {}
+        self.max_size = max_size
+        self.access_times = {}
+    
+    def get_query_cache(self, query_hash: str):
+        """Get cached query result"""
+        if query_hash in self.query_cache:
+            self.access_times[query_hash] = time.time()
+            return self.query_cache[query_hash]
+        return None
+    
+    def set_query_cache(self, query_hash: str, result):
+        """Set cached query result"""
+        self._cleanup_if_needed()
+        self.query_cache[query_hash] = result
+        self.access_times[query_hash] = time.time()
+    
+    def get_embedding_cache(self, text_hash: str):
+        """Get cached embedding"""
+        if text_hash in self.embedding_cache:
+            self.access_times[text_hash] = time.time()
+            return self.embedding_cache[text_hash]
+        return None
+    
+    def set_embedding_cache(self, text_hash: str, embedding):
+        """Set cached embedding"""
+        self._cleanup_if_needed()
+        self.embedding_cache[text_hash] = embedding
+        self.access_times[text_hash] = time.time()
+    
+    def _cleanup_if_needed(self):
+        """Remove oldest entries if cache is full"""
+        total_items = len(self.query_cache) + len(self.embedding_cache)
+        if total_items >= self.max_size:
+            # Remove 20% of oldest entries
+            items_to_remove = int(total_items * 0.2)
+            all_items = [(k, v) for k, v in self.access_times.items()]
+            all_items.sort(key=lambda x: x[1])  # Sort by access time
+            
+            for key, _ in all_items[:items_to_remove]:
+                if key in self.query_cache:
+                    del self.query_cache[key]
+                if key in self.embedding_cache:
+                    del self.embedding_cache[key]
+                del self.access_times[key]
+    
+    def clear(self):
+        """Clear all caches"""
+        self.query_cache.clear()
+        self.embedding_cache.clear()
+        self.access_times.clear()
+
+# Initialize performance cache
+fast_cache = FastCache(max_size=1000)
+
+# File upload limits
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB maximum file size
+MAX_TOTAL_DOCUMENTS = 1000  # Maximum number of documents
+MAX_CONCURRENT_UPLOADS = 5  # Maximum concurrent uploads
+
+# Allowed file types and extensions
+ALLOWED_CONTENT_TYPES = {
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
+    "text/csv",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+}
+
+ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".csv", ".xlsx"}
+
+# Security settings
+ALLOWED_FILENAME_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_")
+MAX_FILENAME_LENGTH = 255
 
 class DocumentResponse(BaseModel):
     id: int
@@ -198,37 +281,103 @@ def chunk_text(text: str, chunk_size: int = 512, overlap: int = 50) -> List[str]
     return chunks
 
 def create_embeddings(texts: List[str]) -> List[List[float]]:
-    """Create embeddings for text chunks."""
+    """Create embeddings for text chunks with caching."""
     if not embedding_model:
         return []
     
     try:
-        embeddings = embedding_model.encode(texts)
-        return embeddings.tolist()
+        embeddings = []
+        uncached_texts = []
+        uncached_indices = []
+        
+        # Check cache first
+        for i, text in enumerate(texts):
+            text_hash = hashlib.md5(text.encode()).hexdigest()
+            cached_embedding = fast_cache.get_embedding_cache(text_hash)
+            
+            if cached_embedding is not None:
+                embeddings.append(cached_embedding)
+            else:
+                embeddings.append(None)  # Placeholder
+                uncached_texts.append(text)
+                uncached_indices.append(i)
+        
+        # Process uncached texts in batch
+        if uncached_texts:
+            new_embeddings = embedding_model.encode(uncached_texts)
+            
+            # Cache new embeddings and fill placeholders
+            for j, embedding in enumerate(new_embeddings):
+                idx = uncached_indices[j]
+                text_hash = hashlib.md5(texts[idx].encode()).hexdigest()
+                embedding_list = embedding.tolist()
+                fast_cache.set_embedding_cache(text_hash, embedding_list)
+                embeddings[idx] = embedding_list
+        
+        return embeddings
     except Exception as e:
         logger.error(f"Error creating embeddings: {e}")
         return []
 
 def find_similar_chunks(query: str, top_k: int = 5) -> List[dict]:
-    """Find similar chunks using cosine similarity."""
+    """Find similar chunks using cosine similarity with caching."""
     if not embedding_model or not document_embeddings:
         return []
     
     try:
-        query_embedding = embedding_model.encode([query])
+        # Check cache first
+        query_hash = hashlib.md5(f"{query}_{top_k}".encode()).hexdigest()
+        cached_result = fast_cache.get_query_cache(query_hash)
+        if cached_result is not None:
+            return cached_result
         
-        similarities = []
-        for i, doc_embedding in enumerate(document_embeddings):
-            if doc_embedding:
-                similarity = cosine_similarity(query_embedding, [doc_embedding])[0][0]
+        # Get or create query embedding
+        query_text_hash = hashlib.md5(query.encode()).hexdigest()
+        query_embedding = fast_cache.get_embedding_cache(query_text_hash)
+        
+        if query_embedding is None:
+            query_embedding = embedding_model.encode([query])[0].tolist()
+            fast_cache.set_embedding_cache(query_text_hash, query_embedding)
+        
+        # Use numpy for faster batch similarity computation
+        query_embedding_np = np.array([query_embedding])
+        valid_embeddings = []
+        valid_indices = []
+        
+        # Filter out None embeddings and track indices
+        for i, emb in enumerate(document_embeddings):
+            if emb:
+                valid_embeddings.append(emb)
+                valid_indices.append(i)
+        
+        if valid_embeddings:
+            # Batch computation is much faster
+            doc_embeddings_np = np.array(valid_embeddings)
+            similarities_np = cosine_similarity(query_embedding_np, doc_embeddings_np)[0]
+            
+            # Create result list with proper indices
+            similarities = []
+            for idx, similarity in enumerate(similarities_np):
                 similarities.append({
-                    'chunk_id': i,
+                    'chunk_id': valid_indices[idx],
                     'similarity': float(similarity)
                 })
+        else:
+            similarities = []
         
         # Sort by similarity and return top_k
         similarities.sort(key=lambda x: x['similarity'], reverse=True)
-        return similarities[:top_k]
+        
+        # Early termination if we have very high similarity matches
+        if similarities and similarities[0]['similarity'] > 0.95:
+            # If we have a nearly perfect match, we can return fewer results
+            result = similarities[:min(top_k, 3)]
+        else:
+            result = similarities[:top_k]
+        
+        # Cache the result
+        fast_cache.set_query_cache(query_hash, result)
+        return result
     
     except Exception as e:
         logger.error(f"Error finding similar chunks: {e}")
@@ -313,6 +462,279 @@ def format_sources_for_response(similar_chunks: List[dict]) -> List[dict]:
     
     return sources
 
+# File validation functions
+def sanitize_filename(filename: str) -> str:
+    """
+    Sanitize filename to prevent directory traversal and other security issues
+    
+    Args:
+        filename: Original filename
+    
+    Returns:
+        str: Sanitized filename
+    """
+    if not filename:
+        return "untitled"
+    
+    # Remove path components
+    filename = os.path.basename(filename)
+    
+    # Remove or replace dangerous characters
+    sanitized = "".join(c for c in filename if c in ALLOWED_FILENAME_CHARS)
+    
+    # Ensure filename is not too long
+    if len(sanitized) > MAX_FILENAME_LENGTH:
+        name, ext = os.path.splitext(sanitized)
+        sanitized = name[:MAX_FILENAME_LENGTH - len(ext)] + ext
+    
+    # Ensure filename is not empty
+    if not sanitized:
+        sanitized = "untitled"
+    
+    return sanitized
+
+def validate_file_upload(file: UploadFile) -> Dict[str, Any]:
+    """
+    Validate file upload for security and size constraints
+    
+    Args:
+        file: FastAPI UploadFile object
+    
+    Returns:
+        Dict with validation results
+    """
+    validation_result = {
+        "valid": True,
+        "errors": [],
+        "warnings": []
+    }
+    
+    # Check if file exists
+    if not file or not file.filename:
+        validation_result["valid"] = False
+        validation_result["errors"].append("No file provided")
+        return validation_result
+    
+    # Check file extension
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        validation_result["valid"] = False
+        validation_result["errors"].append(f"File type {file_ext} not allowed. Allowed types: {', '.join(ALLOWED_EXTENSIONS)}")
+    
+    # Check content type (more lenient - log warning but don't fail)
+    if file.content_type not in ALLOWED_CONTENT_TYPES:
+        logger.warning(f"Unknown content type: {file.content_type} for file: {file.filename}")
+        validation_result["warnings"].append(f"Unknown content type: {file.content_type}, but proceeding based on file extension")
+    
+    # Check filename length
+    if len(file.filename) > MAX_FILENAME_LENGTH:
+        validation_result["warnings"].append(f"Filename too long, will be truncated to {MAX_FILENAME_LENGTH} characters")
+    
+    # Check total document limit
+    if len(documents) >= MAX_TOTAL_DOCUMENTS:
+        validation_result["valid"] = False
+        validation_result["errors"].append(f"Maximum number of documents ({MAX_TOTAL_DOCUMENTS}) reached")
+    
+    return validation_result
+
+def validate_file_content(file_path: str, file_size: int) -> Dict[str, Any]:
+    """
+    Validate file content after upload
+    
+    Args:
+        file_path: Path to uploaded file
+        file_size: File size in bytes
+    
+    Returns:
+        Dict with validation results
+    """
+    validation_result = {
+        "valid": True,
+        "errors": [],
+        "warnings": []
+    }
+    
+    # Check file size
+    if file_size > MAX_FILE_SIZE:
+        validation_result["valid"] = False
+        validation_result["errors"].append(f"File size ({file_size:,} bytes) exceeds maximum allowed size ({MAX_FILE_SIZE:,} bytes)")
+    
+    # Check if file is empty
+    if file_size == 0:
+        validation_result["valid"] = False
+        validation_result["errors"].append("File is empty")
+    
+    # Check if file actually exists (only if file_path is provided)
+    if file_path and not os.path.exists(file_path):
+        validation_result["valid"] = False
+        validation_result["errors"].append("File was not saved properly")
+    
+    # Additional content validation can be added here
+    # For example, checking if PDF is corrupted, etc.
+    
+    return validation_result
+
+# Request validation and sanitization functions
+def sanitize_query_string(query: str) -> str:
+    """
+    Sanitize query string to prevent injection attacks
+    
+    Args:
+        query: Raw query string
+    
+    Returns:
+        str: Sanitized query string
+    """
+    if not query:
+        return ""
+    
+    # Remove null bytes and control characters
+    query = query.replace('\x00', '').replace('\r', '').replace('\n', ' ')
+    
+    # Remove potentially dangerous HTML/script tags
+    query = re.sub(r'<[^>]*>', '', query)
+    
+    # Remove excessive whitespace
+    query = re.sub(r'\s+', ' ', query).strip()
+    
+    # Limit length to prevent DoS
+    if len(query) > 2000:
+        query = query[:2000]
+    
+    return query
+
+def validate_query_request(request: QueryRequest) -> Dict[str, Any]:
+    """
+    Validate and sanitize query request
+    
+    Args:
+        request: Query request object
+    
+    Returns:
+        Dict with validation results and sanitized request
+    """
+    validation_result = {
+        "valid": True,
+        "errors": [],
+        "warnings": [],
+        "sanitized_request": None
+    }
+    
+    # Validate query string
+    if not request.query or not request.query.strip():
+        validation_result["valid"] = False
+        validation_result["errors"].append("Query string cannot be empty")
+        return validation_result
+    
+    # Sanitize query
+    sanitized_query = sanitize_query_string(request.query)
+    
+    if not sanitized_query:
+        validation_result["valid"] = False
+        validation_result["errors"].append("Query string is invalid after sanitization")
+        return validation_result
+    
+    # Warn if query was significantly modified
+    if len(sanitized_query) < len(request.query.strip()) * 0.8:
+        validation_result["warnings"].append("Query was significantly modified during sanitization")
+    
+    # Validate top_k parameter
+    if request.top_k is not None:
+        if not isinstance(request.top_k, int) or request.top_k < 1:
+            validation_result["valid"] = False
+            validation_result["errors"].append("top_k must be a positive integer")
+            return validation_result
+        
+        if request.top_k > 20:
+            validation_result["warnings"].append("top_k is very high, limiting to 20")
+            request.top_k = 20
+    
+    # Validate use_llm parameter
+    if request.use_llm is not None and not isinstance(request.use_llm, bool):
+        validation_result["valid"] = False
+        validation_result["errors"].append("use_llm must be a boolean")
+        return validation_result
+    
+    # Create sanitized request
+    sanitized_request = QueryRequest(
+        query=sanitized_query,
+        top_k=request.top_k,
+        use_llm=request.use_llm
+    )
+    
+    validation_result["sanitized_request"] = sanitized_request
+    return validation_result
+
+def validate_document_id(document_id: str) -> bool:
+    """
+    Validate document ID to prevent injection attacks
+    
+    Args:
+        document_id: Document ID to validate
+    
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    if not document_id:
+        return False
+    
+    # Allow only digits
+    if not re.match(r'^\d+$', document_id):
+        return False
+    
+    # Check reasonable range
+    try:
+        doc_id_int = int(document_id)
+        if doc_id_int < 1 or doc_id_int > 1000000:
+            return False
+    except ValueError:
+        return False
+    
+    return True
+
+def rate_limit_check(request_type: str, client_id: str = "default") -> bool:
+    """
+    Simple rate limiting check
+    
+    Args:
+        request_type: Type of request (upload, query, etc.)
+        client_id: Client identifier
+    
+    Returns:
+        bool: True if request is allowed, False if rate limited
+    """
+    # Simple in-memory rate limiting
+    if not hasattr(rate_limit_check, 'requests'):
+        rate_limit_check.requests = {}
+    
+    current_time = time.time()
+    key = f"{client_id}:{request_type}"
+    
+    # Clean old entries
+    if key in rate_limit_check.requests:
+        rate_limit_check.requests[key] = [
+            timestamp for timestamp in rate_limit_check.requests[key]
+            if current_time - timestamp < 60  # 1 minute window
+        ]
+    else:
+        rate_limit_check.requests[key] = []
+    
+    # Check limits
+    limits = {
+        "upload": 50,  # 50 uploads per minute
+        "query": 100,  # 100 queries per minute
+        "status": 50   # 50 status checks per minute
+    }
+    
+    limit = limits.get(request_type, 30)
+    
+    if len(rate_limit_check.requests[key]) >= limit:
+        return False
+    
+    # Add current request
+    rate_limit_check.requests[key].append(current_time)
+    return True
+
 @app.get("/")
 async def root():
     return {"message": "Simple RAG API is running", "frontend": "/simple_frontend.html", "docs": "/docs"}
@@ -330,9 +752,36 @@ async def get_frontend():
 async def health():
     return {"status": "healthy", "service": "simple-rag-api"}
 
+@app.post("/api/v1/reset-rate-limits")
+async def reset_rate_limits():
+    """Reset rate limits for all clients"""
+    if hasattr(rate_limit_check, 'requests'):
+        rate_limit_check.requests.clear()
+        return {"message": "Rate limits reset successfully"}
+    return {"message": "No rate limits to reset"}
+
+@app.post("/api/v1/clear-cache")
+async def clear_cache():
+    """Clear all performance caches"""
+    fast_cache.clear()
+    return {
+        "message": "Performance caches cleared successfully",
+        "cache_stats": {
+            "query_cache_size": len(fast_cache.query_cache),
+            "embedding_cache_size": len(fast_cache.embedding_cache)
+        }
+    }
+
 @app.get("/api/v1/status")
 async def get_system_status():
     """Get comprehensive system status including LLM availability"""
+    # Rate limiting check
+    if not rate_limit_check("status"):
+        raise HTTPException(
+            status_code=429,
+            detail="Rate limit exceeded. Please try again later."
+        )
+    
     status = {
         "service": "simple-rag-api",
         "status": "healthy",
@@ -381,43 +830,131 @@ async def get_stats():
 
 @app.post("/api/v1/documents", response_model=DocumentResponse)
 async def upload_document(file: UploadFile = File(...)):
-    """Upload a document for processing"""
+    """Upload a document for processing with comprehensive validation"""
     global document_id_counter
     
     try:
-        # Validate file type
-        allowed_types = {
-            "application/pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "text/plain",
-            "text/csv",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        }
-        
-        if file.content_type not in allowed_types:
+        # Rate limiting check
+        if not rate_limit_check("upload"):
             raise HTTPException(
-                status_code=400,
-                detail=f"File type {file.content_type} not supported"
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
             )
+        # Validate file upload
+        logger.info(f"Validating file upload: {file.filename}, content_type: {file.content_type}")
+        validation_result = validate_file_upload(file)
         
-        # Save uploaded file
-        file_path = UPLOAD_DIR / f"{document_id_counter}_{file.filename}"
+        if not validation_result["valid"]:
+            error_message = "Upload validation failed: " + "; ".join(validation_result["errors"])
+            logger.error(f"Upload validation failed for {file.filename}: {error_message}")
+            raise HTTPException(status_code=400, detail=error_message)
         
-        with open(file_path, "wb") as buffer:
-            content = await file.read()
-            buffer.write(content)
+        # Log warnings if any
+        if validation_result["warnings"]:
+            logger.warning(f"Upload warnings for {file.filename}: {'; '.join(validation_result['warnings'])}")
+        
+        # Sanitize filename
+        sanitized_filename = sanitize_filename(file.filename)
+        logger.info(f"Processing document: {file.filename} -> {sanitized_filename}")
+        
+        # Read file content
+        content = await file.read()
+        
+        # Validate file content
+        logger.info(f"Validating content for {file.filename}, size: {len(content)} bytes")
+        content_validation = validate_file_content("", len(content))
+        
+        if not content_validation["valid"]:
+            error_message = "Content validation failed: " + "; ".join(content_validation["errors"])
+            logger.error(f"Content validation failed for {file.filename}: {error_message}")
+            raise HTTPException(status_code=400, detail=error_message)
+        
+        # Save uploaded file with sanitized name
+        file_path = UPLOAD_DIR / f"{document_id_counter}_{sanitized_filename}"
+        
+        # Ensure upload directory exists
+        UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+        
+        try:
+            with open(file_path, "wb") as buffer:
+                buffer.write(content)
+            
+            # Final validation on saved file
+            saved_file_validation = validate_file_content(str(file_path), len(content))
+            
+            if not saved_file_validation["valid"]:
+                # Clean up failed file
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                error_message = "File save validation failed: " + "; ".join(saved_file_validation["errors"])
+                logger.error(f"File save validation failed for {file.filename}: {error_message}")
+                raise HTTPException(status_code=500, detail=error_message)
+            
+        except Exception as e:
+            # Clean up on file write error
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            logger.error(f"Error saving file {file.filename}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
         
         # Extract text from document
-        logger.info(f"Processing document: {file.filename}")
-        extracted_text = extract_text_from_file(str(file_path), file.content_type)
+        try:
+            logger.info(f"Extracting text from: {sanitized_filename}")
+            extracted_text = extract_text_from_file(str(file_path), file.content_type)
+            
+            # Check if text extraction was successful
+            if not extracted_text or extracted_text.strip() == "":
+                logger.warning(f"No text extracted from {sanitized_filename}")
+                raise HTTPException(status_code=400, detail="No text content could be extracted from the file")
+            
+            # Check for extraction errors
+            if extracted_text.startswith("Error processing"):
+                logger.error(f"Text extraction error for {sanitized_filename}: {extracted_text}")
+                raise HTTPException(status_code=400, detail=f"Text extraction failed: {extracted_text}")
+            
+        except HTTPException:
+            # Clean up on text extraction error
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            raise
+        except Exception as e:
+            # Clean up on unexpected error
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            logger.error(f"Unexpected error extracting text from {sanitized_filename}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error extracting text: {str(e)}")
         
         # Create text chunks
-        chunks = chunk_text(extracted_text)
-        logger.info(f"Created {len(chunks)} chunks from {file.filename}")
+        try:
+            chunks = chunk_text(extracted_text)
+            logger.info(f"Created {len(chunks)} chunks from {sanitized_filename}")
+            
+            if not chunks:
+                logger.warning(f"No chunks created from {sanitized_filename}")
+                raise HTTPException(status_code=400, detail="Document could not be processed into searchable chunks")
+            
+        except Exception as e:
+            # Clean up on chunking error
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            logger.error(f"Error chunking text from {sanitized_filename}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error processing document: {str(e)}")
         
         # Create embeddings for chunks
-        embeddings = create_embeddings(chunks)
-        logger.info(f"Created {len(embeddings)} embeddings for {file.filename}")
+        try:
+            embeddings = create_embeddings(chunks)
+            logger.info(f"Created {len(embeddings)} embeddings for {sanitized_filename}")
+            
+            if not embeddings:
+                logger.warning(f"No embeddings created for {sanitized_filename}")
+                raise HTTPException(status_code=500, detail="Could not create embeddings for document")
+            
+        except Exception as e:
+            # Clean up on embedding error
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            logger.error(f"Error creating embeddings for {sanitized_filename}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error creating embeddings: {str(e)}")
         
         # Store chunks and embeddings
         doc_chunk_start = len(document_chunks)
@@ -426,7 +963,7 @@ async def upload_document(file: UploadFile = File(...)):
                 'document_id': document_id_counter,
                 'chunk_id': doc_chunk_start + i,
                 'text': chunk,
-                'filename': file.filename
+                'filename': sanitized_filename
             })
         
         # Store embeddings
@@ -435,7 +972,7 @@ async def upload_document(file: UploadFile = File(...)):
         # Create document record
         document = {
             "id": document_id_counter,
-            "filename": file.filename,
+            "filename": sanitized_filename,
             "original_filename": file.filename,
             "file_type": file.content_type,
             "file_size": len(content),
@@ -449,11 +986,11 @@ async def upload_document(file: UploadFile = File(...)):
         }
         
         documents.append(document)
-        logger.info(f"Document processed: {file.filename} (ID: {document_id_counter}, Chunks: {len(chunks)})")
+        logger.info(f"Document processed successfully: {sanitized_filename} (ID: {document_id_counter}, Chunks: {len(chunks)}, Size: {len(content):,} bytes)")
         
         response = DocumentResponse(
             id=document_id_counter,
-            filename=file.filename,
+            filename=sanitized_filename,
             size=len(content),
             content_type=file.content_type,
             status="processed"
@@ -462,9 +999,13 @@ async def upload_document(file: UploadFile = File(...)):
         document_id_counter += 1
         return response
         
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
     except Exception as e:
-        logger.error(f"Error uploading document: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error uploading document: {str(e)}")
+        # Handle any other unexpected errors
+        logger.error(f"Unexpected error uploading document {file.filename if file else 'unknown'}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error uploading document: {str(e)}")
 
 @app.get("/api/v1/documents")
 async def list_documents():
@@ -492,6 +1033,28 @@ async def list_documents():
 async def query_documents(request: QueryRequest):
     """Query documents using vector similarity search (legacy endpoint)"""
     try:
+        # Rate limiting check
+        if not rate_limit_check("query"):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
+            )
+        
+        # Validate and sanitize request
+        validation_result = validate_query_request(request)
+        
+        if not validation_result["valid"]:
+            error_message = "Request validation failed: " + "; ".join(validation_result["errors"])
+            logger.warning(f"Query validation failed: {error_message}")
+            raise HTTPException(status_code=400, detail=error_message)
+        
+        # Log warnings if any
+        if validation_result["warnings"]:
+            logger.warning(f"Query validation warnings: {'; '.join(validation_result['warnings'])}")
+        
+        # Use sanitized request
+        sanitized_request = validation_result["sanitized_request"]
+        
         if not embedding_model:
             raise HTTPException(
                 status_code=500,
@@ -500,13 +1063,13 @@ async def query_documents(request: QueryRequest):
         
         if not document_chunks:
             return QueryResponse(
-                query=request.query,
+                query=sanitized_request.query,
                 results=[],
                 total_results=0
             )
         
         # Find similar chunks using vector search
-        similar_chunks = find_similar_chunks(request.query, request.top_k)
+        similar_chunks = find_similar_chunks(sanitized_request.query, sanitized_request.top_k)
         
         # Format results
         results = []
@@ -523,14 +1086,17 @@ async def query_documents(request: QueryRequest):
                 }
             })
         
-        logger.info(f"Query: '{request.query}' returned {len(results)} results")
+        logger.info(f"Query: '{sanitized_request.query}' returned {len(results)} results")
         
         return QueryResponse(
-            query=request.query,
+            query=sanitized_request.query,
             results=results,
             total_results=len(results)
         )
         
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
     except Exception as e:
         logger.error(f"Error querying documents: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error querying documents: {str(e)}")
@@ -541,6 +1107,28 @@ async def query_documents_enhanced(request: QueryRequest):
     start_time = time.time()
     
     try:
+        # Rate limiting check
+        if not rate_limit_check("query"):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
+            )
+        
+        # Validate and sanitize request
+        validation_result = validate_query_request(request)
+        
+        if not validation_result["valid"]:
+            error_message = "Request validation failed: " + "; ".join(validation_result["errors"])
+            logger.warning(f"Enhanced query validation failed: {error_message}")
+            raise HTTPException(status_code=400, detail=error_message)
+        
+        # Log warnings if any
+        if validation_result["warnings"]:
+            logger.warning(f"Enhanced query validation warnings: {'; '.join(validation_result['warnings'])}")
+        
+        # Use sanitized request
+        sanitized_request = validation_result["sanitized_request"]
+        
         if not embedding_model:
             raise HTTPException(
                 status_code=500,
@@ -549,7 +1137,7 @@ async def query_documents_enhanced(request: QueryRequest):
         
         if not document_chunks:
             return LLMQueryResponse(
-                query=request.query,
+                query=sanitized_request.query,
                 answer="No documents have been uploaded yet. Please upload some documents first.",
                 method="no_documents",
                 sources=[],
@@ -558,11 +1146,11 @@ async def query_documents_enhanced(request: QueryRequest):
             )
         
         # Find similar chunks using vector search
-        similar_chunks = find_similar_chunks(request.query, request.top_k)
+        similar_chunks = find_similar_chunks(sanitized_request.query, sanitized_request.top_k)
         
         if not similar_chunks:
             return LLMQueryResponse(
-                query=request.query,
+                query=sanitized_request.query,
                 answer="I couldn't find any relevant information in the uploaded documents for your question.",
                 method="no_results",
                 sources=[],
@@ -571,36 +1159,47 @@ async def query_documents_enhanced(request: QueryRequest):
             )
         
         # Determine whether to use LLM
-        use_llm = request.use_llm
+        use_llm = sanitized_request.use_llm
         if use_llm is None:
             use_llm = USE_LLM_DEFAULT
         
         sources = format_sources_for_response(similar_chunks)
         
         # Try LLM generation if requested and available
-        if use_llm and ollama_client and ollama_client.is_available():
+        if use_llm and ollama_client:
             try:
-                # Prepare context for LLM
-                context = prepare_context_for_llm(similar_chunks)
-                
-                # Generate answer
-                llm_answer = generate_llm_answer(request.query, context)
-                
-                if llm_answer:
-                    logger.info(f"LLM query successful: '{request.query}'")
-                    return LLMQueryResponse(
-                        query=request.query,
-                        answer=llm_answer,
-                        method="llm_generated",
-                        sources=sources,
-                        total_sources=len(sources),
-                        processing_time=time.time() - start_time
-                    )
+                # Check if Ollama is available (this may trigger a fresh check)
+                if not ollama_client.is_available():
+                    logger.warning("Ollama not available, falling back to vector search")
+                    method = "vector_search_fallback"
                 else:
-                    logger.warning("LLM generation failed, falling back to vector search")
+                    # Prepare context for LLM
+                    context = prepare_context_for_llm(similar_chunks)
+                    
+                    if not context:
+                        logger.warning("No context available for LLM generation")
+                        method = "vector_search_fallback"
+                    else:
+                        # Generate answer
+                        llm_answer = generate_llm_answer(sanitized_request.query, context)
+                        
+                        if llm_answer:
+                            logger.info(f"LLM query successful: '{sanitized_request.query}'")
+                            return LLMQueryResponse(
+                                query=sanitized_request.query,
+                                answer=llm_answer,
+                                method="llm_generated",
+                                sources=sources,
+                                total_sources=len(sources),
+                                processing_time=time.time() - start_time
+                            )
+                        else:
+                            logger.warning("LLM generation failed, falling back to vector search")
+                            method = "vector_search_fallback"
             
             except Exception as e:
                 logger.error(f"LLM generation error: {e}, falling back to vector search")
+                method = "vector_search_fallback"
         
         # Fallback to vector search results
         if sources:
@@ -612,10 +1211,14 @@ async def query_documents_enhanced(request: QueryRequest):
                 source_doc = sources[i-1]["source_document"]
                 fallback_answer += f"{i}. From '{source_doc}':\n{chunk}\n\n"
             
-            method = "vector_search_fallback" if use_llm else "vector_search"
+            # Determine the method based on whether LLM was attempted
+            if use_llm and ollama_client:
+                method = "vector_search_fallback"
+            else:
+                method = "vector_search"
             
             return LLMQueryResponse(
-                query=request.query,
+                query=sanitized_request.query,
                 answer=fallback_answer,
                 method=method,
                 sources=sources,
@@ -625,7 +1228,7 @@ async def query_documents_enhanced(request: QueryRequest):
         
         # No results found
         return LLMQueryResponse(
-            query=request.query,
+            query=sanitized_request.query,
             answer="I couldn't find relevant information to answer your question.",
             method="no_results",
             sources=[],
@@ -637,12 +1240,106 @@ async def query_documents_enhanced(request: QueryRequest):
         logger.error(f"Error in enhanced query: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
 
+@app.post("/api/v1/query-stream")
+async def query_documents_stream(request: QueryRequest):
+    """Enhanced query with streaming LLM response"""
+    def generate_stream():
+        try:
+            # Rate limiting check
+            if not rate_limit_check("query"):
+                yield f"data: {json.dumps({'error': 'Rate limit exceeded'})}\n\n"
+                return
+            
+            # Validate request
+            validation_result = validate_query_request(request)
+            if not validation_result["valid"]:
+                yield f"data: {json.dumps({'error': 'Invalid request'})}\n\n"
+                return
+            
+            sanitized_request = validation_result["sanitized_request"]
+            
+            # Check if we have documents
+            if not document_chunks:
+                yield f"data: {json.dumps({'error': 'No documents uploaded'})}\n\n"
+                return
+            
+            # Find similar chunks
+            similar_chunks = find_similar_chunks(sanitized_request.query, sanitized_request.top_k)
+            
+            if not similar_chunks:
+                yield f"data: {json.dumps({'error': 'No relevant information found'})}\n\n"
+                return
+            
+            # Prepare context
+            context = prepare_context_for_llm(similar_chunks)
+            
+            # Send initial metadata
+            sources = format_sources_for_response(similar_chunks)
+            metadata = {
+                "type": "metadata",
+                "sources": sources,
+                "total_sources": len(sources),
+                "query": sanitized_request.query
+            }
+            yield f"data: {json.dumps(metadata)}\n\n"
+            
+            # Check if LLM is available
+            if ollama_client and ollama_client.is_available():
+                # Stream LLM response
+                yield f"data: {json.dumps({'type': 'answer_start'})}\n\n"
+                
+                answer_chunks = []
+                for chunk in ollama_client.generate_answer_stream(sanitized_request.query, context):
+                    if chunk:
+                        answer_chunks.append(chunk)
+                        yield f"data: {json.dumps({'type': 'answer_chunk', 'content': chunk})}\n\n"
+                
+                yield f"data: {json.dumps({'type': 'answer_end', 'method': 'llm'})}\n\n"
+            else:
+                # Fallback to vector search
+                fallback_answer = f"Based on the uploaded documents, here are the most relevant excerpts:\n\n"
+                for i, source in enumerate(sources[:3], 1):
+                    fallback_answer += f"{i}. From '{source['source_document']}':\n{source['content']}\n\n"
+                
+                yield f"data: {json.dumps({'type': 'answer_complete', 'content': fallback_answer, 'method': 'vector_search'})}\n\n"
+            
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+            
+        except Exception as e:
+            logger.error(f"Error in streaming query: {e}")
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+    
+    return StreamingResponse(
+        generate_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*"
+        }
+    )
+
 @app.delete("/api/v1/documents/{document_id}")
-async def delete_document(document_id: int):
-    """Delete a document"""
+async def delete_document(document_id: str):
+    """Delete a document with validation"""
     global documents
     
-    document = next((doc for doc in documents if doc["id"] == document_id), None)
+    # Validate document ID
+    if not validate_document_id(document_id):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid document ID format"
+        )
+    
+    # Rate limiting check
+    if not rate_limit_check("delete"):
+        raise HTTPException(
+            status_code=429,
+            detail="Rate limit exceeded. Please try again later."
+        )
+    
+    document_id_int = int(document_id)
+    document = next((doc for doc in documents if doc["id"] == document_id_int), None)
     if not document:
         raise HTTPException(status_code=404, detail="Document not found")
     
@@ -652,20 +1349,38 @@ async def delete_document(document_id: int):
             os.remove(document["file_path"])
         
         # Remove from documents list
-        documents = [doc for doc in documents if doc["id"] != document_id]
+        documents = [doc for doc in documents if doc["id"] != document_id_int]
         
-        logger.info(f"Document deleted: {document['filename']} (ID: {document_id})")
-        return {"message": "Document deleted successfully"}
+        # Also remove associated chunks and embeddings
+        # Note: This is a simplified approach - in a production system,
+        # you'd want more efficient chunk/embedding management
+        global document_chunks, document_embeddings
+        original_chunk_count = len(document_chunks)
+        
+        # Remove chunks for this document
+        document_chunks = [chunk for chunk in document_chunks if chunk["document_id"] != document_id_int]
+        
+        # Remove corresponding embeddings (assuming same order)
+        # This is a simplified approach - a real system would need proper indexing
+        chunks_removed = original_chunk_count - len(document_chunks)
+        if chunks_removed > 0:
+            # Remove the same number of embeddings from the end
+            # This assumes chunks and embeddings are in the same order
+            document_embeddings = document_embeddings[:-chunks_removed] if chunks_removed < len(document_embeddings) else []
+        
+        logger.info(f"Document deleted: {document['filename']} (ID: {document_id_int}), removed {chunks_removed} chunks")
+        return {"message": "Document deleted successfully", "chunks_removed": chunks_removed}
         
     except Exception as e:
         logger.error(f"Error deleting document: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run(
         "simple_api:app",
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=8001,
-        reload=True,
+        reload=False,
         log_level="info"
     )
