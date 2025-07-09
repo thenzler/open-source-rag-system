@@ -1,0 +1,306 @@
+# Prometheus Alerting Rules for RAG System
+
+groups:
+  - name: rag-system-alerts
+    rules:
+      
+      # Service Health Alerts
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute"
+          
+      - alert: APIGatewayDown
+        expr: up{job="rag-api-gateway"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service: api-gateway
+        annotations:
+          summary: "API Gateway is down"
+          description: "The RAG System API Gateway has been down for more than 30 seconds"
+          
+      - alert: DocumentProcessorDown
+        expr: up{job="rag-document-processor"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: document-processor
+        annotations:
+          summary: "Document Processor is down"
+          description: "The Document Processor service has been down for more than 1 minute"
+          
+      - alert: VectorEngineDown
+        expr: up{job="rag-vector-engine"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: vector-engine
+        annotations:
+          summary: "Vector Engine is down"
+          description: "The Vector Engine service has been down for more than 1 minute"
+          
+      # Database Alerts
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: postgres
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL database has been down for more than 1 minute"
+          
+      - alert: QdrantDown
+        expr: up{job="qdrant"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: qdrant
+        annotations:
+          summary: "Qdrant vector database is down"
+          description: "Qdrant vector database has been down for more than 1 minute"
+          
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis cache is down"
+          description: "Redis cache has been down for more than 1 minute"
+          
+      # Performance Alerts
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "High response time on {{ $labels.job }}"
+          description: "95th percentile response time is above 2 seconds for {{ $labels.job }}"
+          
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status_code=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "High error rate on {{ $labels.job }}"
+          description: "Error rate is above 5% for {{ $labels.job }}"
+          
+      - alert: SlowDocumentProcessing
+        expr: histogram_quantile(0.95, rate(document_processing_duration_seconds_bucket[10m])) > 30
+        for: 10m
+        labels:
+          severity: warning
+          service: document-processor
+        annotations:
+          summary: "Slow document processing"
+          description: "95th percentile document processing time is above 30 seconds"
+          
+      - alert: SlowQueryResponse
+        expr: histogram_quantile(0.95, rate(query_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: query-service
+        annotations:
+          summary: "Slow query response"
+          description: "95th percentile query response time is above 5 seconds"
+          
+      # Resource Alerts
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is above 90% for more than 5 minutes"
+          
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is above 90% for more than 5 minutes"
+          
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "High disk usage"
+          description: "Disk usage is above 90% for more than 5 minutes"
+          
+      # Application-specific Alerts
+      - alert: TooManyFailedDocumentUploads
+        expr: rate(documents_uploaded_total{status="failed"}[10m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: document-processor
+        annotations:
+          summary: "Too many failed document uploads"
+          description: "Failed document upload rate is above 0.1 per second"
+          
+      - alert: TooManyFailedQueries
+        expr: rate(queries_total{status="failed"}[10m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: query-service
+        annotations:
+          summary: "Too many failed queries"
+          description: "Failed query rate is above 0.1 per second"
+          
+      - alert: VectorDatabaseSizeGrowth
+        expr: increase(vector_db_size[1h]) > 100000
+        for: 1h
+        labels:
+          severity: info
+          service: vector-engine
+        annotations:
+          summary: "Large vector database growth"
+          description: "Vector database size increased by more than 100,000 vectors in the last hour"
+          
+      - alert: HighLLMRequestFailureRate
+        expr: rate(llm_requests_total{status="failed"}[10m]) / rate(llm_requests_total[10m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: llm-service
+        annotations:
+          summary: "High LLM request failure rate"
+          description: "LLM request failure rate is above 10%"
+          
+      - alert: LongLLMResponseTime
+        expr: histogram_quantile(0.95, rate(llm_request_duration_seconds_bucket[10m])) > 30
+        for: 10m
+        labels:
+          severity: warning
+          service: llm-service
+        annotations:
+          summary: "Long LLM response time"
+          description: "95th percentile LLM response time is above 30 seconds"
+          
+      # Storage Alerts
+      - alert: HighStorageUsage
+        expr: storage_usage_bytes > 1e10  # 10GB
+        for: 5m
+        labels:
+          severity: warning
+          service: storage
+        annotations:
+          summary: "High storage usage"
+          description: "Storage usage is above 10GB for {{ $labels.type }}"
+          
+      - alert: CacheHitRateLow
+        expr: rate(cache_operations_total{operation="hit"}[10m]) / rate(cache_operations_total{operation=~"hit|miss"}[10m]) < 0.7
+        for: 10m
+        labels:
+          severity: info
+          service: cache
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is below 70%"
+          
+      # Security Alerts
+      - alert: TooManyErrors
+        expr: rate(errors_total[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: "{{ $labels.service }}"
+        annotations:
+          summary: "High error rate"
+          description: "Error rate is above 1 per second for {{ $labels.service }}"
+          
+      - alert: UnusualRequestPattern
+        expr: rate(http_requests_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: info
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "Unusual request pattern"
+          description: "Request rate is above 10 per second for {{ $labels.job }}"
+
+  - name: rag-system-recording-rules
+    rules:
+      
+      # Request rate recording rules
+      - record: rag:http_requests_per_second
+        expr: rate(http_requests_total[5m])
+        
+      - record: rag:http_errors_per_second
+        expr: rate(http_requests_total{status_code=~"5.."}[5m])
+        
+      - record: rag:http_error_rate
+        expr: rag:http_errors_per_second / rag:http_requests_per_second
+        
+      # Document processing recording rules
+      - record: rag:documents_processed_per_second
+        expr: rate(documents_processed_total[5m])
+        
+      - record: rag:document_processing_success_rate
+        expr: rate(documents_processed_total{status="success"}[5m]) / rate(documents_processed_total[5m])
+        
+      # Query recording rules
+      - record: rag:queries_per_second
+        expr: rate(queries_total[5m])
+        
+      - record: rag:query_success_rate
+        expr: rate(queries_total{status="success"}[5m]) / rate(queries_total[5m])
+        
+      # Response time recording rules
+      - record: rag:response_time_p95
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+        
+      - record: rag:response_time_p99
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
+        
+      - record: rag:query_response_time_p95
+        expr: histogram_quantile(0.95, rate(query_duration_seconds_bucket[5m]))
+        
+      - record: rag:document_processing_time_p95
+        expr: histogram_quantile(0.95, rate(document_processing_duration_seconds_bucket[5m]))
+        
+      # LLM recording rules
+      - record: rag:llm_requests_per_second
+        expr: rate(llm_requests_total[5m])
+        
+      - record: rag:llm_success_rate
+        expr: rate(llm_requests_total{status="success"}[5m]) / rate(llm_requests_total[5m])
+        
+      - record: rag:llm_response_time_p95
+        expr: histogram_quantile(0.95, rate(llm_request_duration_seconds_bucket[5m]))
+        
+      # Vector operations recording rules
+      - record: rag:embeddings_per_second
+        expr: rate(vector_embeddings_total[5m])
+        
+      - record: rag:vector_search_time_p95
+        expr: histogram_quantile(0.95, rate(query_vector_search_duration_seconds_bucket[5m]))
+        
+      # Cache recording rules
+      - record: rag:cache_hit_rate
+        expr: rate(cache_operations_total{operation="hit"}[5m]) / rate(cache_operations_total{operation=~"hit|miss"}[5m])
+        
+      - record: rag:cache_operations_per_second
+        expr: rate(cache_operations_total[5m])
