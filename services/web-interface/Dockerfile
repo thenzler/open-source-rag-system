@@ -1,7 +1,8 @@
-# Multi-stage build for React app
-FROM node:18-alpine AS builder
+# Web Interface Dockerfile
 
-# Set working directory
+# Build stage
+FROM node:18-alpine as build
+
 WORKDIR /app
 
 # Copy package files
@@ -16,21 +17,17 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage with nginx
+# Production stage
 FROM nginx:alpine
 
-# Copy built assets from builder stage
-COPY --from=builder /app/build /usr/share/nginx/html
+# Copy built app to nginx
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port
-EXPOSE 80
+EXPOSE 3000
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
