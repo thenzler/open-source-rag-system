@@ -1,4 +1,5 @@
-# Prometheus Configuration for RAG System Monitoring
+# Prometheus Configuration for RAG System
+
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
@@ -15,102 +16,121 @@ alerting:
 
 # Load rules once and periodically evaluate them
 rule_files:
-  - "alert_rules.yml"
+  - "alerts.yml"
   - "recording_rules.yml"
 
-# Scrape configurations
+# A scrape configuration containing exactly one endpoint to scrape
 scrape_configs:
+  
   # Prometheus itself
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
-
-  # API Gateway
-  - job_name: 'api-gateway'
+    scrape_interval: 30s
+    metrics_path: /metrics
+    
+  # RAG System API Gateway
+  - job_name: 'rag-api-gateway'
     static_configs:
       - targets: ['api-gateway:8000']
-    metrics_path: '/metrics'
-    scrape_interval: 10s
-    scrape_timeout: 5s
-
-  # Document Processor
-  - job_name: 'document-processor'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    
+  # Document Processor Service
+  - job_name: 'rag-document-processor'
     static_configs:
       - targets: ['document-processor:8001']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  # Vector Engine
-  - job_name: 'vector-engine'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    
+  # Vector Engine Service
+  - job_name: 'rag-vector-engine'
     static_configs:
       - targets: ['vector-engine:8002']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    
   # PostgreSQL Database
   - job_name: 'postgres'
     static_configs:
-      - targets: ['postgres:9187']
-    metrics_path: '/metrics'
+      - targets: ['postgres:5432']
     scrape_interval: 30s
-
+    metrics_path: /metrics
+    
   # Qdrant Vector Database
   - job_name: 'qdrant'
     static_configs:
       - targets: ['qdrant:6333']
-    metrics_path: '/metrics'
     scrape_interval: 30s
-
-  # Redis
+    metrics_path: /metrics
+    
+  # Redis Cache
   - job_name: 'redis'
     static_configs:
-      - targets: ['redis:9121']
-    metrics_path: '/metrics'
+      - targets: ['redis:6379']
     scrape_interval: 30s
-
+    metrics_path: /metrics
+    
   # Ollama LLM Service
   - job_name: 'ollama'
     static_configs:
       - targets: ['ollama:11434']
-    metrics_path: '/metrics'
     scrape_interval: 30s
-
+    metrics_path: /metrics
+    
   # Node Exporter (system metrics)
-  - job_name: 'node-exporter'
+  - job_name: 'node'
     static_configs:
       - targets: ['node-exporter:9100']
     scrape_interval: 30s
-
-  # cAdvisor (container metrics)
+    
+  # Container metrics (cAdvisor)
   - job_name: 'cadvisor'
     static_configs:
       - targets: ['cadvisor:8080']
     scrape_interval: 30s
-
-  # Custom application metrics
-  - job_name: 'rag-system-custom'
+    metrics_path: /metrics
+    
+  # Nginx metrics (if using nginx)
+  - job_name: 'nginx'
     static_configs:
-      - targets: ['api-gateway:8001']
-    metrics_path: '/custom-metrics'
-    scrape_interval: 60s
+      - targets: ['nginx:9113']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+# Remote write configuration (for long-term storage)
+remote_write:
+  - url: http://remote-storage:9201/api/v1/write
+    queue_config:
+      max_samples_per_send: 1000
+      batch_send_deadline: 5s
+      max_shards: 10
+      min_shards: 1
+      max_backoff: 100ms
+      min_backoff: 10ms
+    # Optional: Add authentication
+    # basic_auth:
+    #   username: prometheus
+    #   password: secret
 
 # Storage configuration
 storage:
   tsdb:
-    path: /prometheus/data
     retention.time: 30d
     retention.size: 10GB
     wal-compression: true
-
-# Remote write configuration (for long-term storage)
-# remote_write:
-#   - url: "http://remote-storage:9201/write"
-#     queue_config:
-#       max_samples_per_send: 1000
-#       max_shards: 200
-#       capacity: 2500
-
-# Global limits
-global:
-  query_log_file: /prometheus/logs/query.log
-  scrape_timeout: 10s
+    
+# Web configuration
+web:
+  console.templates: /etc/prometheus/consoles
+  console.libraries: /etc/prometheus/console_libraries
+  enable-lifecycle: true
+  enable-admin-api: true
+  
+# Logging configuration
+log:
+  level: info
+  format: json
