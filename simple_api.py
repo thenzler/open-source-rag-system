@@ -56,9 +56,9 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8001", "http://127.0.0.1:8001"],
+    allow_origins=["*"],  # Allow all origins for widget integration
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -203,6 +203,20 @@ class LLMQueryResponse(BaseModel):
     method: str  # "llm_generated" or "vector_search"
     sources: List[dict]
     total_sources: int
+    processing_time: Optional[float] = None
+
+class ChatRequest(BaseModel):
+    query: str
+    chat_history: Optional[List[dict]] = []
+    max_tokens: Optional[int] = 1000
+    temperature: Optional[float] = 0.7
+    context_limit: Optional[int] = 5
+
+class ChatResponse(BaseModel):
+    response: str
+    query: Optional[str] = None
+    context: Optional[List[dict]] = []
+    confidence: Optional[float] = 0.0
     processing_time: Optional[float] = None
 
 # Document processing functions
@@ -1374,6 +1388,303 @@ async def delete_document(document_id: str):
     except Exception as e:
         logger.error(f"Error deleting document: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
+
+@app.post("/api/chat", response_model=ChatResponse)
+async def chat_endpoint(request: ChatRequest):
+    """Chat endpoint for the widget - compatible with widget expectations"""
+    start_time = time.time()
+    
+    try:
+        # Rate limiting check
+        if not rate_limit_check("query"):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
+            )
+        
+        # Validate query
+        if not request.query or not request.query.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="Query cannot be empty"
+            )
+        
+        # Sanitize query
+        sanitized_query = sanitize_query_string(request.query)
+        if not sanitized_query:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid query after sanitization"
+            )
+        
+        # Check if we have any documents
+        if not document_chunks:
+            return ChatResponse(
+                response="I don't have any documents to search through yet. Please upload some documents first so I can help answer your questions!",
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Find similar chunks
+        similar_chunks = find_similar_chunks(sanitized_query, request.context_limit or 5)
+        
+        if not similar_chunks:
+            return ChatResponse(
+                response="I couldn't find any relevant information in the uploaded documents to answer your question. Could you try rephrasing your question or asking about a different topic?",
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Calculate average confidence
+        avg_confidence = sum(chunk['similarity'] for chunk in similar_chunks) / len(similar_chunks)
+        
+        # Prepare context for response
+        context_sources = format_sources_for_response(similar_chunks)
+        
+        # Try to use LLM if available
+        if ollama_client and ollama_client.is_available():
+            try:
+                # Prepare context for LLM
+                context_text = prepare_context_for_llm(similar_chunks)
+                
+                if context_text:
+                    # Generate LLM response
+                    llm_response = generate_llm_answer(sanitized_query, context_text)
+                    
+                    if llm_response:
+                        return ChatResponse(
+                            response=llm_response,
+                            context=context_sources,
+                            confidence=avg_confidence,
+                            processing_time=time.time() - start_time
+                        )
+            except Exception as e:
+                logger.error(f"LLM generation failed: {e}")
+        
+        # Fallback to vector search response with better formatting
+        if context_sources:
+            # Create a concise, direct answer from the most relevant source
+            top_source = context_sources[0]
+            content = top_source['content']
+            
+            # Extract key sentences that likely contain the answer
+            sentences = content.split('.')
+            key_sentences = []
+            query_words = set(sanitized_query.lower().split())
+            
+            for sentence in sentences:
+                sentence = sentence.strip()
+                if len(sentence) > 10:  # Skip very short sentences
+                    sentence_words = set(sentence.lower().split())
+                    if query_words.intersection(sentence_words):
+                        key_sentences.append(sentence)
+                        if len(key_sentences) >= 2:  # Limit to 2 key sentences
+                            break
+            
+            # Create formatted response
+            if key_sentences:
+                response_text = '. '.join(key_sentences) + '.'
+            else:
+                # Fallback to first 150 characters if no key sentences found
+                response_text = content[:150] + '...' if len(content) > 150 else content
+            
+            # Add source information
+            response_text += f"\n\nQuelle: {top_source['source_document']}"
+            
+            # Add additional sources if available
+            if len(context_sources) > 1:
+                other_sources = [s['source_document'] for s in context_sources[1:3]]
+                response_text += f"\nWeitere relevante Quellen: {', '.join(other_sources)}"
+            
+            return ChatResponse(
+                response=response_text,
+                context=context_sources,
+                confidence=avg_confidence,
+                processing_time=time.time() - start_time
+            )
+        
+        # No relevant content found
+        return ChatResponse(
+            response="I couldn't find specific information about that topic in the uploaded documents. Could you try asking about something else or upload more relevant documents?",
+            context=[],
+            confidence=0.0,
+            processing_time=time.time() - start_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing chat request: {str(e)}")
+
+@app.post("/api/v1/query/optimized", response_model=ChatResponse)
+async def query_documents_optimized(request: ChatRequest):
+    """Optimized query with faster timeouts and better fallback formatting"""
+    start_time = time.time()
+    
+    try:
+        # Rate limiting check
+        if not rate_limit_check("query"):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
+            )
+        
+        # Validate query
+        if not request.query or not request.query.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="Query cannot be empty"
+            )
+        
+        # Sanitize query
+        sanitized_query = sanitize_query_string(request.query)
+        if not sanitized_query:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid query after sanitization"
+            )
+        
+        # Check if we have any documents
+        if not document_chunks:
+            return ChatResponse(
+                response="Bitte laden Sie zuerst Dokumente hoch, damit ich Ihnen helfen kann!",
+                query=sanitized_query,
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Find similar chunks
+        similar_chunks = find_similar_chunks(sanitized_query, request.context_limit or 3)
+        
+        if not similar_chunks:
+            return ChatResponse(
+                response="Ich konnte keine relevanten Informationen in den Dokumenten finden. Versuchen Sie eine andere Fragestellung.",
+                query=sanitized_query,
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Calculate average confidence
+        avg_confidence = sum(chunk['similarity'] for chunk in similar_chunks) / len(similar_chunks)
+        
+        # Prepare context for response
+        context_sources = format_sources_for_response(similar_chunks)
+        
+        # Try LLM with reduced timeout (5 seconds) - skip if Ollama unavailable
+        if ollama_client and ollama_client.is_available():
+            try:
+                context_text = prepare_context_for_llm(similar_chunks[:2])  # Use fewer chunks
+                
+                if context_text:
+                    # Create a more concise prompt
+                    prompt = f"""Beantworte die Frage kurz und direkt basierend auf dem bereitgestellten Kontext.
+                    
+Kontext: {context_text[:1000]}
+
+Frage: {sanitized_query}
+
+Antwort (max 2-3 Sätze):"""
+                    
+                    # Quick LLM generation with timeout
+                    import asyncio
+                    import concurrent.futures
+                    
+                    def quick_llm_call():
+                        return ollama_client.generate_answer(prompt, max_tokens=150)
+                    
+                    with concurrent.futures.ThreadPoolExecutor() as executor:
+                        future = executor.submit(quick_llm_call)
+                        try:
+                            llm_response = future.result(timeout=5)  # 5 second timeout
+                            if llm_response:
+                                return ChatResponse(
+                                    response=llm_response + f"\n\nQuelle: {context_sources[0]['source_document']}",
+                                    query=sanitized_query,
+                                    context=context_sources,
+                                    confidence=avg_confidence,
+                                    processing_time=time.time() - start_time
+                                )
+                        except concurrent.futures.TimeoutError:
+                            logger.warning("LLM timeout after 5 seconds, falling back to vector search")
+            except Exception as e:
+                logger.error(f"LLM generation failed: {e}")
+        
+        # Optimized vector search fallback
+        if context_sources:
+            top_source = context_sources[0]
+            content = top_source['content']
+            
+            # Smart content extraction - find the most relevant sentences
+            sentences = [s.strip() for s in content.split('.') if len(s.strip()) > 15]
+            query_words = set(sanitized_query.lower().split())
+            
+            # Score sentences by relevance
+            scored_sentences = []
+            for sentence in sentences[:5]:  # Only check first 5 sentences
+                sentence_words = set(sentence.lower().split())
+                overlap = len(query_words.intersection(sentence_words))
+                if overlap > 0:
+                    scored_sentences.append((sentence, overlap))
+            
+            # Create response from best sentences
+            if scored_sentences:
+                scored_sentences.sort(key=lambda x: x[1], reverse=True)
+                response_text = scored_sentences[0][0]
+                if len(scored_sentences) > 1:
+                    response_text += '. ' + scored_sentences[1][0]
+                response_text += '.'
+            else:
+                # Use first 120 characters if no relevant sentences
+                response_text = content[:120] + '...' if len(content) > 120 else content
+            
+            # Add source
+            response_text += f"\n\nQuelle: {top_source['source_document']}"
+            
+            return ChatResponse(
+                response=response_text,
+                query=sanitized_query,
+                context=context_sources,
+                confidence=avg_confidence,
+                processing_time=time.time() - start_time
+            )
+        
+        # No relevant content found
+        return ChatResponse(
+            response="Keine relevanten Informationen gefunden. Versuchen Sie eine andere Frage.",
+            query=sanitized_query,
+            context=[],
+            confidence=0.0,
+            processing_time=time.time() - start_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in optimized query: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+
+@app.get("/api/status")
+async def get_api_status():
+    """Status endpoint for widget health checks"""
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "uptime": time.time(),
+        "features": {
+            "vector_search": embedding_model is not None,
+            "llm_generation": ollama_client is not None and ollama_client.is_available() if ollama_client else False,
+            "document_processing": True
+        },
+        "statistics": {
+            "documents_uploaded": len(documents),
+            "total_chunks": len(document_chunks)
+        }
+    }
 
 if __name__ == "__main__":
     import uvicorn

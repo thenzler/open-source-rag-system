@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCorp Solutions - RAG Widget Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>TechCorp Solutions</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Advanced RAG Integration Solutions</h2>
+                <p>Intelligent document processing and AI-powered responses for your business</p>
+                <button class="cta-button">Get Started</button>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Our Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>🤖 AI-Powered Search</h3>
+                        <p>Advanced retrieval-augmented generation for accurate document search and intelligent responses.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📄 Document Processing</h3>
+                        <p>Support for PDF, Word, and text documents with automatic indexing and vectorization.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔍 Vector Search</h3>
+                        <p>Lightning-fast semantic search with optimized vector embeddings for precise results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔒 Secure Integration</h3>
+                        <p>Enterprise-grade security with API key authentication and CORS support.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="documentation">
+            <div class="container">
+                <h2>Quick Start Guide</h2>
+                <div class="doc-content">
+                    <h3>API Integration</h3>
+                    <p>Integrate our RAG API with a simple POST request:</p>
+                    <pre><code>curl -X POST "http://localhost:8000/api/v1/query/optimized" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{"query": "What are the system requirements?"}'</code></pre>
+                    
+                    <h3>Widget Integration</h3>
+                    <p>Add our chat widget to any website with one line:</p>
+                    <pre><code>&lt;script src="widget-loader.js" data-api-key="YOUR_KEY"&gt;&lt;/script&gt;</code></pre>
+                    
+                    <h3>Common Questions</h3>
+                    <ul>
+                        <li><strong>Q:</strong> How do I authenticate API requests?</li>
+                        <li><strong>A:</strong> Use the Authorization header with your API key</li>
+                        <li><strong>Q:</strong> What document formats are supported?</li>
+                        <li><strong>A:</strong> PDF, DOCX, TXT, and MD files are supported</li>
+                        <li><strong>Q:</strong> How fast are the responses?</li>
+                        <li><strong>A:</strong> Optimized responses in under 10 seconds</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TechCorp Solutions. All rights reserved.</p>
+            <p>Demo website for RAG Widget Integration</p>
+        </div>
+    </footer>
+
+    <!-- RAG Widget Integration -->
+    <script src="../widget/widget-loader.js" 
+            data-api-key="demo-key-123" 
+            data-api-url="http://localhost:8001"
+            data-theme="default"
+            data-position="bottom-right"
+            data-title="Documentation Assistant"
+            data-welcome="Hi! I can help you with our API documentation and integration questions. What would you like to know?">
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

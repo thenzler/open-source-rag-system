@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Widget Test - Standalone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover { background: #45a049; }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 RAG Widget API Test</h1>
+        <p>Test the RAG API endpoints directly without CORS issues.</p>
+        
+        <button class="test-button" onclick="testOptimizedEndpoint()">Test Optimized Endpoint</button>
+        <button class="test-button" onclick="testChatEndpoint()">Test Chat Endpoint</button>
+        <button class="test-button" onclick="testServerStatus()">Test Server Status</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+
+        function showResult(content, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = isError ? 'error' : 'success';
+            resultDiv.innerHTML = content;
+        }
+
+        async function testOptimizedEndpoint() {
+            showResult('Testing optimized endpoint...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/query/optimized`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: "Was gehört in die Bio Tonne?",
+                        context_limit: 3,
+                        max_tokens: 200
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                showResult(`
+                    <h3>✅ Optimized Endpoint Success!</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong> ${data.response || 'No response field'}</p>
+                    <p><strong>Query:</strong> ${data.query || 'No query field'}</p>
+                    <p><strong>Sources:</strong> ${data.context ? data.context.length : 0}</p>
+                    <p><strong>Processing Time:</strong> ${data.processing_time || 'N/A'}s</p>
+                    <details style="margin-top: 10px;">
+                        <summary>Full Response</summary>
+                        <pre style="background: #f8f9fa; padding: 10px; margin-top: 5px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                `);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showResult(`
+                    <h3>❌ Optimized Endpoint Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul>
+                        <li>API server not running (run: <code>python simple_api.py</code>)</li>
+                        <li>Server running on wrong port (should be 8001)</li>
+                        <li>CORS policy blocking request</li>
+                        <li>No documents uploaded to the system</li>
+                    </ul>
+                `, true);
+            }
+        }
+
+        async function testChatEndpoint() {
+            showResult('Testing chat endpoint...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: "Was gehört in die Bio Tonne?",
+                        chat_history: []
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                
+                showResult(`
+                    <h3>✅ Chat Endpoint Success!</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong> ${data.response || 'No response field'}</p>
+                    <p><strong>Sources:</strong> ${data.context ? data.context.length : 0}</p>
+                    <details style="margin-top: 10px;">
+                        <summary>Full Response</summary>
+                        <pre style="background: #f8f9fa; padding: 10px; margin-top: 5px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                `);
+
+            } catch (error) {
+                showResult(`
+                    <h3>❌ Chat Endpoint Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `, true);
+            }
+        }
+
+        async function testServerStatus() {
+            showResult('Testing server status...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/status`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                showResult(`
+                    <h3>✅ Server Status OK!</h3>
+                    <p><strong>Status:</strong> ${data.status}</p>
+                    <p><strong>Documents:</strong> ${data.statistics?.documents_uploaded || 0}</p>
+                    <p><strong>Chunks:</strong> ${data.statistics?.total_chunks || 0}</p>
+                    <p><strong>Vector Search:</strong> ${data.features?.vector_search ? '✅' : '❌'}</p>
+                    <p><strong>LLM Generation:</strong> ${data.features?.llm_generation ? '✅' : '❌'}</p>
+                `);
+
+            } catch (error) {
+                showResult(`
+                    <h3>❌ Server Not Responding</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Make sure the API server is running: <code>python simple_api.py</code></p>
+                `, true);
+            }
+        }
+
+        // Auto-test server status on load
+        window.addEventListener('load', () => {
+            setTimeout(testServerStatus, 1000);
+        });
+    </script>
+</body>
+</html>

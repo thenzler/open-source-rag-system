@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TechCorp Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>TechCorp Solutions</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h2>Get in Touch</h2>
+                <p>Ready to transform your document processing? We're here to help!</p>
+            </div>
+        </section>
+
+        <section class="contact-content">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3>Contact Information</h3>
+                        <div class="contact-item">
+                            <strong>📧 Email:</strong>
+                            <p>info@techcorp-solutions.com</p>
+                        </div>
+                        <div class="contact-item">
+                            <strong>📞 Phone:</strong>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                        <div class="contact-item">
+                            <strong>🏢 Address:</strong>
+                            <p>123 Tech Street<br>
+                            Innovation District<br>
+                            San Francisco, CA 94105</p>
+                        </div>
+                        <div class="contact-item">
+                            <strong>⏰ Business Hours:</strong>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM PST<br>
+                            Saturday: 10:00 AM - 4:00 PM PST<br>
+                            Sunday: Closed</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h3>Send us a Message</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Company</label>
+                                <input type="text" id="company" name="company">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="api-integration">API Integration</option>
+                                    <option value="widget-support">Widget Support</option>
+                                    <option value="enterprise-sales">Enterprise Sales</option>
+                                    <option value="technical-support">Technical Support</option>
+                                    <option value="billing">Billing Questions</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="support-options">
+            <div class="container">
+                <h2>Get Support</h2>
+                <div class="support-grid">
+                    <div class="support-card">
+                        <h3>📚 Documentation</h3>
+                        <p>Comprehensive guides and API reference documentation to help you integrate our solutions.</p>
+                        <a href="#" class="support-link">View Docs</a>
+                    </div>
+                    <div class="support-card">
+                        <h3>💬 Live Chat</h3>
+                        <p>Chat with our support team in real-time using the widget on this page.</p>
+                        <a href="#" class="support-link">Start Chat</a>
+                    </div>
+                    <div class="support-card">
+                        <h3>🎓 Training</h3>
+                        <p>Personalized training sessions to help your team get the most out of our platform.</p>
+                        <a href="#" class="support-link">Schedule Training</a>
+                    </div>
+                    <div class="support-card">
+                        <h3>🔧 Technical Support</h3>
+                        <p>Expert technical support for integration, troubleshooting, and optimization.</p>
+                        <a href="#" class="support-link">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>How do I get started with the API?</h3>
+                        <p>Sign up for an account, get your API key, and check out our quickstart guide. You can be up and running in minutes!</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>What document formats do you support?</h3>
+                        <p>We support PDF, DOCX, TXT, and Markdown files. Support for additional formats is being added regularly.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Do you offer enterprise pricing?</h3>
+                        <p>Yes! We offer custom enterprise plans with volume discounts, dedicated support, and SLA guarantees.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>How secure is my data?</h3>
+                        <p>We use enterprise-grade security with encryption at rest and in transit, plus strict access controls and regular security audits.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TechCorp Solutions. All rights reserved.</p>
+            <p>Demo website for RAG Widget Integration</p>
+        </div>
+    </footer>
+
+    <!-- RAG Widget Integration - Support Theme -->
+    <script src="../widget/widget-loader.js" 
+            data-api-key="demo-key-123" 
+            data-api-url="http://localhost:8001"
+            data-theme="green"
+            data-position="bottom-right"
+            data-title="Support Assistant"
+            data-welcome="Hi! I'm here to help with any questions about our services, pricing, or technical support. How can I assist you today?">
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
