@@ -1,12 +1,104 @@
-# Open Source RAG AI System
+# 🚀 Open Source RAG System
 
-🚀 **Complete locally hosted Retrieval-Augmented Generation system with document processing, vector search, and LLM integration**
+A high-performance Retrieval-Augmented Generation (RAG) system with AI-powered document search, optimized response generation, and embeddable widget integration.
 
-[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/thenzler/open-source-rag-system/releases)
-[![Performance](https://img.shields.io/badge/performance-5x--10x_faster-green.svg)](#performance-optimizations)
-[![Streaming](https://img.shields.io/badge/streaming-enabled-brightgreen.svg)](#streaming-responses)
+![RAG System Demo](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
+![Version](https://img.shields.io/badge/Version-1.3.0-blue)
+![Python](https://img.shields.io/badge/Python-3.8%2B-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Overview
+## ✨ Features
+
+### 🔍 **Advanced Document Processing**
+- **Multi-format Support**: PDF, DOCX, TXT, and Markdown files
+- **Intelligent Chunking**: Optimized text segmentation for better retrieval
+- **Vector Embeddings**: High-quality semantic search using SentenceTransformers
+- **Fast Processing**: Optimized document indexing with caching
+
+### 🤖 **AI-Powered Generation**
+- **LLM Integration**: Supports Ollama with multiple models (Mistral, Phi-3, Llama)
+- **Smart Fallback**: Automatic fallback to vector search if LLM fails
+- **Optimized Timeouts**: Fast response times (5-10 seconds)
+- **Source Citations**: Automatic source attribution with highlighting
+
+### 🎯 **Performance Optimizations**
+- **Smart Caching**: 2-10x faster repeated queries
+- **Optimized Vector Search**: 3-5x faster similarity search
+- **Streaming API**: Real-time response streaming
+- **Production Infrastructure**: Health checks, rate limiting, auto-setup
+
+### 🌐 **Embeddable Widget**
+- **Universal Integration**: Works on any website with one line of code
+- **Customizable Themes**: 7 built-in themes + custom colors
+- **Mobile Responsive**: Perfect on all devices
+- **Source Display**: Shows document sources with each answer
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┬─────────────────┬─────────────────┐
+│   Frontend      │   API Server    │   AI Engine    │
+├─────────────────┼─────────────────┼─────────────────┤
+│ • Web Interface │ • FastAPI       │ • Ollama LLMs   │
+│ • Chat Widget   │ • Vector Search │ • Embeddings    │
+│ • Examples      │ • Document Proc │ • Smart Cache   │
+└─────────────────┴─────────────────┴─────────────────┘
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Python 3.8+**
+- **Ollama** (for AI generation) - [Download here](https://ollama.com/download)
+- **Git** (for cloning)
+
+### 1. Installation
+
+```bash
+# Clone repository
+git clone https://github.com/your-username/open-source-rag-system.git
+cd open-source-rag-system
+
+# Install dependencies
+pip install -r simple_requirements.txt
+
+# Install Ollama models (optional but recommended)
+ollama pull phi3-mini    # Fast, lightweight model
+ollama pull llama3.2:1b  # Ultra-fast model
+```
+
+### 2. Start the System
+
+```bash
+# Start API server
+python simple_api.py
+# Server runs on http://localhost:8001
+
+# Open frontend
+# Double-click simple_frontend.html
+# Or visit: http://localhost:8001 (if served by API)
+```
+
+### 3. Upload Documents
+
+1. Open the frontend in your browser
+2. Click "Choose Files" and select PDF/DOCX/TXT files
+3. Wait for processing to complete
+4. Start asking questions!
+
+### 4. Test the System
+
+```bash
+# Test API directly
+python test_widget_endpoint.py
+
+# Test widget integration
+python test_widget_server.py
+# Then visit: http://localhost:3000/widget/
+```
+
+## 📖 Usage Overview
 
 This project provides a **production-ready**, open-source RAG (Retrieval-Augmented Generation) AI system designed to run entirely locally while delivering enterprise-grade performance. Version 1.3.0 introduces major performance optimizations and streaming capabilities.
 

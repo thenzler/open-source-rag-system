@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Widget - Vanilla HTML Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .code-block {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background: #5a67d8;
+        }
+        .note {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>RAG Chat Widget - Vanilla HTML Example</h1>
+        <p>This page demonstrates how to integrate the RAG chat widget with a simple HTML page.</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>Basic Integration</h2>
+        <p>The widget is already loaded on this page! Look for the chat bubble in the bottom-right corner.</p>
+        
+        <div class="code-block">
+            <code>
+&lt;script src="https://yoursite.com/widget-loader.js" 
+        data-api-key="YOUR_API_KEY"
+        data-api-url="http://localhost:8001"
+        data-title="Demo Assistant"
+        data-theme="default"&gt;
+&lt;/script&gt;
+            </code>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Widget Controls</h2>
+        <p>You can control the widget programmatically using JavaScript:</p>
+        
+        <div class="controls">
+            <button onclick="openWidget()">Open Widget</button>
+            <button onclick="closeWidget()">Close Widget</button>
+            <button onclick="sendMessage()">Send Test Message</button>
+            <button onclick="clearHistory()">Clear History</button>
+        </div>
+
+        <div class="code-block">
+            <code>
+// Open the widget
+window.ragWidget.open();
+
+// Close the widget
+window.ragWidget.close();
+
+// Send a message programmatically
+window.ragWidget.sendMessage('Hello from JavaScript!');
+
+// Clear chat history
+window.ragWidget.clear();
+            </code>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Configuration Options</h2>
+        <p>The widget can be customized with various data attributes:</p>
+        
+        <div class="code-block">
+            <code>
+&lt;script src="widget-loader.js" 
+        data-api-key="YOUR_API_KEY"
+        data-api-url="https://your-api.com"
+        data-theme="dark"
+        data-position="bottom-left"
+        data-primary-color="#ff6b6b"
+        data-secondary-color="#4ecdc4"
+        data-title="Custom Assistant"
+        data-welcome-message="Welcome! How can I help?"
+        data-placeholder="Ask me anything..."
+        data-z-index="999999"&gt;
+&lt;/script&gt;
+            </code>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Theme Examples</h2>
+        <p>Try different themes by clicking the buttons below:</p>
+        
+        <div class="controls">
+            <button onclick="changeTheme('default')">Default</button>
+            <button onclick="changeTheme('dark')">Dark</button>
+            <button onclick="changeTheme('blue')">Blue</button>
+            <button onclick="changeTheme('green')">Green</button>
+            <button onclick="changeTheme('purple')">Purple</button>
+            <button onclick="changeTheme('orange')">Orange</button>
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>Note:</strong> Make sure your RAG API is running and accessible. The default configuration assumes the API is running on <code>http://localhost:8001</code>.
+    </div>
+
+    <div class="warning">
+        <strong>API Key Required:</strong> Replace <code>YOUR_API_KEY</code> with your actual API key. For this demo, we're using a placeholder key.
+    </div>
+
+    <div class="demo-section">
+        <h2>Sample Content</h2>
+        <p>This is sample content to demonstrate how the widget works alongside your existing website content. The widget floats above your content and doesn't interfere with the page layout.</p>
+        
+        <h3>About RAG Systems</h3>
+        <p>Retrieval-Augmented Generation (RAG) is a powerful technique that combines information retrieval with text generation. It allows AI systems to access and reference specific documents or knowledge bases when generating responses.</p>
+        
+        <h3>Benefits of RAG</h3>
+        <ul>
+            <li>Provides accurate, source-backed information</li>
+            <li>Reduces hallucinations in AI responses</li>
+            <li>Allows for real-time knowledge updates</li>
+            <li>Enables domain-specific expertise</li>
+        </ul>
+        
+        <h3>Use Cases</h3>
+        <p>RAG systems are particularly useful for:</p>
+        <ul>
+            <li>Customer support and documentation</li>
+            <li>Research and knowledge management</li>
+            <li>Educational applications</li>
+            <li>Content creation and editing</li>
+        </ul>
+    </div>
+
+    <!-- RAG Widget Integration -->
+    <script>
+        // Widget control functions
+        function openWidget() {
+            if (window.ragWidget) {
+                window.ragWidget.open();
+            } else {
+                alert('Widget not loaded yet. Please wait a moment and try again.');
+            }
+        }
+
+        function closeWidget() {
+            if (window.ragWidget) {
+                window.ragWidget.close();
+            }
+        }
+
+        function sendMessage() {
+            if (window.ragWidget) {
+                window.ragWidget.sendMessage('Hello! This is a test message from the demo page.');
+            } else {
+                alert('Widget not loaded yet. Please wait a moment and try again.');
+            }
+        }
+
+        function clearHistory() {
+            if (window.ragWidget) {
+                window.ragWidget.clear();
+                alert('Chat history cleared!');
+            }
+        }
+
+        function changeTheme(theme) {
+            // Note: Theme changing after load is not implemented in this version
+            // This would require reloading the widget with new configuration
+            alert(`Theme change to '${theme}' would require reloading the widget with new configuration.`);
+        }
+
+        // Wait for widget to load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.ragWidget) {
+                    console.log('RAG Widget loaded successfully!');
+                    console.log('Widget config:', window.ragWidget.config);
+                } else {
+                    console.log('RAG Widget not found. Make sure the widget script is loaded.');
+                }
+            }, 1000);
+        });
+    </script>
+
+    <!-- Load the RAG Widget -->
+    <script src="../widget-loader.js" 
+            data-api-key="demo-key-replace-with-real-key"
+            data-api-url="http://localhost:8001"
+            data-title="Demo Assistant"
+            data-welcome-message="Hello! I'm a demo of the RAG chat widget. Upload some documents to the API first, then I can help answer questions about them!"
+            data-theme="default"
+            data-position="bottom-right">
+    </script>
+</body>
+</html>

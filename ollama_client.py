@@ -18,7 +18,7 @@ class OllamaClient:
     def __init__(self, 
                  base_url: str = "http://localhost:11434",
                  model: str = None,
-                 timeout: int = 30):
+                 timeout: int = 10):
         """
         Initialize Ollama client
         
@@ -47,16 +47,18 @@ class OllamaClient:
             str: Best available model name
         """
         try:
-            # Preferred models in order of preference
+            # Preferred models in order of preference (fastest first)
             preferred_models = [
-                "llama3.1:8b",
-                "llama3:8b", 
-                "llama2:13b",
-                "llama2:7b",
-                "mistral:latest",
-                "mistral:7b",
-                "phi3:latest",
                 "phi3-mini:latest",
+                "phi3:latest", 
+                "llama3.2:1b",
+                "llama3.2:3b",
+                "llama3:8b",
+                "llama3.1:8b",
+                "mistral:7b",
+                "mistral:latest",
+                "llama2:7b",
+                "llama2:13b",
                 "mannix/phi3-mini-4k:latest"
             ]
             

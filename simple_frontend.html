@@ -303,7 +303,7 @@
 
             try {
                 const endpoint = isEnhanced ? 
-                    `${API_BASE}/api/v1/query/enhanced` : 
+                    `${API_BASE}/api/v1/query/optimized` : 
                     `${API_BASE}/api/v1/query`;
                 
                 const response = await fetch(endpoint, {
@@ -360,6 +360,55 @@
             resultsDiv.innerHTML = html;
         }
 
+        // Extract key phrases from answer for highlighting
+        function extractAnswerPhrases(answerText) {
+            // Remove source references and clean text
+            const cleanAnswer = answerText.replace(/\n\nQuelle:.*$/g, '').trim();
+            
+            // Split into sentences and extract meaningful phrases
+            const sentences = cleanAnswer.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const phrases = [];
+            
+            sentences.forEach(sentence => {
+                // Extract key noun phrases (simple approach)
+                const words = sentence.trim().split(/\s+/);
+                
+                // Extract 2-4 word phrases
+                for (let i = 0; i < words.length - 1; i++) {
+                    for (let len = 2; len <= Math.min(4, words.length - i); len++) {
+                        const phrase = words.slice(i, i + len).join(' ');
+                        if (phrase.length > 5 && !phrase.match(/^(der|die|das|ein|eine|und|oder|für|in|an|auf|mit|von|zu|ist|sind|werden|wird)$/i)) {
+                            phrases.push(phrase.toLowerCase());
+                        }
+                    }
+                }
+                
+                // Also add individual important words (longer than 4 chars)
+                words.forEach(word => {
+                    const cleanWord = word.replace(/[.,!?;:"']/g, '').toLowerCase();
+                    if (cleanWord.length > 4 && !cleanWord.match(/^(aber|auch|dann|dass|diese|einem|einer|eines|haben|nicht|noch|oder|sind|über|unter|werden|wird|wurde|wurden)$/)) {
+                        phrases.push(cleanWord);
+                    }
+                });
+            });
+            
+            // Remove duplicates and sort by length (longer phrases first)
+            return [...new Set(phrases)].sort((a, b) => b.length - a.length);
+        }
+
+        // Highlight text based on phrases
+        function highlightText(text, phrases) {
+            let highlightedText = text;
+            
+            phrases.forEach(phrase => {
+                // Create case-insensitive regex
+                const regex = new RegExp(`(${phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                highlightedText = highlightedText.replace(regex, '<mark style="background-color: #fff3cd; padding: 1px 2px; border-radius: 2px; font-weight: 500;">$1</mark>');
+            });
+            
+            return highlightedText;
+        }
+
         // Display enhanced results (LLM generated)
         function displayEnhancedResults(result) {
             const resultsDiv = document.getElementById('searchResults');
@@ -386,23 +435,40 @@
             }
             
             // Main answer
+            const answerText = result.response || result.answer || 'No answer available';
+            const queryText = result.query || 'Unknown query';
+            
+            // Extract phrases from answer for highlighting
+            const answerPhrases = extractAnswerPhrases(answerText);
+            
             html += `<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3498db;">
-                <h3 style="margin: 0 0 10px 0; color: #2c3e50;">Answer for: "${result.query}"</h3>
-                <div style="line-height: 1.6; color: #333; white-space: pre-wrap;">${result.answer}</div>
+                <h3 style="margin: 0 0 10px 0; color: #2c3e50;">Answer for: "${queryText}"</h3>
+                <div style="line-height: 1.6; color: #333; white-space: pre-wrap;">${answerText}</div>
             </div>`;
             
-            // Sources
-            if (result.sources && result.sources.length > 0) {
-                html += `<h4>📚 Sources (${result.total_sources})</h4>`;
-                result.sources.forEach((source, index) => {
+            // Sources with highlighting
+            const sources = result.context || result.sources || [];
+            if (sources && sources.length > 0) {
+                html += `<h4>📚 Sources (${sources.length}) - <span style="color: #f39c12; font-size: 14px;">🔍 Highlighted text shows what was used in the answer</span></h4>`;
+                sources.forEach((source, index) => {
+                    const similarity = source.similarity_score || source.score || 0;
+                    
+                    // Highlight the source content based on answer phrases
+                    const highlightedContent = highlightText(source.content, answerPhrases);
+                    
                     html += `
-                        <div class="result-item" style="margin-bottom: 10px;">
-                            <div class="result-title">📄 ${source.source_document}</div>
-                            <div class="result-content">${source.content}</div>
-                            <div class="result-score">Similarity: ${(source.similarity_score * 100).toFixed(1)}%</div>
+                        <div class="result-item" style="margin-bottom: 15px; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px;">
+                            <div class="result-title" style="font-weight: 600; color: #2c3e50; margin-bottom: 8px;">📄 ${source.source_document}</div>
+                            <div class="result-content" style="line-height: 1.6; color: #333; margin-bottom: 8px;">${highlightedContent}</div>
+                            <div class="result-score" style="font-size: 12px; color: #7f8c8d;">Similarity: ${(similarity * 100).toFixed(1)}%</div>
                         </div>
                     `;
                 });
+                
+                // Add legend
+                html += `<div style="background: #e8f4f8; padding: 10px; border-radius: 6px; font-size: 12px; color: #2c3e50; margin-top: 10px;">
+                    <strong>💡 How to read this:</strong> Highlighted text shows the specific parts of documents that were used to construct your answer. The more highlighting, the more that source contributed to the response.
+                </div>`;
             }
             
             html += '</div>';
