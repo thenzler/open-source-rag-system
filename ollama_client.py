@@ -31,6 +31,19 @@ class OllamaClient:
         self.timeout = timeout
         self.available = None
         
+        # Try to use LLM manager for model selection
+        try:
+            from services.llm_manager import get_llm_manager
+            self.llm_manager = get_llm_manager()
+            
+            if model is None:
+                # Use model from config
+                model = self.llm_manager.get_current_model()
+                logger.info(f"Using model from config: {model}")
+        except ImportError:
+            logger.info("LLM manager not available, using auto-detection")
+            self.llm_manager = None
+        
         # Auto-detect available model if not specified
         if model is None:
             self.model = self._auto_detect_model()
@@ -47,18 +60,17 @@ class OllamaClient:
             str: Best available model name
         """
         try:
-            # Preferred models in order of preference (fastest first)
+            # Preferred models in order of preference (best for RAG first)
             preferred_models = [
-                "phi3-mini:latest",
-                "phi3:latest", 
-                "llama3.2:1b",
-                "llama3.2:3b",
-                "llama3:8b",
-                "llama3.1:8b",
-                "mistral:7b",
-                "mistral:latest",
-                "llama2:7b",
-                "llama2:13b",
+                "llama3.2:3b",      # Best balance for German RAG
+                "llama3.2:7b",      # Better quality if available
+                "mistral:7b",       # Good alternative
+                "mistral:latest",   # Current fallback
+                "phi3:latest",      # Fast but limited
+                "llama3.1:8b",      # Older but capable
+                "llama3:8b",        # Legacy support
+                "phi3-mini:latest", # Minimal option
+                "llama2:7b",        # Older generation
                 "mannix/phi3-mini-4k:latest"
             ]
             
@@ -385,7 +397,7 @@ class OllamaClient:
     
     def _create_rag_prompt(self, query: str, context: str) -> str:
         """
-        Create a RAG-optimized prompt
+        Create a structured German RAG prompt using LLM manager
         
         Args:
             query: User's question
@@ -394,22 +406,79 @@ class OllamaClient:
         Returns:
             str: Formatted prompt
         """
-        prompt = f"""You are a helpful AI assistant that answers questions based only on the provided context. Follow these rules:
-
-1. Only use information from the provided context
-2. If the context doesn't contain enough information, say "I don't have enough information to answer this question."
-3. Be concise and direct
-4. Include specific details from the context when relevant
-5. Do not make up or assume information not in the context
-
-Context:
+        # Use LLM manager for prompt if available
+        if hasattr(self, 'llm_manager') and self.llm_manager:
+            try:
+                prompt = self.llm_manager.get_prompt_template(query, context)
+                logger.debug(f"Using LLM manager prompt for model: {self.model}")
+                return prompt
+            except Exception as e:
+                logger.warning(f"Failed to get prompt from LLM manager: {e}")
+        
+        # Fallback to model-specific prompts
+        model_name = self.model.lower()
+        
+        if 'command-r' in model_name:
+            # Optimized for Command-R models
+            prompt = f"""<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>Du bist ein hilfreicher Assistent, der Fragen NUR basierend auf bereitgestellten Dokumenten beantwortet.<|END_OF_TURN_TOKEN|>
+<|START_OF_TURN_TOKEN|><|USER_TOKEN|>
+Dokumente:
 {context}
 
-Question: {query}
+Frage: {query}<|END_OF_TURN_TOKEN|>
+<|START_OF_TURN_TOKEN|><|ASSISTANT_TOKEN|>Basierend auf den bereitgestellten Dokumenten:"""
+        
+        elif 'solar' in model_name:
+            # Optimized for Solar models
+            prompt = f"""### System:
+Du bist ein Experte im Analysieren von Dokumenten. Beantworte Fragen NUR mit Informationen aus den gegebenen Dokumenten.
 
-Answer:"""
+### Dokumente:
+{context}
+
+### Benutzer:
+{query}
+
+### Assistent:
+Nach Analyse der Dokumente:"""
+        
+        else:
+            # Default prompt for other models
+            prompt = f"""Beantworte die Frage basierend AUSSCHLIESSLICH auf den bereitgestellten Dokumenten.
+
+ANWEISUNGEN:
+1. Lies die Dokumente sorgfältig
+2. Extrahiere NUR die relevanten Informationen für die Frage
+3. Formuliere eine klare, strukturierte Antwort
+4. Verwende KEINE Informationen außerhalb der Dokumente
+
+FRAGE: {query}
+
+DOKUMENTE:
+{context}
+
+ANTWORT (nur basierend auf den Dokumenten):"""
         
         return prompt
+    
+    def switch_model(self, model_key: str) -> bool:
+        """
+        Switch to a different model using LLM manager
+        
+        Args:
+            model_key: Model key from configuration
+            
+        Returns:
+            bool: True if successful
+        """
+        if hasattr(self, 'llm_manager') and self.llm_manager:
+            if self.llm_manager.set_model(model_key):
+                self.model = self.llm_manager.get_current_model()
+                logger.info(f"Switched to model: {self.model}")
+                # Reset availability check
+                self.available = None
+                return True
+        return False
     
     def chat_completion(self, 
                        messages: List[Dict[str, str]], 

@@ -1,0 +1,103 @@
+# LLM Configuration File
+# Easy model switching without code changes
+
+# Default model to use
+default_model: "command-r:latest"
+
+# Model configurations
+models:
+  command-r:
+    name: "command-r:latest"
+    description: "Best for RAG - Optimized for retrieval tasks"
+    context_length: 128000
+    temperature: 0.3
+    max_tokens: 2048
+    prompt_template: "command-r"
+    
+  command-r-plus:
+    name: "command-r-plus:latest"
+    description: "Ultimate RAG model - Needs 60GB+ RAM"
+    context_length: 128000
+    temperature: 0.3
+    max_tokens: 2048
+    prompt_template: "command-r"
+    
+  llama3.2:
+    name: "llama3.2:3b"
+    description: "Balanced model - Good for general use"
+    context_length: 8192
+    temperature: 0.4
+    max_tokens: 2048
+    prompt_template: "default"
+    
+  mistral:
+    name: "mistral:7b-instruct-v0.2"
+    description: "Fast and efficient - Good instruction following"
+    context_length: 32768
+    temperature: 0.3
+    max_tokens: 2048
+    prompt_template: "default"
+    
+  mixtral:
+    name: "mixtral:8x7b"
+    description: "High quality - Needs 26GB+ RAM"
+    context_length: 32768
+    temperature: 0.3
+    max_tokens: 2048
+    prompt_template: "default"
+    
+  solar:
+    name: "solar:10.7b"
+    description: "Excellent context understanding"
+    context_length: 4096
+    temperature: 0.3
+    max_tokens: 2048
+    prompt_template: "solar"
+    
+  phi3:
+    name: "phi3:latest"
+    description: "Lightweight and fast"
+    context_length: 4096
+    temperature: 0.4
+    max_tokens: 1024
+    prompt_template: "default"
+
+# Prompt templates for different model families
+prompt_templates:
+  command-r: |
+    <|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>Du bist ein hilfreicher Assistent, der Fragen NUR basierend auf bereitgestellten Dokumenten beantwortet.<|END_OF_TURN_TOKEN|>
+    <|START_OF_TURN_TOKEN|><|USER_TOKEN|>
+    Dokumente:
+    {context}
+    
+    Frage: {query}<|END_OF_TURN_TOKEN|>
+    <|START_OF_TURN_TOKEN|><|ASSISTANT_TOKEN|>Basierend auf den bereitgestellten Dokumenten:
+    
+  solar: |
+    ### System:
+    Du bist ein Experte im Analysieren von Dokumenten. Beantworte Fragen NUR mit Informationen aus den gegebenen Dokumenten.
+    
+    ### Dokumente:
+    {context}
+    
+    ### Benutzer:
+    {query}
+    
+    ### Assistent:
+    Nach Analyse der Dokumente:
+    
+  default: |
+    Beantworte die Frage basierend AUSSCHLIESSLICH auf den bereitgestellten Dokumenten.
+    
+    ANWEISUNGEN:
+    1. Lies die Dokumente sorgfältig
+    2. Extrahiere NUR die relevanten Informationen für die Frage
+    3. Formuliere eine klare, strukturierte Antwort
+    4. Verwende KEINE Informationen außerhalb der Dokumente
+    
+    FRAGE: {query}
+    
+    DOKUMENTE:
+    {context}
+    
+    ANTWORT (nur basierend auf den Dokumenten):
