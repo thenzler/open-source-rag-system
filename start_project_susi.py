@@ -16,7 +16,7 @@ def print_banner():
     banner = """
     ╔══════════════════════════════════════════════════════════════════╗
     ║                                                                  ║
-    ║    🤖 PROJECT SUSI - Smart Universal Search Intelligence         ║
+    ║       PROJECT SUSI - Smart Universal Search Intelligence         ║
     ║                                                                  ║
     ║    Advanced AI-powered document processing and search system     ║
     ║                                                                  ║

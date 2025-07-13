@@ -706,7 +706,7 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <div class="logo">🤖 Project SUSI</div>
+            <div class="logo">Project SUSI</div>
             <div class="tagline">Smart Universal Search Intelligence</div>
         </div>
     </div>
@@ -1351,7 +1351,7 @@
             }
         }
 
-        // Additional search results display for vector search
+        // Display search results (legacy vector search) - PRESERVED FUNCTIONALITY
         function displaySearchResults(result) {
             const resultsDiv = document.getElementById('searchResults');
             
@@ -1364,11 +1364,14 @@
                 <div class="answer-card">
                     <div class="answer-header">
                         <span class="answer-icon"><i class="fas fa-search"></i></span>
-                        <h3 class="answer-title">Found ${result.total_results} document chunks</h3>
+                        <h3 class="answer-title">Found ${result.total_results} document chunks for "${result.query}"</h3>
                     </div>
-                    <div class="answer-content">Search query: "${result.query}"</div>
                 </div>
                 <div class="sources-container">
+                    <div class="sources-header">
+                        <i class="fas fa-file-alt" style="margin-right: 0.5rem; color: var(--primary-color);"></i>
+                        <span style="font-weight: 600;">Document Chunks (${result.results.length})</span>
+                    </div>
             `;
             
             result.results.forEach(item => {
@@ -1380,7 +1383,7 @@
                                 ${item.source_document}
                             </div>
                             <div class="source-score">
-                                ${(item.score * 100).toFixed(1)}% match
+                                ${(item.score * 100).toFixed(1)}% similarity
                             </div>
                         </div>
                         <div class="source-content">${item.content}</div>
@@ -1397,6 +1400,9 @@
             initializeDragAndDrop();
             loadDocuments();
             checkSystemStatus();
+            
+            // Auto-check system status every 30 seconds
+            setInterval(checkSystemStatus, 30000);
         });
     </script>
 </body>

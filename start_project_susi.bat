@@ -1,6 +1,6 @@
 @echo off
 echo.
-echo   🤖 Starting Project SUSI - Smart Universal Search Intelligence
+echo   Starting Project SUSI - Smart Universal Search Intelligence
 echo   ================================================================
 echo.
 
