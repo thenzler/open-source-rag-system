@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Simple FastAPI server for document uploads and basic RAG functionality
+🤖 Project SUSI - Smart Universal Search Intelligence
+Advanced FastAPI server for intelligent document processing and AI-powered search
 """
 import os
 import tempfile
@@ -195,9 +196,9 @@ async def lifespan(app: FastAPI):
             logger.error(f"Error stopping async processor: {e}")
 
 app = FastAPI(
-    title="Simple RAG API",
-    description="Basic API for document upload and processing with embeddings",
-    version="1.3.0",
+    title="🤖 Project SUSI - Smart Universal Search Intelligence",
+    description="Advanced AI-powered document processing and intelligent search system",
+    version="2.0.0",
     lifespan=lifespan
 )
 
