@@ -1,0 +1,177 @@
+CLOUDSYNC PRO - Benutzerhandbuch
+
+VERSION 3.2
+Veröffentlichung: März 2024
+
+ERSTE SCHRITTE
+
+Willkommen bei CloudSync Pro, Ihrer umfassenden Cloud-Speicher- und Synchronisationslösung!
+
+SYSTEMVORAUSSETZUNGEN
+
+Minimum:
+- Betriebssystem: Windows 10, macOS 10.14, Ubuntu 18.04
+- Arbeitsspeicher: 4 GB RAM
+- Festplattenspeicher: 2 GB verfügbarer Speicherplatz
+- Internetverbindung: Breitband erforderlich
+- Prozessor: Intel Core i3 oder AMD-Äquivalent
+
+Empfohlen:
+- Betriebssystem: Windows 11, macOS 12+, Ubuntu 20.04+
+- Arbeitsspeicher: 8 GB RAM oder mehr
+- Festplattenspeicher: 10 GB verfügbarer Speicherplatz
+- Internetverbindung: Hochgeschwindigkeits-Breitband
+- Prozessor: Intel Core i5 oder AMD-Äquivalent
+
+INSTALLATION
+
+1. Laden Sie CloudSync Pro von unserer Website herunter
+2. Führen Sie die Installationsdatei als Administrator aus
+3. Folgen Sie den Anweisungen des Installationsassistenten
+4. Starten Sie die Anwendung nach der Installation neu
+5. Melden Sie sich mit Ihren Anmeldeinformationen an
+
+GRUNDLEGENDE FUNKTIONEN
+
+1. DATEI-SYNCHRONISATION
+CloudSync Pro synchronisiert Ihre Dateien automatisch zwischen Geräten:
+- Änderungen werden in Echtzeit erkannt
+- Konflikte werden intelligent gelöst
+- Offline-Zugriff auf wichtige Dateien
+- Selektive Synchronisation verfügbar
+
+2. DATEIFREIGABE
+Dateien mit Teammitgliedern teilen:
+- Klicken Sie mit der rechten Maustaste auf eine Datei
+- Wählen Sie "Freigabe-Link erstellen"
+- Legen Sie Berechtigungen fest (Anzeigen/Bearbeiten)
+- Kopieren Sie den Link und teilen Sie ihn
+
+3. VERSIONSVERWALTUNG
+Auf frühere Versionen von Dateien zugreifen:
+- Klicken Sie mit der rechten Maustaste auf eine Datei
+- Wählen Sie "Versionsverlauf anzeigen"
+- Durchsuchen Sie verfügbare Versionen
+- Stellen Sie bei Bedarf frühere Versionen wieder her
+
+4. ZUSAMMENARBEIT
+Echtzeit-Zusammenarbeit an Dokumenten:
+- Mehrere Benutzer können gleichzeitig bearbeiten
+- Änderungen werden sofort synchronisiert
+- Kommentare und Vorschläge unterstützt
+- Aktivitätsverfolgung verfügbar
+
+TASTATURKÜRZEL
+
+Windows:
+- Strg+U: Datei hochladen
+- Strg+D: Datei herunterladen
+- Strg+S: Freigabe-Link erstellen
+- Strg+H: Versionsverlauf anzeigen
+- Strg+F: Dateien durchsuchen
+- Strg+R: Synchronisation aktualisieren
+
+macOS:
+- Cmd+U: Datei hochladen
+- Cmd+D: Datei herunterladen
+- Cmd+S: Freigabe-Link erstellen
+- Cmd+H: Versionsverlauf anzeigen
+- Cmd+F: Dateien durchsuchen
+- Cmd+R: Synchronisation aktualisieren
+
+ERWEITERTE FUNKTIONEN
+
+1. INTELLIGENTE SYNCHRONISATION
+- Bandbreitenoptimierung
+- Adaptive Synchronisation basierend auf Netzwerkbedingungen
+- Prioritätswarteschlangen für wichtige Dateien
+- Delta-Synchronisation für große Dateien
+
+2. SICHERHEITSFEATURES
+- Ende-zu-Ende-Verschlüsselung
+- Zwei-Faktor-Authentifizierung
+- Erweiterte Zugriffskontrolle
+- Prüfprotokoll für alle Aktivitäten
+
+3. TEAM-MANAGEMENT
+- Zentralisierte Benutzeradministration
+- Rollenbasierte Berechtigungen
+- Gruppenordner und gemeinsame Bereiche
+- Aktivitätsberichte und Nutzungsanalyse
+
+FEHLERBEHEBUNG
+
+HÄUFIGE PROBLEME
+
+Problem: Synchronisation funktioniert nicht
+Lösung:
+1. Überprüfen Sie Ihre Internetverbindung
+2. Starten Sie CloudSync Pro neu
+3. Überprüfen Sie den verfügbaren Speicherplatz
+4. Kontaktieren Sie den Support, wenn das Problem weiterhin besteht
+
+Problem: Datei kann nicht hochgeladen werden
+Lösung:
+1. Überprüfen Sie die Dateigröße (max. 5 GB pro Datei)
+2. Stellen Sie sicher, dass der Dateityp unterstützt wird
+3. Überprüfen Sie Ihre Kontospeichergrenze
+4. Überprüfen Sie die Netzwerkstabilität
+
+Problem: Langsame Synchronisationsgeschwindigkeit
+Lösung:
+1. Überprüfen Sie Ihre Internetgeschwindigkeit
+2. Passen Sie die Bandbreiteneinstellungen an
+3. Pausieren Sie andere bandbreitenintensive Anwendungen
+4. Verwenden Sie selektive Synchronisation für große Ordner
+
+Problem: Anmeldung fehlgeschlagen
+Lösung:
+1. Überprüfen Sie Ihre Anmeldeinformationen
+2. Stellen Sie sicher, dass die Feststelltaste nicht aktiviert ist
+3. Setzen Sie Ihr Passwort zurück, falls erforderlich
+4. Überprüfen Sie Ihre Zwei-Faktor-Authentifizierung
+
+SUPPORT UND DOKUMENTATION
+
+KONTAKT-INFORMATIONEN
+- Email-Support: support@cloudsync.com
+- Live-Chat: Verfügbar 24/7 auf unserer Website
+- Telefonischer Support: 1-800-CLOUDSYNC
+- Wissensdatenbank: help.cloudsync.com
+
+WEITERE RESSOURCEN
+- Video-Tutorials: youtube.com/cloudsyncpro
+- Community-Forum: community.cloudsync.com
+- API-Dokumentation: developers.cloudsync.com
+- Status-Seite: status.cloudsync.com
+
+SICHERHEIT UND DATENSCHUTZ
+
+CloudSync Pro nimmt Ihre Sicherheit ernst:
+- Alle Daten werden mit AES-256-Verschlüsselung gesichert
+- Sichere Datenübertragung über TLS 1.3
+- Regelmäßige Sicherheitsaudits von Dritten
+- GDPR- und CCPA-konform
+- Keine Datenweitergabe an Dritte ohne Zustimmung
+
+ABONNEMENT UND ABRECHNUNG
+
+Pläne verwalten:
+- Besuchen Sie account.cloudsync.com
+- Anzeigen der aktuellen Nutzung und Limits
+- Abonnement upgraden/downgraden
+- Rechnungsverlauf anzeigen
+- Zahlungsmethoden verwalten
+
+UPDATES UND NEUE FUNKTIONEN
+
+CloudSync Pro wird regelmäßig aktualisiert:
+- Automatische Updates standardmäßig aktiviert
+- Neue Funktionen werden monatlich hinzugefügt
+- Sicherheitspatches werden bei Bedarf bereitgestellt
+- Benachrichtigungen über wichtige Updates
+
+Dieses Handbuch wurde zuletzt am 15. März 2024 aktualisiert.
+Für die neueste Version besuchen Sie: help.cloudsync.com/user-guide
+
+© 2024 CloudSync Technologies. Alle Rechte vorbehalten.

@@ -1,0 +1,383 @@
+VERFAHRENSANWEISUNG
+Korrektur- und Vorbeugemaßnahmen (CAPA)
+
+DOKUMENTENINFORMATIONEN
+
+Dokumententyp: Verfahrensanweisung (VA)
+Dokumentennummer: VA-QM-005
+Version: 3.1
+Erstellungsdatum: 15. Januar 2024
+Nächste Überprüfung: 15. Januar 2025
+Freigegeben von: Dr. Sarah Weber (Qualitätsmanagerin)
+
+GELTUNGSBEREICH
+
+Diese Verfahrensanweisung gilt für alle Bereiche der Unternehmensgruppe und beschreibt das systematische Vorgehen bei der Identifikation, Bewertung und Umsetzung von Korrektur- und Vorbeugemaßnahmen (CAPA - Corrective and Preventive Actions).
+
+ZWECK
+
+Das CAPA-System dient dazu:
+- Abweichungen systematisch zu analysieren
+- Ursachen zu identifizieren und zu beseitigen
+- Wiederholungen zu verhindern
+- Kontinuierliche Verbesserung zu fördern
+- Compliance-Anforderungen zu erfüllen
+
+REFERENZEN
+
+- ISO 9001:2015 Kapitel 10.2 (Nichtkonformität und Korrekturmaßnahmen)
+- IATF 16949:2016 Kapitel 10.2.3 (Problemlösungsprozess)
+- QM-Handbuch Kapitel 8 (Verbesserung)
+- Arbeitsanweisung AA-QM-012 (5-Why-Analyse)
+
+DEFINITIONEN
+
+Korrektur: Maßnahme zur Beseitigung einer entdeckten Nichtkonformität
+Korrekturmaßnahme: Maßnahme zur Beseitigung der Ursache einer Nichtkonformität
+Vorbeugemaßnahme: Maßnahme zur Beseitigung der Ursache einer potenziellen Nichtkonformität
+CAPA: Corrective and Preventive Actions (Korrektur- und Vorbeugemaßnahmen)
+Root Cause: Grundursache einer Nichtkonformität
+
+ROLLEN UND VERANTWORTLICHKEITEN
+
+CAPA-Manager (Qualitätsmanager):
+- Gesamtverantwortung für CAPA-Prozess
+- Bewertung und Priorisierung von CAPAs
+- Überwachung der Wirksamkeit
+- Berichterstattung an die Geschäftsleitung
+
+CAPA-Koordinator:
+- Koordination der CAPA-Aktivitäten
+- Verwaltung des CAPA-Systems
+- Erinnerungen und Eskalationen
+- Dokumentation und Archivierung
+
+Prozessverantwortlicher:
+- Umsetzung der Maßnahmen
+- Bereitstellung von Ressourcen
+- Fortschrittsberichte
+- Wirksamkeitsprüfung
+
+CAPA-Team:
+- Ursachenanalyse
+- Maßnahmenentwicklung
+- Umsetzungsbegleitung
+- Datensammlung und -analyse
+
+PROZESSABLAUF
+
+1. CAPA-AUSLÖSUNG
+
+1.1 Auslöser-Quellen:
+- Kundenreklamationen
+- Interne Abweichungen
+- Audit-Befunde
+- Managementbewertung
+- Lieferantenprobleme
+- Compliance-Verstöße
+- Mitarbeitervorschläge
+
+1.2 CAPA-Meldung:
+- Unverzügliche Meldung an CAPA-Koordinator
+- Verwendung Formular F-QM-015
+- Erste Bewertung der Dringlichkeit
+- Registrierung im CAPA-System
+
+1.3 Prioritätsklassifizierung:
+- Kritisch: Sicherheitsrelevant, Compliance-Verstoß
+- Hoch: Kundenzufriedenheit, Produktqualität
+- Mittel: Prozesseffizienz, Kosten
+- Niedrig: Dokumentation, Optimierung
+
+2. CAPA-BEARBEITUNG
+
+2.1 CAPA-Team-Bildung:
+- Zusammenstellung interdisziplinäres Team
+- Benennung des Team-Leiters
+- Definition der Rollen und Verantwortlichkeiten
+- Kick-off-Meeting
+
+2.2 Sofortmaßnahmen:
+- Unmittelbare Gefahrenabwehr
+- Schadensbegrenzung
+- Produktstopp falls erforderlich
+- Kundenschutz gewährleisten
+
+2.3 Problemdefinition:
+- Präzise Beschreibung der Nichtkonformität
+- Sammlung relevanter Daten
+- Abgrenzung des Problems
+- Auswirkungsanalyse
+
+3. URSACHENANALYSE
+
+3.1 Datensammlung:
+- Sammlung aller relevanten Informationen
+- Interviews mit Beteiligten
+- Prozessbeobachtungen
+- Datenauswertung
+
+3.2 Analysemethoden:
+- 5-Why-Analyse (Primärmethode)
+- Ishikawa-Diagramm (Ursache-Wirkungs-Diagramm)
+- Pareto-Analyse
+- Fehlerbaumanalyse (bei komplexen Problemen)
+
+3.3 Root-Cause-Identifikation:
+- Unterscheidung zwischen Symptomen und Ursachen
+- Verifikation der Grundursache
+- Dokumentation der Analyseergebnisse
+- Validierung durch Team
+
+4. MASSNAHMENENTWICKLUNG
+
+4.1 Maßnahmentypen:
+- Korrektur (Symptombehandlung)
+- Korrekturmaßnahme (Ursachenbehebung)
+- Vorbeugemaßnahme (Prävention)
+- Systemverbesserung (Optimierung)
+
+4.2 Maßnahmenplanung:
+- Konkrete Maßnahmendefinition
+- Verantwortlichkeiten festlegen
+- Zeitpläne entwickeln
+- Ressourcenbedarf ermitteln
+
+4.3 Risikobewertung:
+- Bewertung der Maßnahmenrisiken
+- Kosten-Nutzen-Analyse
+- Auswirkung auf andere Prozesse
+- Machbarkeitsprüfung
+
+5. UMSETZUNG
+
+5.1 Umsetzungsplan:
+- Detaillierter Aktionsplan
+- Meilenstein-Definition
+- Ressourcenzuteilung
+- Kommunikationsplan
+
+5.2 Umsetzungsüberwachung:
+- Regelmäßige Fortschrittskontrollen
+- Hindernisbeseitigung
+- Anpassung bei Bedarf
+- Dokumentation der Umsetzung
+
+5.3 Freigabe:
+- Verifikation der Umsetzung
+- Funktionstest
+- Freigabe durch Prozessverantwortlichen
+- Systemaktualisierung
+
+6. WIRKSAMKEITSPRÜFUNG
+
+6.1 Wirksamkeitskriterien:
+- Definierte Erfolgskriterien
+- Messbare Kennzahlen
+- Zeitrahmen für Bewertung
+- Bewertungsmethoden
+
+6.2 Wirksamkeitsbewertung:
+- Datensammlung nach Umsetzung
+- Vergleich mit Baseline
+- Trend-Analyse
+- Stakeholder-Feedback
+
+6.3 Ergebnisbewertung:
+- Bewertung der Zielerreichung
+- Identifikation von Verbesserungen
+- Entscheidung über weitere Maßnahmen
+- Dokumentation der Ergebnisse
+
+7. ABSCHLUSS UND ARCHIVIERUNG
+
+7.1 CAPA-Abschluss:
+- Verifikation der Wirksamkeit
+- Freigabe durch CAPA-Manager
+- Aktualisierung relevanter Dokumente
+- Kommunikation des Abschlusses
+
+7.2 Lessons Learned:
+- Dokumentation der Erkenntnisse
+- Wissenstransfer
+- Prozessverbesserungen
+- Schulungsbedarf identifizieren
+
+7.3 Archivierung:
+- Vollständige Dokumentation
+- Archivierung gemäß Aufbewahrungsrichtlinien
+- Zugriffsrechte definieren
+- Suchfunktionen einrichten
+
+CAPA-KATEGORIEN
+
+REAKTIVE CAPAS:
+- Kundenreklamationen
+- Produktfehler
+- Prozessabweichungen
+- Audit-Befunde
+
+PROAKTIVE CAPAS:
+- Risikobewertungen
+- Trend-Analysen
+- Präventionsmaßnahmen
+- Verbesserungsvorschläge
+
+SYSTEM-CAPAS:
+- Dokumentenaktualisierungen
+- Prozessoptimierungen
+- Organisationsänderungen
+- Technologie-Upgrades
+
+PRIORISIERUNG
+
+KRITISCH (24 Stunden):
+- Sicherheitsrelevante Probleme
+- Compliance-Verstöße
+- Kundenstopp
+- Produktrückrufe
+
+HOCH (72 Stunden):
+- Kundenzufriedenheit beeinträchtigt
+- Produktqualität gefährdet
+- Lieferprobleme
+- Hauptabweichungen
+
+MITTEL (1 Woche):
+- Prozesseffizienz
+- Kostenauswirkungen
+- Kleinere Abweichungen
+- Dokumentationsfehler
+
+NIEDRIG (1 Monat):
+- Optimierungspotentiale
+- Komfortverbesserungen
+- Langfristige Verbesserungen
+- Präventionsmaßnahmen
+
+ESKALATION
+
+STUFE 1: CAPA-Koordinator
+- Erinnerungen senden
+- Unterstützung anbieten
+- Hindernisse beseitigen
+- Statusverfolgung
+
+STUFE 2: CAPA-Manager
+- Ressourcen bereitstellen
+- Prioritäten anpassen
+- Externe Unterstützung
+- Alternativen entwickeln
+
+STUFE 3: Bereichsleitung
+- Strategische Entscheidungen
+- Budgetfreigabe
+- Organisationsänderungen
+- Externe Berater
+
+STUFE 4: Geschäftsleitung
+- Grundsatzentscheidungen
+- Investitionsentscheidungen
+- Strukturänderungen
+- Notfallmaßnahmen
+
+KENNZAHLEN
+
+QUANTITATIVE KENNZAHLEN:
+- Anzahl offener CAPAs
+- Durchschnittliche Bearbeitungszeit
+- Terminzielerreichung
+- Wirksamkeitsrate
+
+QUALITATIVE KENNZAHLEN:
+- Kundenzufriedenheit
+- Mitarbeiterzufriedenheit
+- Prozessverbesserung
+- Lerneffekte
+
+REPORTING:
+- Monatliche CAPA-Berichte
+- Quartalsweise Management-Reviews
+- Jährliche Trendanalysen
+- Ad-hoc-Berichte bei Bedbedarf
+
+SYSTEMUNTERSTÜTZUNG
+
+CAPA-SOFTWARE:
+- ProQuality Manager v4.2
+- Workflow-Management
+- Automatische Erinnerungen
+- Berichtsfunktionen
+
+DOKUMENTATION:
+- Zentrale Dokumentenablage
+- Versionskontrolle
+- Zugriffsprotokolle
+- Backup-Systeme
+
+SCHULUNGEN:
+- CAPA-Grundlagen
+- Analysemethoden
+- Systemnutzung
+- Auffrischungsschulungen
+
+EXTERNE UNTERSTÜTZUNG:
+- Beratungsunternehmen
+- Fachexperten
+- Zertifizierungsstellen
+- Benchmarking-Partner
+
+ÜBERWACHUNG UND MESSUNG
+
+SYSTEM-AUDIT:
+- Jährliche CAPA-System-Audits
+- Prozesskonformität prüfen
+- Verbesserungspotentiale identifizieren
+- Systemoptimierung
+
+KENNZAHLEN-MONITORING:
+- Monatliche Auswertungen
+- Trend-Überwachung
+- Benchmark-Vergleiche
+- Zielabweichungsanalyse
+
+STAKEHOLDER-FEEDBACK:
+- Kundenbewertungen
+- Mitarbeiterbefragungen
+- Lieferantenfeedback
+- Managementbewertung
+
+KONTINUIERLICHE VERBESSERUNG:
+- Prozessoptimierungen
+- Methodenverbesserungen
+- Systemupdates
+- Schulungsanpassungen
+
+ANHÄNGE
+
+Anhang A: CAPA-Formular (F-QM-015)
+Anhang B: 5-Why-Analyse-Vorlage
+Anhang C: Ishikawa-Diagramm-Vorlage
+Anhang D: Wirksamkeitsprüfung-Checkliste
+Anhang E: CAPA-Kennzahlen-Dashboard
+Anhang F: Eskalationsmatrix
+Anhang G: Schulungsplan
+
+DOKUMENTENHISTORIE
+
+Version 1.0 (15.01.2022): Erstversion
+Version 2.0 (15.07.2022): Prozessoptimierung
+Version 2.1 (15.01.2023): Kleinere Anpassungen
+Version 3.0 (15.07.2023): Systemintegration
+Version 3.1 (15.01.2024): Aktuelle Version
+
+GENEHMIGUNG
+
+Erstellt von: Klaus Müller, CAPA-Koordinator
+Geprüft von: Dr. Sarah Weber, Qualitätsmanagerin
+Freigegeben von: Heinrich Steiner, Geschäftsführer
+
+Datum: 15. Januar 2024
+Nächste Überprüfung: 15. Januar 2025
+
+© 2024 ProQuality Solutions GmbH - Vertraulich

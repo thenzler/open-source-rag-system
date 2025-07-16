@@ -1,0 +1,321 @@
+QM-SOFTWARE BENUTZERHANDBUCH
+ProQuality Manager v4.2
+
+WILLKOMMEN BEI PROQUALITY MANAGER
+
+ProQuality Manager ist Ihr umfassendes Qualitätsmanagementsystem für die Erfüllung von ISO 9001:2015, ISO 14001:2015 und IATF 16949:2016 Standards. Dieses Handbuch führt Sie durch alle Funktionen und Arbeitsabläufe.
+
+ERSTE SCHRITTE
+
+1. SYSTEMZUGANG
+- Öffnen Sie Ihren Webbrowser
+- Navigieren Sie zu https://qm.ihreunternehmen.de
+- Geben Sie Ihre Anmeldedaten ein
+- Klicken Sie auf "Anmelden"
+
+2. DASHBOARD-ÜBERSICHT
+Nach der Anmeldung sehen Sie das Hauptdashboard mit:
+- Aktuelle Kennzahlen
+- Offene Aufgaben
+- Terminübersicht
+- Systembenachrichtigungen
+
+3. NAVIGATION
+Die Hauptnavigation befindet sich in der linken Seitenleiste:
+- Dokumente: Dokumentenmanagement
+- Audits: Audit-Verwaltung
+- CAPA: Korrekturmaßnahmen
+- Risiken: Risikomanagement
+- Lieferanten: Lieferantenbewertung
+- Berichte: Reporting und Analytik
+
+DOKUMENTENMANAGEMENT
+
+1. DOKUMENTE ANZEIGEN
+- Klicken Sie auf "Dokumente" in der Navigation
+- Verwenden Sie Filter nach Typ, Status oder Abteilung
+- Suchfunktion für schnelles Auffinden
+- Dokumentenvorschau durch Klick auf Titel
+
+2. NEUES DOKUMENT ERSTELLEN
+- Klicken Sie auf "Neues Dokument"
+- Wählen Sie Dokumententyp aus:
+  * Qualitätshandbuch (QHB)
+  * Verfahrensanweisung (VA)
+  * Arbeitsanweisung (AA)
+  * Prüfanweisung (PA)
+  * Formular/Checkliste
+- Füllen Sie die Metadaten aus:
+  * Titel und Beschreibung
+  * Verantwortliche Person
+  * Gültigkeitsdauer
+  * Verteilerliste
+- Laden Sie das Dokument hoch oder erstellen Sie es im Editor
+
+3. DOKUMENTENBEARBEITUNG
+- Klicken Sie auf "Bearbeiten" bei einem Dokument
+- Verwenden Sie den integrierten Editor oder
+- Laden Sie eine neue Version hoch
+- Fügen Sie Änderungskommentare hinzu
+- Senden Sie zur Genehmigung
+
+4. GENEHMIGUNGSWORKFLOW
+- Dokumente durchlaufen automatisch den Genehmigungsprozess
+- Genehmiger erhalten E-Mail-Benachrichtigungen
+- Status-Tracking: Entwurf → Prüfung → Genehmigt → Veröffentlicht
+- Kommentare und Änderungsanfragen möglich
+
+5. VERSIONSKONTROLLE
+- Automatische Versionierung bei jeder Änderung
+- Vergleich zwischen Versionen
+- Rollback zu früheren Versionen möglich
+- Änderungshistorie mit Zeitstempel
+
+AUDIT-MANAGEMENT
+
+1. AUDIT-PLANUNG
+- Navigieren Sie zu "Audits" → "Planung"
+- Erstellen Sie einen Jahresauditplan
+- Terminierung und Auditorenzuweisung
+- Automatische Kalendererinnerungen
+
+2. AUDIT-CHECKLISTEN
+- Wählen Sie passende Checklisten aus der Bibliothek
+- Anpassung an spezifische Anforderungen
+- Bewertungsskalen konfigurieren
+- Mobile Nutzung auf Tablets/Smartphones
+
+3. AUDIT-DURCHFÜHRUNG
+- Starten Sie das Audit über "Audits" → "Durchführung"
+- Arbeiten Sie die Checkliste systematisch ab
+- Dokumentieren Sie Befunde mit Fotos
+- Bewerten Sie Konformität (konform/Abweichung/Beobachtung)
+- Erfassen Sie Maßnahmen direkt im System
+
+4. AUDIT-BERICHTE
+- Automatische Berichterstellung nach Audit-Abschluss
+- Standardisierte Berichtsvorlagen
+- Individuelle Anpassungen möglich
+- E-Mail-Versand an Beteiligte
+
+KORREKTURMASSNAHMEN (CAPA)
+
+1. MÄNGEL ERFASSEN
+- Navigieren Sie zu "CAPA" → "Neuer Mangel"
+- Kategorisierung nach Quelle:
+  * Kundenreklamation
+  * Interne Abweichung
+  * Audit-Befund
+  * Lieferantenprobleme
+- Priorität festlegen (niedrig/mittel/hoch/kritisch)
+- Verantwortlichkeiten zuweisen
+
+2. ROOT-CAUSE-ANALYSE
+- Verwenden Sie integrierte Analyse-Tools:
+  * 5-Why-Methode
+  * Ishikawa-Diagramm
+  * Pareto-Analyse
+- Dokumentieren Sie Ursachen systematisch
+- Verknüpfen Sie mit ähnlichen Fällen
+
+3. MASSNAHMENPLANUNG
+- Definieren Sie Sofortmaßnahmen
+- Planen Sie Korrekturmaßnahmen
+- Legen Sie Präventivmaßnahmen fest
+- Terminierung und Budgetplanung
+
+4. UMSETZUNGSVERFOLGUNG
+- Automatische Erinnerungen an Verantwortliche
+- Status-Updates und Fortschrittsberichte
+- Dokumentation der Umsetzung
+- Foto-Dokumentation von Verbesserungen
+
+5. WIRKSAMKEITSPRÜFUNG
+- Automatische Erinnerung zur Wirksamkeitsprüfung
+- Bewertung der Zielerreichung
+- Erfolgsmessung anhand von Kennzahlen
+- Abschlussfreigabe durch Qualitätsmanager
+
+RISIKOMANAGEMENT
+
+1. RISIKEN IDENTIFIZIEREN
+- Navigieren Sie zu "Risiken" → "Neues Risiko"
+- Kategorisierung nach Bereichen:
+  * Produktrisiken
+  * Prozessrisiken
+  * Umweltrisiken
+  * Compliance-Risiken
+- Beschreibung und Kontext dokumentieren
+
+2. RISIKOBEWERTUNG
+- Bewertung der Eintrittswahrscheinlichkeit (1-5)
+- Bewertung der Auswirkungen (1-5)
+- Automatische Risikoscore-Berechnung
+- Visualisierung in Risikomatrix
+
+3. RISIKOMINDERUNG
+- Maßnahmenplanung zur Risikominderung
+- Verantwortlichkeiten und Termine
+- Budgetplanung für Maßnahmen
+- Umsetzungsüberwachung
+
+4. RISIKO-MONITORING
+- Regelmäßige Neubewertung
+- Trend-Überwachung
+- Frühwarnsystem bei kritischen Risiken
+- Eskalationsverfahren
+
+LIEFERANTENBEWERTUNG
+
+1. LIEFERANTENSTAMMDATEN
+- Navigieren Sie zu "Lieferanten" → "Stammdaten"
+- Erfassen Sie Kontaktinformationen
+- Kategorisierung nach Kritikalität
+- Zertifizierungsstatus dokumentieren
+
+2. BEWERTUNGSKRITERIEN
+- Qualitätsleistung (PPM-Rate, Reklamationen)
+- Lieferperformance (Termintreue, Flexibilität)
+- Serviceleistung (Kommunikation, Support)
+- Preis-Leistungs-Verhältnis
+
+3. BEWERTUNGSDURCHFÜHRUNG
+- Jährliche Grundbewertung
+- Quartalsweise Updates
+- Ereignisbasierte Bewertungen
+- Automatische Bewertungserinnerungen
+
+4. LIEFERANTENENTWICKLUNG
+- Entwicklungspläne für kritische Lieferanten
+- Verbesserungsmaßnahmen definieren
+- Fortschrittsverfolgung
+- Erfolgskontrollen
+
+REPORTING UND ANALYTIK
+
+1. STANDARD-BERICHTE
+- Management-Review-Berichte
+- Qualitätskennzahlen-Berichte
+- Audit-Übersichten
+- CAPA-Statistiken
+
+2. DASHBOARD-KONFIGURATION
+- Personalisierte Dashboards erstellen
+- Kennzahlen-Widgets hinzufügen
+- Diagramm-Typen auswählen
+- Aktualisierungsintervalle festlegen
+
+3. ERWEITERTE ANALYTIK
+- Trend-Analysen über Zeiträume
+- Korrelationsanalysen
+- Benchmarking-Funktionen
+- Predictive Analytics
+
+4. EXPORT-FUNKTIONEN
+- Export nach Excel, PDF, CSV
+- Automatische Berichts-E-Mails
+- Datenexport für Drittsysteme
+- Archivierung von Berichten
+
+MOBILE FUNKTIONEN
+
+1. MOBILE APP
+- Download aus App Store/Google Play
+- Synchronisation mit Hauptsystem
+- Offline-Funktionen für Audits
+- Push-Benachrichtigungen
+
+2. MOBILE AUDIT-ERFASSUNG
+- Checklisten auf Tablet/Smartphone
+- Foto-Dokumentation
+- Barcode-Scanner-Integration
+- GPS-Koordinaten erfassen
+
+3. MOBILE GENEHMIGUNGEN
+- Dokumente mobil genehmigen
+- E-Unterschriften
+- Kommentare hinzufügen
+- Workflow-Benachrichtigungen
+
+SYSTEMADMINISTRATION
+
+1. BENUTZERVERWALTUNG
+- Neue Benutzer anlegen
+- Rollen und Berechtigungen zuweisen
+- Passwort-Richtlinien verwalten
+- Inaktive Benutzer deaktivieren
+
+2. SYSTEMKONFIGURATION
+- Workflows anpassen
+- Benachrichtigungseinstellungen
+- E-Mail-Templates bearbeiten
+- Systemparameter konfigurieren
+
+3. DATENSICHERUNG
+- Automatische Backups
+- Datenexport-Funktionen
+- Systemwiederherstellung
+- Datenarchivierung
+
+HÄUFIGE FRAGEN (FAQ)
+
+F: Wie kann ich mein Passwort zurücksetzen?
+A: Klicken Sie auf "Passwort vergessen" auf der Anmeldeseite und folgen Sie den Anweisungen.
+
+F: Warum kann ich ein Dokument nicht bearbeiten?
+A: Prüfen Sie Ihre Berechtigungen oder ob das Dokument von einem anderen Benutzer bearbeitet wird.
+
+F: Wie kann ich Berichte automatisch versenden?
+A: Nutzen Sie die Funktion "Berichts-Abonnements" in den Berichtseinstellungen.
+
+F: Kann ich das System offline nutzen?
+A: Die Mobile App bietet Offline-Funktionen für Audits. Synchronisation erfolgt bei Internetverbindung.
+
+F: Wie importiere ich Daten aus dem alten System?
+A: Kontaktieren Sie den Support für Datenimport-Services.
+
+SUPPORT UND HILFE
+
+1. ONLINE-HILFE
+- Kontextsensitive Hilfe (F1-Taste)
+- Video-Tutorials im System
+- Benutzerhandbuch als PDF
+- FAQ-Datenbank
+
+2. SUPPORT-KONTAKT
+- E-Mail: support@proquality.com
+- Telefon: +49 (0) 800 123 456
+- Live-Chat: Montag-Freitag 8:00-18:00
+- Fernwartung nach Vereinbarung
+
+3. SCHULUNGEN
+- Online-Schulungen verfügbar
+- Präsenz-Schulungen vor Ort
+- Webinar-Reihen
+- Zertifizierungsprogramme
+
+ANHANG
+
+1. TASTATURKÜRZEL
+- Strg+N: Neues Dokument
+- Strg+S: Speichern
+- Strg+F: Suchen
+- F1: Hilfe
+- F5: Aktualisieren
+
+2. SYSTEMANFORDERUNGEN
+- Browser: Chrome 90+, Firefox 88+, Safari 14+
+- Internetverbindung erforderlich
+- PDF-Reader für Berichte
+- Mobile App: iOS 12+, Android 8+
+
+3. DATENSCHUTZ
+- DSGVO-konforme Datenverarbeitung
+- Verschlüsselte Datenübertragung
+- Sichere Datenspeicherung
+- Audit-Trail für alle Zugriffe
+
+Dieses Handbuch wurde zuletzt am 15. Januar 2024 aktualisiert.
+Version 4.2 des ProQuality Managers.
+
+© 2024 ProQuality Solutions GmbH. Alle Rechte vorbehalten.

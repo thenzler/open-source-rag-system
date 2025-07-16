@@ -1,0 +1,569 @@
+QM-SCHULUNGSMATERIAL
+ProQuality Manager v4.2 - Anwenderschulung
+
+SCHULUNGSPLAN
+
+Schulung: ProQuality Manager Grundlagen
+Zielgruppe: Neue Benutzer, Qualitätspersonal
+Dauer: 2 Tage (16 Stunden)
+Schulungstyp: Präsenz + Online-Komponenten
+Trainer: Klaus Müller, zertifizierter QM-Trainer
+
+LERNZIELE
+
+Nach der Schulung können die Teilnehmer:
+- Das QM-System effektiv nutzen
+- Dokumente verwalten und erstellen
+- Audits planen und durchführen
+- CAPAs bearbeiten und verfolgen
+- Risiken bewerten und Maßnahmen planen
+- Berichte erstellen und interpretieren
+
+AGENDA
+
+TAG 1: GRUNDLAGEN UND DOKUMENTENMANAGEMENT
+
+09:00 - 09:30: Begrüßung und Einführung
+- Vorstellungsrunde
+- Schulungsziele und -ablauf
+- Systemüberblick
+- Anmeldung und erste Schritte
+
+09:30 - 10:30: Qualitätsmanagementsystem Grundlagen
+- Was ist ein QM-System?
+- ISO 9001:2015 Überblick
+- Prozessorientierter Ansatz
+- Kontinuierliche Verbesserung
+
+10:30 - 10:45: Kaffeepause
+
+10:45 - 12:00: Systemnavigation und Benutzeroberfläche
+- Dashboard-Überblick
+- Navigationsmenü
+- Benutzereinstellungen
+- Hilfefunktionen
+
+12:00 - 13:00: Mittagspause
+
+13:00 - 14:30: Dokumentenmanagement (Teil 1)
+- Dokumentenarten verstehen
+- Dokumente suchen und finden
+- Dokumentendetails anzeigen
+- Versionsverwaltung
+
+14:30 - 15:45: Dokumentenmanagement (Teil 2)
+- Neue Dokumente erstellen
+- Dokumente bearbeiten
+- Metadaten verwalten
+- Dokumente hochladen
+
+15:45 - 16:00: Kaffeepause
+
+16:00 - 17:00: Genehmigungsworkflow
+- Workflow-Konzept verstehen
+- Dokumente zur Genehmigung senden
+- Genehmigungsaufgaben bearbeiten
+- Status verfolgen
+
+17:00 - 17:15: Tagesabschluss und Fragen
+
+TAG 2: AUDITS, CAPAS UND BERICHTE
+
+09:00 - 09:15: Tagesstart und Wiederholung
+
+09:15 - 10:30: Audit-Management
+- Audit-Arten und -Zyklen
+- Audit-Planung
+- Checklisten verwenden
+- Audit-Durchführung
+
+10:30 - 10:45: Kaffeepause
+
+10:45 - 12:00: Audit-Berichtswesen
+- Befunde dokumentieren
+- Fotos und Evidenzen
+- Audit-Berichte erstellen
+- Nachverfolgung von Maßnahmen
+
+12:00 - 13:00: Mittagspause
+
+13:00 - 14:30: CAPA-System
+- CAPA-Konzept verstehen
+- Nichtkonformitäten erfassen
+- Ursachenanalyse durchführen
+- Maßnahmen planen
+
+14:30 - 15:45: Risikomanagement
+- Risikobewertung
+- Risikomatrix verwenden
+- Maßnahmenplanung
+- Monitoring und Review
+
+15:45 - 16:00: Kaffeepause
+
+16:00 - 16:45: Berichtswesen und Dashboards
+- Standard-Berichte nutzen
+- Dashboards konfigurieren
+- Kennzahlen interpretieren
+- Datenexport
+
+16:45 - 17:00: Abschluss und Zertifizierung
+
+MODUL 1: QUALITÄTSMANAGEMENTSYSTEM GRUNDLAGEN
+
+LERNINHALT:
+
+Was ist ein Qualitätsmanagementsystem?
+Ein QM-System ist eine systematische Herangehensweise zur Steuerung und Verbesserung der Qualität in einem Unternehmen. Es umfasst:
+
+Kernelemente:
+- Prozesse und Verfahren
+- Dokumentation
+- Verantwortlichkeiten
+- Kontinuierliche Verbesserung
+
+Vorteile:
+- Verbesserte Produktqualität
+- Erhöhte Kundenzufriedenheit
+- Reduzierte Kosten
+- Bessere Marktposition
+
+ISO 9001:2015 Überblick:
+Die ISO 9001:2015 ist der internationale Standard für Qualitätsmanagementsysteme und basiert auf:
+
+7 Grundsätzen:
+1. Kundenorientierung
+2. Führung
+3. Einbeziehung von Personen
+4. Prozessorientierter Ansatz
+5. Verbesserung
+6. Faktengestützte Entscheidungsfindung
+7. Beziehungsmanagement
+
+10 Kapitel:
+- Kontext der Organisation
+- Führung
+- Planung
+- Unterstützung
+- Betrieb
+- Bewertung der Leistung
+- Verbesserung
+
+ÜBUNG 1: QM-System Verständnis
+Aufgabe: Identifizieren Sie 5 Qualitätsprobleme in Ihrem Arbeitsbereich und erklären Sie, wie ein QM-System helfen könnte.
+
+MODUL 2: SYSTEMNAVIGATION
+
+LERNINHALT:
+
+Dashboard-Funktionen:
+Das Dashboard ist Ihre zentrale Schaltzentrale:
+
+Widgets:
+- Offene Aufgaben
+- Kennzahlen-Übersicht
+- Terminkalender
+- Systembenachrichtigungen
+- Schnellzugriff
+
+Anpassungsmöglichkeiten:
+- Widget-Auswahl
+- Layout-Konfiguration
+- Aktualisierungsintervalle
+- Farbschemata
+
+Navigationsmenü:
+Hauptbereiche verstehen:
+
+Dokumente:
+- Dokumentenübersicht
+- Suche und Filter
+- Workflow-Aufgaben
+- Archiv
+
+Audits:
+- Audit-Planung
+- Durchführung
+- Berichtswesen
+- Statistiken
+
+CAPA:
+- Offene Maßnahmen
+- Neue CAPAs
+- Eskalationen
+- Kennzahlen
+
+ÜBUNG 2: Navigation
+Aufgabe: Navigieren Sie durch alle Hauptbereiche und finden Sie mindestens 3 Funktionen in jedem Bereich.
+
+MODUL 3: DOKUMENTENMANAGEMENT
+
+LERNINHALT:
+
+Dokumentenarten:
+Verschiedene Dokumente im QM-System:
+
+Typ 1: Qualitätshandbuch
+- Grundlegende Richtlinien
+- Unternehmenspolitik
+- Organisationsstruktur
+- Prozessübersicht
+
+Typ 2: Verfahrensanweisungen
+- Detaillierte Prozessbeschreibungen
+- Verantwortlichkeiten
+- Eingaben und Ausgaben
+- Messgrößen
+
+Typ 3: Arbeitsanweisungen
+- Spezifische Arbeitsschritte
+- Schritt-für-Schritt-Anleitungen
+- Sicherheitshinweise
+- Qualitätskriterien
+
+Typ 4: Formulare und Checklisten
+- Standardisierte Erfassung
+- Prüfkriterien
+- Bewertungshilfen
+- Dokumentationshilfen
+
+Dokumentensuche:
+Effektive Suchstrategien:
+
+Suchoptionen:
+- Volltext-Suche
+- Metadaten-Filter
+- Kategorien
+- Datumsbereiche
+
+Filter-Kriterien:
+- Dokumententyp
+- Status
+- Abteilung
+- Verantwortlicher
+
+Erweiterte Suche:
+- Kombinierte Kriterien
+- Boolesche Operatoren
+- Wildcards
+- Ähnlichkeitssuche
+
+ÜBUNG 3: Dokumentensuche
+Aufgabe: Finden Sie alle Dokumente zu "Audit", die in den letzten 6 Monaten erstellt wurden.
+
+Versionsverwaltung:
+Kontrolle über Dokumentenversionen:
+
+Versionskonzept:
+- Automatische Versionierung
+- Änderungshistorie
+- Vergleichsfunktionen
+- Rollback-Möglichkeiten
+
+Versionsregeln:
+- Hauptversionen (1.0, 2.0)
+- Nebenversionen (1.1, 1.2)
+- Entwürfe (1.0-Draft)
+- Freigaben (1.0-Approved)
+
+ÜBUNG 4: Versionsverwaltung
+Aufgabe: Erstellen Sie 3 Versionen eines Testdokuments und vergleichen Sie die Unterschiede.
+
+MODUL 4: GENEHMIGUNGSWORKFLOW
+
+LERNINHALT:
+
+Workflow-Konzept:
+Systematische Dokumentenfreigabe:
+
+Workflow-Stufen:
+1. Entwurf
+2. Prüfung
+3. Genehmigung
+4. Veröffentlichung
+
+Rollen im Workflow:
+- Ersteller
+- Prüfer
+- Genehmiger
+- Verteiler
+
+Eskalationsmechanismen:
+- Terminüberwachung
+- Automatische Erinnerungen
+- Eskalation an Vorgesetzte
+- Notfall-Genehmigungen
+
+Workflow-Bearbeitung:
+Aufgaben effizient bearbeiten:
+
+Genehmigungsaufgaben:
+- Aufgaben-Inbox
+- Prioritätssortierung
+- Bearbeitungsfristen
+- Kommentarfunktionen
+
+Entscheidungsoptionen:
+- Genehmigen
+- Ablehnen
+- Zurückstellen
+- Nachfragen
+
+ÜBUNG 5: Workflow
+Aufgabe: Senden Sie ein Dokument durch den kompletten Genehmigungsworkflow und verfolgen Sie den Status.
+
+MODUL 5: AUDIT-MANAGEMENT
+
+LERNINHALT:
+
+Audit-Grundlagen:
+Systematische Überprüfung:
+
+Audit-Arten:
+- Interne Audits
+- Externe Audits
+- Lieferantenaudits
+- Prozessaudits
+
+Audit-Vorbereitung:
+- Audit-Planung
+- Auditoren-Auswahl
+- Checklisten-Erstellung
+- Terminkoordination
+
+Audit-Durchführung:
+- Eröffnungsbesprechung
+- Evidenz-Sammlung
+- Bewertung
+- Abschlussbesprechung
+
+Checklisten-Management:
+Strukturierte Auditführung:
+
+Checklisten-Typen:
+- ISO 9001-Checklisten
+- Prozess-spezifische Listen
+- Kundenspezifische Listen
+- Selbstbewertungs-Listen
+
+Bewertungsskalen:
+- Konform/Nicht-konform
+- Punktebewertung
+- Ampelsystem
+- Prozentwerte
+
+ÜBUNG 6: Audit-Simulation
+Aufgabe: Führen Sie ein Audit Ihres eigenen Arbeitsplatzes durch und dokumentieren Sie 5 Befunde.
+
+MODUL 6: CAPA-SYSTEM
+
+LERNINHALT:
+
+CAPA-Konzept:
+Systematische Problemlösung:
+
+CAPA-Arten:
+- Korrektur (Symptom)
+- Korrekturmaßnahme (Ursache)
+- Vorbeugemaßnahme (Prävention)
+- Systemverbesserung (Optimierung)
+
+CAPA-Prozess:
+1. Problemidentifikation
+2. Ursachenanalyse
+3. Maßnahmenplanung
+4. Umsetzung
+5. Wirksamkeitsprüfung
+
+Ursachenanalyse:
+Systematische Problemanalyse:
+
+5-Why-Methode:
+- Warum ist das Problem aufgetreten?
+- Warum ist die Ursache eingetreten?
+- Weiteres Hinterfragen
+- Bis zur Grundursache
+- Dokumentation der Kette
+
+Ishikawa-Diagramm:
+- Mensch
+- Methode
+- Material
+- Maschine
+- Mitwelt
+- Management
+
+ÜBUNG 7: Ursachenanalyse
+Aufgabe: Führen Sie eine 5-Why-Analyse für ein typisches Problem in Ihrem Arbeitsbereich durch.
+
+MODUL 7: RISIKOMANAGEMENT
+
+LERNINHALT:
+
+Risikobewertung:
+Systematische Risikoeinschätzung:
+
+Risikokategorien:
+- Produktrisiken
+- Prozessrisiken
+- Umweltrisiken
+- Compliance-Risiken
+
+Bewertungsmatrix:
+- Wahrscheinlichkeit (1-5)
+- Auswirkung (1-5)
+- Risikoscore (1-25)
+- Risikokategorien
+
+Maßnahmenplanung:
+Systematische Risikobehandlung:
+
+Maßnahmentypen:
+- Vermeidung
+- Verminderung
+- Übertragung
+- Akzeptanz
+
+Priorisierung:
+- Kritische Risiken zuerst
+- Kosten-Nutzen-Abwägung
+- Ressourcenverfügbarkeit
+- Umsetzbarkeit
+
+ÜBUNG 8: Risikobewertung
+Aufgabe: Bewerten Sie 5 Risiken in Ihrem Arbeitsbereich und planen Sie Maßnahmen.
+
+MODUL 8: BERICHTSWESEN
+
+LERNINHALT:
+
+Standard-Berichte:
+Vorgefertigte Auswertungen:
+
+Berichtstypen:
+- Qualitätskennzahlen
+- Audit-Berichte
+- CAPA-Statistiken
+- Risikobewertungen
+
+Berichtsparameter:
+- Zeiträume
+- Abteilungen
+- Kategorien
+- Detaillierungsgrad
+
+Dashboard-Konfiguration:
+Persönliche Übersichten:
+
+Widget-Auswahl:
+- Kennzahlen-Widgets
+- Diagramm-Widgets
+- Tabellen-Widgets
+- Status-Widgets
+
+Layout-Optionen:
+- Grid-Layout
+- Spalten-Anordnung
+- Größeneinstellungen
+- Farbanpassungen
+
+ÜBUNG 9: Dashboard
+Aufgabe: Erstellen Sie ein persönliches Dashboard mit 6 Widgets Ihrer Wahl.
+
+PRAXISÜBUNGEN
+
+ÜBUNG 10: Kompletter Workflow
+Aufgabe: Durchlaufen Sie den kompletten Prozess:
+1. Dokument erstellen
+2. Durch Workflow senden
+3. Genehmigen
+4. Veröffentlichen
+5. Audit durchführen
+6. CAPA erstellen
+7. Bericht generieren
+
+ÜBUNG 11: Teamarbeit
+Aufgabe: Arbeiten Sie in 2er-Teams:
+- Partner A: Erstellt Audit-Checkliste
+- Partner B: Führt Audit durch
+- Gemeinsam: Bearbeiten gefundene Abweichungen
+
+ÜBUNG 12: Problemlösung
+Aufgabe: Lösen Sie folgendes Szenario:
+"Ein Kunde reklamiert ein defektes Produkt. Erstellen Sie eine CAPA und verfolgen Sie diese bis zum Abschluss."
+
+BEWERTUNG UND ZERTIFIZIERUNG
+
+LERNKONTROLLE:
+
+Theorietest (30 Minuten):
+- 20 Multiple-Choice-Fragen
+- Mindestens 80% richtig
+- Wiederholung bei Nichtbestehen
+
+Praxistest (45 Minuten):
+- 5 praktische Aufgaben
+- Alle Aufgaben erfolgreich
+- Nachschulung bei Bedarf
+
+ZERTIFIKAT:
+
+Bei erfolgreichem Abschluss:
+- Teilnahmezertifikat
+- Gültigkeitsdauer: 2 Jahre
+- Auffrischungsschulung empfohlen
+- Einträge in Personalakte
+
+NACHBEREITUNG
+
+WEITERFÜHRENDE SCHULUNGEN:
+
+Aufbauschulungen:
+- Erweiterte Audit-Techniken
+- Statistische Auswertungen
+- Systemadministration
+- Train-the-Trainer
+
+Online-Ressourcen:
+- Video-Tutorials
+- Webinar-Aufzeichnungen
+- Benutzerhandbuch
+- FAQ-Datenbank
+
+SUPPORT:
+
+Hilfestellung:
+- Telefon-Support: +49 (0) 800 123 456
+- E-Mail-Support: support@proquality.com
+- Online-Chat: Mo-Fr 8:00-18:00
+- Fernwartung: Nach Terminvereinbarung
+
+FEEDBACK:
+
+Schulungsbewertung:
+- Bewertungsbogen ausfüllen
+- Verbesserungsvorschläge
+- Trainer-Feedback
+- Inhalts-Bewertung
+
+ANHÄNGE
+
+Anhang A: Tastaturkürzel
+Anhang B: Systemanforderungen
+Anhang C: Benutzerhandbuch-Referenz
+Anhang D: Übungsaufgaben-Lösungen
+Anhang E: Zertifikat-Vorlage
+Anhang F: Kontaktliste
+
+SCHULUNGSBESTÄTIGUNG:
+
+Teilnehmer: _________________________
+Datum: _____________________________
+Trainer: ____________________________
+Zertifikat-Nr.: ______________________
+
+Unterschrift Teilnehmer: ________________
+Unterschrift Trainer: ___________________
+
+© 2024 ProQuality Solutions GmbH
+Schulungsunterlagen - Vertraulich

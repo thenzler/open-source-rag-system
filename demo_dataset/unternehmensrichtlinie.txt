@@ -1,0 +1,48 @@
+ACME Corporation - Handbuch für Unternehmensrichtlinien
+
+HOMEOFFICE-RICHTLINIE
+
+Gültigkeitsdatum: 1. Januar 2024
+
+1. BERECHTIGUNG
+Alle Vollzeitmitarbeiter, die ihre Probezeit (6 Monate) abgeschlossen haben, sind für Homeoffice-Vereinbarungen berechtigt. Teilzeitmitarbeiter können im Einzelfall berücksichtigt werden.
+
+2. ARBEITSZEITEN
+Homeoffice-Mitarbeiter müssen die Kernarbeitszeiten zwischen 9:00 und 15:00 Uhr in ihrer jeweiligen Zeitzone einhalten. Flexible Arbeitszeiten außerhalb der Kernzeiten sind mit Genehmigung der Führungskraft möglich.
+
+3. AUSSTATTUNG UND TECHNIK
+- Das Unternehmen stellt Laptop, Monitor und notwendige Software zur Verfügung
+- Mitarbeiter müssen über eine zuverlässige Internetverbindung verfügen (mindestens 25 Mbit/s)
+- Die Einrichtung des Homeoffice muss ergonomischen Standards entsprechen
+- IT-Support ist während der Geschäftszeiten verfügbar
+
+4. KOMMUNIKATIONSANFORDERUNGEN
+- Tägliche Abstimmung mit der direkten Führungskraft
+- Wöchentliche Teammeetings per Videokonferenz
+- Antwortzeit: E-Mail innerhalb von 4 Stunden, Slack innerhalb von 1 Stunde während der Geschäftszeiten
+- Quartalsweise persönliche Meetings erforderlich
+
+5. LEISTUNGSERWARTUNGEN
+Die Leistung wird an Ergebnissen gemessen, nicht an Arbeitsstunden. Wichtige Kennzahlen sind:
+- Projektabschlussraten
+- Qualität der Arbeitsergebnisse
+- Effektivität der Teamzusammenarbeit
+- Kundenzufriedenheitswerte
+
+6. SICHERHEITSPROTOKOLLE
+- VPN-Verbindung für alle Arbeiten erforderlich
+- Unternehmensdaten dürfen nicht auf privaten Geräten gespeichert werden
+- Regelmäßige Sicherheitsschulungen sind verpflichtend
+- Sicherheitsvorfälle sofort melden
+
+7. BEENDIGUNG DER HOMEOFFICE-TÄTIGKEIT
+Homeoffice-Privilegien können widerrufen werden bei:
+- Anhaltenden Leistungsproblemen
+- Sicherheitsverletzungen
+- Nichteinhaltung der Kommunikationsanforderungen
+- Geschäftliche Notwendigkeiten, die Präsenz vor Ort erfordern
+
+Bei Fragen wenden Sie sich an die Personalabteilung unter hr@acmecorp.com oder rufen Sie 555-0123 an.
+
+Letzte Aktualisierung: 15. März 2024
+Überprüfungsdatum der Richtlinie: 1. Januar 2025

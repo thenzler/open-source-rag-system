@@ -1,0 +1,95 @@
+DEMO QUESTIONS FOR PROJECT SUSI
+
+Use these questions to demonstrate the AI's capabilities across different document types and scenarios:
+
+COMPANY POLICY QUESTIONS:
+1. "What are the core hours for remote workers?"
+2. "How long is the probationary period for remote work eligibility?"
+3. "What equipment does the company provide for remote workers?"
+4. "What are the communication requirements for remote employees?"
+5. "Under what conditions can remote work privileges be revoked?"
+
+PROJECT SPECIFICATIONS QUESTIONS:
+1. "What is the budget for Project Alpha?"
+2. "Which frontend framework is being used in the project?"
+3. "What are the performance requirements for page load time?"
+4. "Who is the project manager for Project Alpha?"
+5. "What are the key milestones and their dates?"
+
+FINANCIAL REPORT QUESTIONS:
+1. "What was the revenue growth in Q1 2024?"
+2. "Which business segment had the highest revenue?"
+3. "What is the company's gross margin for Q1 2024?"
+4. "How many employees does the company have?"
+5. "What is the revenue forecast for Q2 2024?"
+
+USER MANUAL QUESTIONS:
+1. "What are the minimum system requirements for CloudSync Pro?"
+2. "How do I share a file with team members?"
+3. "What keyboard shortcuts are available on Windows?"
+4. "How do I access version history for a file?"
+5. "What should I do if sync is not working?"
+
+PRODUCT CATALOG QUESTIONS:
+1. "What is the price of CloudSync Pro Enterprise?"
+2. "What features are included in the SecureBox Pro NAS?"
+3. "What support options are available?"
+4. "Which integration partners are supported?"
+5. "What discounts are available for educational institutions?"
+
+MEETING NOTES QUESTIONS:
+1. "What was discussed about Project Alpha in the meeting?"
+2. "What are the current technical debt priorities?"
+3. "What security issues were identified?"
+4. "When is the next meeting scheduled?"
+5. "What are the upcoming deadlines?"
+
+CROSS-DOCUMENT QUESTIONS (Testing AI's ability to synthesize information):
+1. "How does the remote work policy affect the Project Alpha team?"
+2. "What is the total cost of CloudSync Pro Enterprise for all employees?"
+3. "Are there any budget constraints mentioned that might affect product pricing?"
+4. "How do the company's security requirements align with the product security features?"
+5. "What training mentioned in the meeting notes relates to the technical specifications?"
+
+COMPLEX ANALYTICAL QUESTIONS:
+1. "Compare the revenue growth with the employee growth rate"
+2. "What are the main risk factors across all business areas?"
+3. "How do the project timelines align with the financial forecasts?"
+4. "What patterns do you see in the company's technology choices?"
+5. "Summarize the company's overall strategic direction based on all documents"
+
+SPECIFIC DETAIL QUESTIONS:
+1. "List all the contact email addresses mentioned in the documents"
+2. "What are all the version numbers mentioned across the documents?"
+3. "Identify all the dates and deadlines mentioned"
+4. "What are the specific technical requirements for the customer portal?"
+5. "List all the team members mentioned and their roles"
+
+TROUBLESHOOTING SCENARIOS:
+1. "If a remote worker has connectivity issues, what should they do?"
+2. "How would you resolve a CloudSync Pro performance issue?"
+3. "What steps should be taken if Project Alpha faces delays?"
+4. "How should security incidents be handled?"
+5. "What's the escalation process for technical support?"
+
+BUSINESS INTELLIGENCE QUESTIONS:
+1. "What insights can you provide about the company's market position?"
+2. "How does the company's financial performance compare to industry standards?"
+3. "What are the key success factors for the company?"
+4. "What operational improvements have been made recently?"
+5. "What are the main challenges facing the company?"
+
+DEMO SCRIPT SUGGESTIONS:
+
+1. Start with simple factual questions from individual documents
+2. Progress to more complex cross-document queries
+3. Demonstrate the AI's ability to synthesize information
+4. Show how it handles specific details vs. general concepts
+5. Test edge cases and see how it responds to unclear questions
+
+Tips for effective demonstrations:
+- Ask follow-up questions to show conversation flow
+- Mix different types of questions (factual, analytical, comparative)
+- Show both successful answers and limitations
+- Demonstrate the source citation capabilities
+- Test with both common and unusual query patterns

@@ -1,0 +1,15 @@
+# Authentication Requirements
+# Install with: pip install -r auth_requirements.txt
+
+# JWT handling
+PyJWT>=2.8.0
+
+# Password hashing
+bcrypt>=4.1.0
+
+# Security utilities
+cryptography>=41.0.0
+
+# Additional security (optional)
+passlib>=1.7.4  # Advanced password hashing
+python-multipart>=0.0.6  # For form data handling

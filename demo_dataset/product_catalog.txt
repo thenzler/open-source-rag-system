@@ -1,0 +1,256 @@
+ACME Corporation - Product Catalog 2024
+
+ENTERPRISE SOFTWARE SOLUTIONS
+
+CloudSync Pro Enterprise
+Price: $25/user/month
+Features:
+- Unlimited storage
+- Advanced security controls
+- 24/7 premium support
+- API access
+- Custom integrations
+- Compliance reporting
+- Single sign-on (SSO)
+Target: Large enterprises (500+ employees)
+
+CloudSync Pro Business
+Price: $15/user/month
+Features:
+- 1TB storage per user
+- Team collaboration tools
+- Business hours support
+- Basic API access
+- Standard integrations
+- Activity monitoring
+Target: Small to medium businesses (10-500 employees)
+
+CloudSync Pro Personal
+Price: $9/user/month
+Features:
+- 500GB storage
+- Basic collaboration
+- Email support
+- Mobile apps
+- File versioning
+Target: Individual users and freelancers
+
+HARDWARE PRODUCTS
+
+SecureBox Enterprise NAS
+Price: $2,499
+Specifications:
+- 8-bay RAID configuration
+- 32TB capacity (expandable to 128TB)
+- 10 Gigabit Ethernet
+- Enterprise-grade security
+- Redundant power supplies
+- 5-year warranty
+Target: Data centers and large offices
+
+SecureBox Pro NAS
+Price: $1,299
+Specifications:
+- 4-bay RAID configuration
+- 16TB capacity (expandable to 64TB)
+- Gigabit Ethernet
+- Advanced backup features
+- Remote access capabilities
+- 3-year warranty
+Target: Small businesses and power users
+
+ConnectHub Wireless Router
+Price: $299
+Specifications:
+- Wi-Fi 6E (802.11ax)
+- Tri-band technology
+- 6 Gigabit ports
+- Advanced QoS
+- Parental controls
+- VPN support
+- 2-year warranty
+Target: Home offices and small businesses
+
+SECURITY SOLUTIONS
+
+GuardianShield Antivirus Enterprise
+Price: $45/device/year
+Features:
+- Real-time threat detection
+- Behavioral analysis
+- Zero-day protection
+- Centralized management
+- Detailed reporting
+- 24/7 monitoring
+Target: Enterprise environments
+
+GuardianShield Antivirus Pro
+Price: $29/device/year
+Features:
+- Advanced malware protection
+- Web filtering
+- Email security
+- Remote management
+- Regular updates
+- Business support
+Target: Small to medium businesses
+
+PROFESSIONAL SERVICES
+
+Implementation Services
+Price: $200/hour
+Services:
+- System deployment
+- Data migration
+- Custom configuration
+- User training
+- Integration support
+- Go-live assistance
+Duration: Typically 2-8 weeks
+
+Training Services
+Price: $150/hour
+Services:
+- User training sessions
+- Administrator training
+- Custom curriculum
+- On-site or virtual delivery
+- Certification programs
+- Ongoing support
+Duration: 1-5 days depending on scope
+
+Consulting Services
+Price: $250/hour
+Services:
+- Architecture design
+- Security assessment
+- Performance optimization
+- Best practices guidance
+- Compliance consulting
+- Strategic planning
+Duration: Project-based
+
+SUPPORT PACKAGES
+
+Premium Support
+Price: $500/month per organization
+Features:
+- 24/7 phone and email support
+- 1-hour response time
+- Dedicated account manager
+- Priority bug fixes
+- Quarterly health checks
+- Custom reporting
+
+Standard Support
+Price: $200/month per organization
+Features:
+- Business hours support
+- 4-hour response time
+- Email and chat support
+- Standard bug fixes
+- Monthly check-ins
+- Standard reporting
+
+Basic Support
+Price: Included with product
+Features:
+- Email support only
+- 24-hour response time
+- Community forums
+- Knowledge base access
+- Standard documentation
+
+LICENSING OPTIONS
+
+Enterprise License
+- Volume discounts available
+- Multi-year agreements
+- Custom terms
+- Dedicated support
+- Early access to new features
+- Flexible deployment options
+
+Educational License
+- 50% discount for schools
+- Free for K-12 institutions
+- Simplified licensing
+- Educational resources
+- Student training materials
+- Teacher certification programs
+
+Government License
+- Special pricing for government agencies
+- Compliance certifications
+- Security clearance available
+- Dedicated government support
+- Custom deployment options
+- FedRAMP authorized
+
+PARTNER SOLUTIONS
+
+Integration Partners:
+- Microsoft 365
+- Google Workspace
+- Salesforce
+- Slack
+- Zoom
+- DocuSign
+- Adobe Creative Cloud
+
+Technology Partners:
+- AWS
+- Microsoft Azure
+- Google Cloud Platform
+- VMware
+- Cisco
+- Dell Technologies
+- HP Enterprise
+
+Reseller Partners:
+- CDW
+- SHI
+- Insight
+- Softchoice
+- Zones
+- Connection
+- PCM
+
+PRICING NOTES
+
+- All prices in USD
+- Annual billing required for discounts
+- Volume discounts available for 100+ licenses
+- Educational and non-profit discounts available
+- Free trial periods available for all software products
+- Hardware includes standard warranty
+- Professional services billed monthly
+- Support packages renewable annually
+
+CONTACT INFORMATION
+
+Sales Team:
+- Phone: 1-800-ACME-SALES
+- Email: sales@acmecorp.com
+- Online: www.acmecorp.com/contact
+
+Partner Program:
+- Phone: 1-800-ACME-PARTNER
+- Email: partners@acmecorp.com
+- Portal: partners.acmecorp.com
+
+Technical Support:
+- Phone: 1-800-ACME-HELP
+- Email: support@acmecorp.com
+- Portal: support.acmecorp.com
+
+LEGAL INFORMATION
+
+Terms and Conditions: legal.acmecorp.com/terms
+Privacy Policy: legal.acmecorp.com/privacy
+Service Level Agreement: legal.acmecorp.com/sla
+Export Control: legal.acmecorp.com/export
+
+© 2024 ACME Corporation. All rights reserved.
+Prices subject to change without notice.
+Catalog valid through December 31, 2024.

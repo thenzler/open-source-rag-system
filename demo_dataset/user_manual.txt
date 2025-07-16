@@ -1,0 +1,203 @@
+ACME CloudSync Pro - User Manual
+
+Version 3.2.1
+Last Updated: March 2024
+
+GETTING STARTED
+
+Welcome to ACME CloudSync Pro, the enterprise-grade file synchronization and collaboration platform. This manual will guide you through installation, configuration, and daily usage.
+
+SYSTEM REQUIREMENTS
+
+Minimum Requirements:
+- Operating System: Windows 10, macOS 10.15, or Linux Ubuntu 18.04
+- RAM: 4GB
+- Storage: 2GB available space
+- Internet: Broadband connection (5 Mbps minimum)
+
+Recommended Requirements:
+- Operating System: Windows 11, macOS 12+, or Linux Ubuntu 20.04+
+- RAM: 8GB or more
+- Storage: 10GB available space
+- Internet: High-speed connection (25 Mbps or higher)
+
+INSTALLATION
+
+Windows Installation:
+1. Download CloudSync-Pro-Setup.exe from your admin portal
+2. Run the installer as Administrator
+3. Follow the installation wizard
+4. Enter your license key when prompted
+5. Complete the initial setup
+
+macOS Installation:
+1. Download CloudSync-Pro.dmg
+2. Open the disk image
+3. Drag CloudSync Pro to Applications folder
+4. Launch and enter license key
+5. Grant necessary permissions when prompted
+
+FIRST-TIME SETUP
+
+1. Launch CloudSync Pro
+2. Enter your company email address
+3. Enter the license key provided by your administrator
+4. Choose your sync folders (default: Documents, Desktop, Downloads)
+5. Configure sync settings (real-time vs scheduled)
+6. Set up offline access preferences
+
+MAIN FEATURES
+
+File Synchronization:
+- Real-time sync across all devices
+- Automatic conflict resolution
+- Version history (up to 30 versions)
+- Selective sync options
+- Bandwidth throttling
+
+Collaboration Tools:
+- Share files and folders with team members
+- Set permission levels (view, edit, admin)
+- Real-time collaborative editing
+- Comment and annotation system
+- Activity tracking
+
+Security Features:
+- End-to-end encryption (AES-256)
+- Two-factor authentication
+- Remote wipe capabilities
+- Audit logging
+- Compliance reporting
+
+DAILY USAGE
+
+Creating a Sync Folder:
+1. Right-click in File Explorer/Finder
+2. Select "CloudSync Pro" > "Create Sync Folder"
+3. Choose folder name and sync settings
+4. Click "Create"
+
+Sharing Files:
+1. Right-click on file or folder
+2. Select "CloudSync Pro" > "Share"
+3. Enter email addresses of recipients
+4. Set permissions (view/edit)
+5. Add optional message
+6. Click "Send Invitation"
+
+Accessing Version History:
+1. Right-click on file
+2. Select "CloudSync Pro" > "Version History"
+3. Browse through available versions
+4. Click "Restore" to revert to previous version
+
+Managing Offline Files:
+1. Right-click on file or folder
+2. Select "CloudSync Pro" > "Make Available Offline"
+3. File will be cached locally
+4. Access files even without internet connection
+
+ADVANCED SETTINGS
+
+Sync Configuration:
+- Sync Frequency: Real-time, Every 5 minutes, Hourly, Daily
+- Bandwidth Limits: Set upload/download limits
+- File Type Filters: Exclude specific file types
+- Folder Exclusions: Skip certain folders from sync
+
+Backup Options:
+- Automatic backup scheduling
+- Backup retention policies
+- Incremental vs full backups
+- Backup verification
+
+Notification Settings:
+- Email notifications for shares
+- Desktop notifications for sync events
+- Mobile push notifications
+- Digest emails (daily/weekly)
+
+MOBILE APP
+
+iOS App Features:
+- Full file access and editing
+- Camera auto-upload
+- Biometric authentication
+- Offline file access
+- Push notifications
+
+Android App Features:
+- Complete file management
+- Auto-sync photos and videos
+- Fingerprint unlock
+- Background sync
+- Share extension
+
+TROUBLESHOOTING
+
+Common Issues:
+
+Sync Not Working:
+- Check internet connection
+- Verify account credentials
+- Restart CloudSync Pro service
+- Check firewall settings
+- Contact support if persistent
+
+Files Not Appearing:
+- Wait for sync to complete
+- Check selective sync settings
+- Verify permissions
+- Clear cache and restart
+
+Performance Issues:
+- Check available storage space
+- Reduce sync frequency
+- Enable bandwidth throttling
+- Close unnecessary applications
+
+Error Messages:
+- "Insufficient Storage": Free up space or upgrade plan
+- "Permission Denied": Check file permissions
+- "Sync Conflict": Resolve conflicts manually
+- "License Expired": Contact administrator
+
+KEYBOARD SHORTCUTS
+
+Windows:
+- Ctrl+Shift+S: Open sync status
+- Ctrl+Shift+R: Force refresh
+- Ctrl+Shift+P: Open preferences
+- Ctrl+Shift+H: Show/hide hidden files
+
+macOS:
+- Cmd+Shift+S: Open sync status
+- Cmd+Shift+R: Force refresh
+- Cmd+Shift+P: Open preferences
+- Cmd+Shift+H: Show/hide hidden files
+
+SUPPORT
+
+Technical Support:
+- Email: support@acmecorp.com
+- Phone: 1-800-ACME-HELP
+- Live Chat: Available 24/7
+- Knowledge Base: help.acmecorp.com
+
+Account Management:
+- Admin Portal: admin.cloudsync.acmecorp.com
+- Billing Questions: billing@acmecorp.com
+- License Issues: licenses@acmecorp.com
+
+Training Resources:
+- Video Tutorials: training.acmecorp.com
+- Webinars: Monthly training sessions
+- Documentation: docs.cloudsync.acmecorp.com
+- Best Practices Guide: Available in admin portal
+
+WARRANTY AND DISCLAIMERS
+
+ACME Corporation provides CloudSync Pro "as is" without warranty. For complete terms and conditions, visit legal.acmecorp.com.
+
+© 2024 ACME Corporation. All rights reserved.
+CloudSync Pro is a trademark of ACME Corporation.

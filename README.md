@@ -1,51 +1,61 @@
-# 🚀 Open Source RAG System
+# Open Source RAG System
 
-A high-performance Retrieval-Augmented Generation (RAG) system with AI-powered document search, optimized response generation, and embeddable widget integration.
+A production-ready Retrieval-Augmented Generation (RAG) system with local LLM integration using Ollama. This system allows you to upload documents, ask questions, and get intelligent answers based on your document collection.
 
 ![RAG System Demo](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![Version](https://img.shields.io/badge/Version-1.3.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## ✨ Features
+## Table of Contents
 
-### 🔍 **Advanced Document Processing**
-- **Multi-format Support**: PDF, DOCX, TXT, and Markdown files
-- **Intelligent Chunking**: Optimized text segmentation for better retrieval
-- **Vector Embeddings**: High-quality semantic search using SentenceTransformers
-- **Fast Processing**: Optimized document indexing with caching
+- [Features](#features)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [API Documentation](#api-documentation)
+- [Configuration](#configuration)
+- [Security Considerations](#security-considerations)
+- [Troubleshooting](#troubleshooting)
+- [Development](#development)
+- [License](#license)
 
-### 🤖 **AI-Powered Generation**
-- **LLM Integration**: Supports Ollama with multiple models (Mistral, Phi-3, Llama)
-- **Smart Fallback**: Automatic fallback to vector search if LLM fails
-- **Optimized Timeouts**: Fast response times (5-10 seconds)
-- **Source Citations**: Automatic source attribution with highlighting
+## Features
 
-### 🎯 **Performance Optimizations**
-- **Smart Caching**: 2-10x faster repeated queries
-- **Optimized Vector Search**: 3-5x faster similarity search
-- **Streaming API**: Real-time response streaming
-- **Production Infrastructure**: Health checks, rate limiting, auto-setup
+### Core Functionality
+- **Document Upload and Processing**: Support for PDF, DOCX, TXT, and CSV files
+- **Intelligent Question Answering**: Uses Ollama LLM for context-aware responses
+- **Vector Search**: Fast similarity search using FAISS
+- **Hybrid Search**: Combines vector similarity with keyword matching
+- **Real-time Processing**: Asynchronous document processing for better performance
+- **Smart Answer Engine**: Advanced context extraction and answer generation
 
-### 🌐 **Embeddable Widget**
-- **Universal Integration**: Works on any website with one line of code
-- **Customizable Themes**: 7 built-in themes + custom colors
-- **Mobile Responsive**: Perfect on all devices
-- **Source Display**: Shows document sources with each answer
+### Technical Features
+- **RESTful API**: Built with FastAPI for high performance
+- **Graceful Degradation**: Falls back to vector search when LLM unavailable
+- **Comprehensive Error Handling**: Robust error recovery and user feedback
+- **Rate Limiting**: Prevents abuse and ensures fair usage
+- **Input Validation**: Security-focused validation of all inputs
+- **Document Management**: Full CRUD operations for documents
+- **Persistent Storage**: SQLite database for document metadata
+- **Embeddable Widget**: Easy integration into any website
+- **Performance Optimizations**: Caching, optimized search, and streaming responses
 
-## 🏗️ Architecture
+## System Requirements
 
-```
-┌─────────────────┬─────────────────┬─────────────────┐
-│   Frontend      │   API Server    │   AI Engine    │
-├─────────────────┼─────────────────┼─────────────────┤
-│ • Web Interface │ • FastAPI       │ • Ollama LLMs   │
-│ • Chat Widget   │ • Vector Search │ • Embeddings    │
-│ • Examples      │ • Document Proc │ • Smart Cache   │
-└─────────────────┴─────────────────┴─────────────────┘
-```
+### Minimum Requirements
+- **Operating System**: Windows 10/11, Linux, or macOS
+- **Python**: 3.8 or higher
+- **RAM**: 8GB minimum (16GB recommended)
+- **Storage**: 10GB free space
+- **CPU**: 4 cores recommended
 
-## 🚀 Quick Start
+### Software Dependencies
+- **Ollama**: For local LLM inference
+- **Python Libraries**: See `simple_requirements.txt`
+
+## Quick Start
 
 ### Prerequisites
 
