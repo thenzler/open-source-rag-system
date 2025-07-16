@@ -1,103 +1,123 @@
-# LLM Configuration File
-# Easy model switching without code changes
-
-# Default model to use
-default_model: "command-r:latest"
-
-# Model configurations
+default_model: mistral
 models:
   command-r:
-    name: "command-r:latest"
-    description: "Best for RAG - Optimized for retrieval tasks"
     context_length: 128000
-    temperature: 0.3
+    description: 'Best for RAG - Optimized for retrieval tasks (Install with: ollama
+      pull command-r)'
     max_tokens: 2048
-    prompt_template: "command-r"
-    
+    name: command-r:latest
+    prompt_template: command-r
+    temperature: 0.3
   command-r-plus:
-    name: "command-r-plus:latest"
-    description: "Ultimate RAG model - Needs 60GB+ RAM"
     context_length: 128000
-    temperature: 0.3
+    description: Ultimate RAG model - Needs 60GB+ RAM
     max_tokens: 2048
-    prompt_template: "command-r"
-    
+    name: command-r-plus:latest
+    prompt_template: command-r
+    temperature: 0.3
   llama3.2:
-    name: "llama3.2:3b"
-    description: "Balanced model - Good for general use"
     context_length: 8192
-    temperature: 0.4
+    description: Balanced model - Good for general use
     max_tokens: 2048
-    prompt_template: "default"
-    
+    name: llama3.2:3b
+    prompt_template: default
+    temperature: 0.4
   mistral:
-    name: "mistral:7b-instruct-v0.2"
-    description: "Fast and efficient - Good instruction following"
     context_length: 32768
-    temperature: 0.3
+    description: Fast and efficient - Good instruction following
     max_tokens: 2048
-    prompt_template: "default"
-    
+    name: mistral:latest
+    prompt_template: default
+    temperature: 0.3
   mixtral:
-    name: "mixtral:8x7b"
-    description: "High quality - Needs 26GB+ RAM"
     context_length: 32768
-    temperature: 0.3
+    description: High quality - Needs 26GB+ RAM
     max_tokens: 2048
-    prompt_template: "default"
-    
-  solar:
-    name: "solar:10.7b"
-    description: "Excellent context understanding"
-    context_length: 4096
+    name: mixtral:8x7b
+    prompt_template: default
     temperature: 0.3
-    max_tokens: 2048
-    prompt_template: "solar"
-    
-  phi3:
-    name: "phi3:latest"
-    description: "Lightweight and fast"
-    context_length: 4096
-    temperature: 0.4
+  orca-mini:
+    context_length: 2048
+    description: "\xE2\u0161\xA1 Fast & smart - 3B params (20-40 seconds)"
     max_tokens: 1024
-    prompt_template: "default"
-
-# Prompt templates for different model families
+    name: orca-mini:latest
+    prompt_template: default
+    temperature: 0.3
+  phi3:
+    context_length: 4096
+    description: Lightweight and fast
+    max_tokens: 1024
+    name: phi3:latest
+    prompt_template: default
+    temperature: 0.4
+  phi3-mini:
+    context_length: 4096
+    description: Small and fast model - 3.8B parameters
+    max_tokens: 1024
+    name: mannix/phi3-mini-4k:latest
+    prompt_template: default
+    temperature: 0.4
+  phi3-mini-fast:
+    context_length: 4096
+    description: "\xE2\u0161\xA1 Ultra-fast for laptops - 30-60 seconds"
+    max_tokens: 1024
+    name: phi3:mini
+    prompt_template: default
+    temperature: 0.3
+  solar:
+    context_length: 4096
+    description: Excellent context understanding
+    max_tokens: 2048
+    name: solar:10.7b
+    prompt_template: solar
+    temperature: 0.3
+  tinyllama:
+    context_length: 2048
+    description: "\xF0\u0178\u0161\u20AC Fastest option - 1.1B params (10-30 seconds)"
+    max_tokens: 1024
+    name: tinyllama:latest
+    prompt_template: default
+    temperature: 0.4
 prompt_templates:
-  command-r: |
-    <|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>Du bist ein hilfreicher Assistent, der Fragen NUR basierend auf bereitgestellten Dokumenten beantwortet.<|END_OF_TURN_TOKEN|>
+  command-r: '<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>Du bist ein hilfreicher Assistent,
+    der Fragen NUR basierend auf bereitgestellten Dokumenten beantwortet.<|END_OF_TURN_TOKEN|>
+
     <|START_OF_TURN_TOKEN|><|USER_TOKEN|>
+
     Dokumente:
+
     {context}
-    
+
+
     Frage: {query}<|END_OF_TURN_TOKEN|>
+
     <|START_OF_TURN_TOKEN|><|ASSISTANT_TOKEN|>Basierend auf den bereitgestellten Dokumenten:
-    
-  solar: |
-    ### System:
-    Du bist ein Experte im Analysieren von Dokumenten. Beantworte Fragen NUR mit Informationen aus den gegebenen Dokumenten.
-    
+
+    '
+  default: "Beantworte die Frage basierend AUSSCHLIESSLICH auf den bereitgestellten\
+    \ Dokumenten.\n\nANWEISUNGEN:\n1. Lies die Dokumente sorgf\xC3\xA4ltig\n2. Extrahiere\
+    \ NUR die relevanten Informationen f\xC3\xBCr die Frage\n3. Formuliere eine klare,\
+    \ strukturierte Antwort\n4. Verwende KEINE Informationen au\xC3\u0178erhalb der\
+    \ Dokumente\n\nFRAGE: {query}\n\nDOKUMENTE:\n{context}\n\nANTWORT (nur basierend\
+    \ auf den Dokumenten):"
+  solar: '### System:
+
+    Du bist ein Experte im Analysieren von Dokumenten. Beantworte Fragen NUR mit Informationen
+    aus den gegebenen Dokumenten.
+
+
     ### Dokumente:
+
     {context}
-    
+
+
     ### Benutzer:
+
     {query}
-    
+
+
     ### Assistent:
+
     Nach Analyse der Dokumente:
-    
-  default: |
-    Beantworte die Frage basierend AUSSCHLIESSLICH auf den bereitgestellten Dokumenten.
-    
-    ANWEISUNGEN:
-    1. Lies die Dokumente sorgfältig
-    2. Extrahiere NUR die relevanten Informationen für die Frage
-    3. Formuliere eine klare, strukturierte Antwort
-    4. Verwende KEINE Informationen außerhalb der Dokumente
-    
-    FRAGE: {query}
-    
-    DOKUMENTE:
-    {context}
-    
-    ANTWORT (nur basierend auf den Dokumenten):
+
+    '

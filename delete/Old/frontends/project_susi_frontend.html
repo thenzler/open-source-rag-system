@@ -299,6 +299,34 @@
         .search-input::placeholder {
             color: var(--text-secondary);
         }
+        
+        /* Fix dropdown styling for dark theme */
+        select.search-input {
+            background-color: #16213e !important;
+            color: #ffffff !important;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 3rem;
+        }
+        
+        select.search-input option {
+            background-color: #1a1a2e !important;
+            color: #ffffff !important;
+            padding: 0.8rem;
+            font-size: 0.95rem;
+        }
+        
+        select.search-input option:hover,
+        select.search-input option:checked,
+        select.search-input option:focus {
+            background-color: #667eea !important;
+            color: white !important;
+        }
 
         .search-btn {
             position: absolute;
@@ -776,10 +804,47 @@
                     <button class="btn warning" onclick="checkLLMStatus()">
                         <i class="fas fa-brain"></i> LLM Status
                     </button>
+                    <button class="btn" onclick="toggleSettings()">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
                 </div>
 
                 <div id="systemStatus"></div>
                 <div id="llmStatus"></div>
+                
+                <!-- Settings Panel (Hidden by default) -->
+                <div id="settingsPanel" style="display: none; margin-top: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--gradient-card);">
+                    <h3><i class="fas fa-microchip"></i> LLM Model Management</h3>
+                    
+                    <div class="status-item" style="margin: 1rem 0;">
+                        <i class="fas fa-info-circle status-icon"></i>
+                        <div>
+                            <div><strong>Current Model:</strong> <span id="currentModel">Loading...</span></div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);" id="modelDescription"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 1.5rem 0;">
+                        <label for="modelSelect" style="display: block; margin-bottom: 0.5rem;">Select Model:</label>
+                        <select id="modelSelect" class="search-input" style="width: 100%; cursor: pointer;">
+                            <option value="">Loading models...</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn" onclick="switchModel()">
+                            <i class="fas fa-exchange-alt"></i> Switch Model
+                        </button>
+                        <button class="btn success" onclick="refreshLLMStatus()">
+                            <i class="fas fa-sync"></i> Refresh Status
+                        </button>
+                        <button class="btn warning" onclick="reconnectLLM()">
+                            <i class="fas fa-plug"></i> Reconnect LLM
+                        </button>
+                    </div>
+                    
+                    <div id="llmStatusDetails" style="margin-top: 1rem;"></div>
+                </div>
             </div>
         </div>
 
@@ -1038,6 +1103,10 @@
                     `${API_BASE}/api/v1/query/optimized` : 
                     `${API_BASE}/api/v1/query`;
                 
+                // Create abort controller for timeout handling
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minute timeout for laptop performance
+                
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1045,8 +1114,11 @@
                         query: query,
                         top_k: 5,
                         use_llm: isEnhanced
-                    })
+                    }),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
 
                 clearInterval(stepInterval);
                 
@@ -1067,7 +1139,13 @@
                 }
             } catch (error) {
                 clearInterval(stepInterval);
-                showSearchResults(`<i class="fas fa-times-circle"></i> Network Error: ${error.message}`, 'error');
+                clearTimeout(timeoutId);
+                
+                if (error.name === 'AbortError') {
+                    showSearchResults(`<i class="fas fa-clock"></i> Search timed out after 60 seconds. The AI might be processing a complex query. Please try a simpler question.`, 'error');
+                } else {
+                    showSearchResults(`<i class="fas fa-times-circle"></i> Network Error: ${error.message}`, 'error');
+                }
             }
         }
 
@@ -1512,14 +1590,200 @@
             resultsDiv.innerHTML = html;
         }
 
+        // LLM Management Functions
+        async function loadAvailableModels() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/llm/models`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const modelSelect = document.getElementById('modelSelect');
+                    
+                    modelSelect.innerHTML = '<option value="">Select a model...</option>';
+                    
+                    // Add speed categories
+                    const speedCategories = {
+                        'tinyllama': '⚡ 10-30 sec',
+                        'orca-mini': '⚡ 20-40 sec', 
+                        'phi3-mini-fast': '⚡ 30-60 sec',
+                        'phi3-mini': '⏱️ 1-2 min',
+                        'phi3': '⏱️ 1-2 min',
+                        'mistral': '🐌 2-5 min',
+                        'llama3.2': '🐌 2-5 min',
+                        'mixtral': '🐌 5+ min',
+                        'solar': '🐌 3-5 min',
+                        'command-r': '🐌 5+ min',
+                        'command-r-plus': '🐌 10+ min'
+                    };
+                    
+                    Object.entries(data.models || {}).forEach(([key, model]) => {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        const speedInfo = speedCategories[key] || '⏱️ Speed varies';
+                        option.textContent = `${model.name} - ${model.description} [${speedInfo}]`;
+                        option.setAttribute('data-speed', speedInfo);
+                        option.setAttribute('data-description', model.description);
+                        if (key === data.current_model) {
+                            option.selected = true;
+                        }
+                        modelSelect.appendChild(option);
+                    });
+                    
+                    updateCurrentModelDisplay(data);
+                } else {
+                    console.error('Failed to load models');
+                    document.getElementById('modelSelect').innerHTML = '<option value="">Error loading models</option>';
+                }
+            } catch (error) {
+                console.error('Error loading models:', error);
+                document.getElementById('modelSelect').innerHTML = '<option value="">Error loading models</option>';
+            }
+        }
+
+        function updateCurrentModelDisplay(data) {
+            const currentModelSpan = document.getElementById('currentModel');
+            const descriptionSpan = document.getElementById('modelDescription');
+            
+            if (data.current_model && data.models[data.current_model]) {
+                const currentModel = data.models[data.current_model];
+                currentModelSpan.textContent = currentModel.name;
+                descriptionSpan.textContent = currentModel.description;
+            } else {
+                currentModelSpan.textContent = 'Unknown';
+                descriptionSpan.textContent = 'No model information available';
+            }
+        }
+
+        async function switchModel() {
+            const modelSelect = document.getElementById('modelSelect');
+            const selectedModel = modelSelect.value;
+            const statusDiv = document.getElementById('llmStatusDetails');
+            
+            if (!selectedModel) {
+                showStatus('<i class="fas fa-exclamation-triangle"></i> Please select a model', 'error', statusDiv);
+                return;
+            }
+            
+            showStatus('<i class="fas fa-spinner fa-spin"></i> Switching to model: ' + selectedModel, 'info', statusDiv);
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/llm/switch`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showStatus('<i class="fas fa-check"></i> Successfully switched to: ' + data.new_model, 'success', statusDiv);
+                    await loadAvailableModels(); // Refresh the display
+                    await refreshLLMStatus();
+                } else {
+                    showStatus('<i class="fas fa-times"></i> Failed to switch model: ' + (data.message || 'Unknown error'), 'error', statusDiv);
+                }
+            } catch (error) {
+                showStatus('<i class="fas fa-times"></i> Error switching model: ' + error.message, 'error', statusDiv);
+            }
+        }
+
+        async function refreshLLMStatus() {
+            const statusDiv = document.getElementById('llmStatusDetails');
+            showStatus('<i class="fas fa-spinner fa-spin"></i> Checking LLM status...', 'info', statusDiv);
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/llm/status`);
+                const data = await response.json();
+                
+                let statusClass = 'info';
+                let icon = 'fas fa-info-circle';
+                
+                if (data.available) {
+                    statusClass = 'success';
+                    icon = 'fas fa-check-circle';
+                } else {
+                    statusClass = 'error';
+                    icon = 'fas fa-exclamation-circle';
+                }
+                
+                const statusText = `
+                    <div class="status-item">
+                        <i class="${icon} status-icon ${statusClass}"></i>
+                        <div>
+                            <div><strong>Status:</strong> ${data.status}</div>
+                            <div><strong>Available:</strong> ${data.available ? 'Yes' : 'No'}</div>
+                            ${data.model ? `<div><strong>Model:</strong> ${data.model}</div>` : ''}
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">${data.message}</div>
+                        </div>
+                    </div>
+                `;
+                
+                statusDiv.innerHTML = statusText;
+                
+                // Update current model display
+                if (data.available && data.model) {
+                    document.getElementById('currentModel').textContent = data.model;
+                }
+                
+            } catch (error) {
+                showStatus('<i class="fas fa-times"></i> Error checking LLM status: ' + error.message, 'error', statusDiv);
+            }
+        }
+
+        async function reconnectLLM() {
+            const statusDiv = document.getElementById('llmStatusDetails');
+            showStatus('<i class="fas fa-spinner fa-spin"></i> Attempting to reconnect LLM...', 'info', statusDiv);
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/llm/reconnect`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                let statusClass = data.available ? 'success' : 'error';
+                let icon = data.available ? 'fas fa-check' : 'fas fa-times';
+                
+                showStatus(`<i class="${icon}"></i> ${data.message}`, statusClass, statusDiv);
+                
+                if (data.available) {
+                    await loadAvailableModels(); // Refresh models if reconnected
+                }
+                
+            } catch (error) {
+                showStatus('<i class="fas fa-times"></i> Error reconnecting LLM: ' + error.message, 'error', statusDiv);
+            }
+        }
+
+        // Toggle settings panel visibility
+        function toggleSettings() {
+            const settingsPanel = document.getElementById('settingsPanel');
+            const isVisible = settingsPanel.style.display !== 'none';
+            
+            if (isVisible) {
+                settingsPanel.style.display = 'none';
+            } else {
+                settingsPanel.style.display = 'block';
+                // Load models when opening settings
+                loadAvailableModels();
+                refreshLLMStatus();
+            }
+        }
+
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
             initializeDragAndDrop();
             loadDocuments();
             checkSystemStatus();
+            loadAvailableModels(); // Load LLM models
             
             // Auto-check system status every 30 seconds
             setInterval(checkSystemStatus, 30000);
+            
+            // Auto-refresh LLM status every 60 seconds
+            setInterval(refreshLLMStatus, 60000);
         });
     </script>
 </body>

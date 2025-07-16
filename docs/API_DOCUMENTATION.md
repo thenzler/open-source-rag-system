@@ -1,4 +1,4 @@
-# 📋 API Documentation
+# API Documentation
 
 Complete API reference for the Open Source RAG System.
 

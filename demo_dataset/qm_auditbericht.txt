@@ -1,0 +1,314 @@
+INTERNER AUDIT-BERICHT
+ISO 9001:2015 Qualitätsmanagementsystem
+
+AUDITINFORMATIONEN
+
+Audittyp: Internes Audit
+Auditnummer: IA-2024-003
+Auditstandard: ISO 9001:2015
+Auditdatum: 8. - 10. März 2024
+Berichtsdatum: 15. März 2024
+
+AUDITORGANISATION
+
+Leitender Auditor: Klaus Müller (Zertifizierter QM-Auditor)
+Auditteam: 
+- Maria Schmidt (Prozess-Expertin)
+- Thomas Weber (Technischer Auditor)
+- Dr. Anna Becker (Compliance-Spezialistin)
+
+AUDITIERTE BEREICHE
+
+Produktion:
+- Fertigungsbereich A (Montage)
+- Fertigungsbereich B (Verpackung)
+- Qualitätsprüfung
+- Lager und Versand
+
+Unterstützende Prozesse:
+- Einkauf und Beschaffung
+- Personalwesen
+- IT-Abteilung
+- Wartung und Instandhaltung
+
+AUDITUMFANG
+
+Auditierte Prozesse:
+- Kontext der Organisation (Kap. 4)
+- Führung und Verpflichtung (Kap. 5)
+- Planung des QM-Systems (Kap. 6)
+- Unterstützung (Kap. 7)
+- Betrieb (Kap. 8)
+- Bewertung der Leistung (Kap. 9)
+- Verbesserung (Kap. 10)
+
+Auditierte Standorte:
+- Hauptwerk München
+- Lager Frankfurt
+- Entwicklungszentrum Stuttgart
+
+AUDIT-METHODIK
+
+Verwendete Techniken:
+- Dokumentenprüfung
+- Interviews mit Mitarbeitern
+- Beobachtung von Arbeitsprozessen
+- Stichprobenprüfungen
+- Datenanalyse
+
+Stichprobenumfang:
+- 45 Interviews durchgeführt
+- 120 Dokumente geprüft
+- 15 Prozesse beobachtet
+- 8 Bereiche auditiert
+
+AUDIT-ERGEBNISSE
+
+ZUSAMMENFASSUNG
+
+Gesamtbewertung: BESTANDEN
+Das Qualitätsmanagementsystem entspricht den Anforderungen der ISO 9001:2015 und wird wirksam umgesetzt.
+
+Statistik:
+- Konformitäten: 187
+- Kleinere Abweichungen: 8
+- Hauptabweichungen: 2
+- Beobachtungen: 15
+- Verbesserungsvorschläge: 22
+
+POSITIVE BEFUNDE
+
+1. FÜHRUNG UND VERPFLICHTUNG
+- Starkes Engagement der Geschäftsleitung
+- Klare Qualitätspolitik kommuniziert
+- Regelmäßige Management-Reviews
+- Ausreichende Ressourcenzuteilung
+
+2. PROZESSMANAGEMENT
+- Gut dokumentierte Prozesse
+- Klare Verantwortlichkeiten
+- Effektive Prozessmessung
+- Kontinuierliche Verbesserung erkennbar
+
+3. MITARBEITERKOMPETENZ
+- Systematische Schulungsprogramme
+- Kompetenzbewertung implementiert
+- Bewusstsein für Qualitätsziele hoch
+- Motivation und Engagement positiv
+
+4. KUNDENZUFRIEDENHEIT
+- Kundenfeedback systematisch erfasst
+- Reklamationsbearbeitung effizient
+- Kundenzufriedenheitsindex: 4,2/5
+- Verbesserung der Liefertreue auf 98%
+
+HAUPTABWEICHUNGEN
+
+1. ABWEICHUNG MA-001
+Bereich: Einkauf und Beschaffung
+Anforderung: ISO 9001:2015, Kap. 8.4.1
+Feststellung: Lieferantenbewertung nicht für alle kritischen Lieferanten durchgeführt
+
+Beschreibung:
+Bei der Prüfung der Lieferantenbewertungsunterlagen wurde festgestellt, dass 12 von 45 als kritisch eingestuften Lieferanten in den letzten 24 Monaten nicht bewertet wurden. Die Bewertungskriterien sind definiert, aber die Umsetzung ist unvollständig.
+
+Auswirkung:
+- Risiko unentdeckter Lieferantenprobleme
+- Potenzielle Auswirkungen auf Produktqualität
+- Nichteinhaltung der Norm-Anforderungen
+
+Korrekturmaßnahmen erforderlich bis: 30. Juni 2024
+
+2. ABWEICHUNG MA-002
+Bereich: Überwachung und Messung
+Anforderung: ISO 9001:2015, Kap. 9.1.1
+Feststellung: Kalibrierung von Prüfmitteln teilweise überfällig
+
+Beschreibung:
+15 von 127 Prüfmitteln haben ihre Kalibrierintervalle überschritten. Das Kalibrierungsprogramm ist vorhanden, aber die Überwachung der Termine ist unzureichend.
+
+Betroffene Prüfmittel:
+- 8 Digitale Messschieber
+- 4 Druckmessgeräte
+- 2 Waagen
+- 1 Härteprüfgerät
+
+Auswirkung:
+- Messungenauigkeiten möglich
+- Risiko für Produktqualität
+- Kundenreklamationen möglich
+
+Korrekturmaßnahmen erforderlich bis: 30. April 2024
+
+KLEINERE ABWEICHUNGEN
+
+1. ABWEICHUNG MI-001
+Bereich: Dokumentenlenkung
+Feststellung: Veraltete Arbeitsanweisungen in Arbeitsplatz 7 gefunden
+
+2. ABWEICHUNG MI-002
+Bereich: Personalschulung
+Feststellung: Schulungsnachweise für 3 Mitarbeiter nicht vollständig
+
+3. ABWEICHUNG MI-003
+Bereich: Interne Kommunikation
+Feststellung: Qualitätsziele nicht an allen Arbeitsplätzen sichtbar
+
+4. ABWEICHUNG MI-004
+Bereich: Reklamationsbearbeitung
+Feststellung: Verspätete Bearbeitung von 2 Kundenreklamationen
+
+5. ABWEICHUNG MI-005
+Bereich: Managementbewertung
+Feststellung: Unvollständige Dokumentation der letzten Management-Review
+
+6. ABWEICHUNG MI-006
+Bereich: Risikomanagement
+Feststellung: Risikobewertung für Prozess "Verpackung" nicht aktuell
+
+7. ABWEICHUNG MI-007
+Bereich: Lagerung
+Feststellung: Kennzeichnung von Produkten im Lager unvollständig
+
+8. ABWEICHUNG MI-008
+Bereich: Wartung
+Feststellung: Wartungsplan für Maschine M-15 nicht befolgt
+
+BEOBACHTUNGEN
+
+1. PROZESSEFFIZIENZ
+- Potenzial zur Automatisierung in der Qualitätsprüfung
+- Mögliche Optimierung der Materialflüsse
+- Reduzierung von Durchlaufzeiten möglich
+
+2. DIGITALISIERUNG
+- Papierdokumente könnten digitalisiert werden
+- Mobile Lösungen für Audit-Checklisten empfehlenswert
+- Integration verschiedener IT-Systeme verbesserungswürdig
+
+3. MITARBEITERZUFRIEDENHEIT
+- Hohe Motivation bei Qualitätspersonal
+- Bedarf an ergonomischen Verbesserungen
+- Wunsch nach mehr Autonomie in Entscheidungen
+
+4. UMWELTASPEKTE
+- Energieverbrauch könnte optimiert werden
+- Abfallreduzierung in der Produktion möglich
+- Nachhaltigkeitsziele könnten integriert werden
+
+VERBESSERUNGSVORSCHLÄGE
+
+1. KURZE FRIST (3 Monate)
+- Implementierung elektronischer Kalibriererinnerungen
+- Schulung der Einkaufsabteilung zu Lieferantenbewertung
+- Überarbeitung der Arbeitsanweisungen
+- Verbesserung der internen Kommunikation
+
+2. MITTLERE FRIST (6 Monate)
+- Einführung digitaler Audit-Checklisten
+- Optimierung des Reklamationsprozesses
+- Implementierung von Dashboards für Kennzahlen
+- Verbesserung der Lagerorganisation
+
+3. LANGE FRIST (12 Monate)
+- Vollständige Digitalisierung der Dokumentation
+- Automatisierung der Qualitätsprüfung
+- Integration der IT-Systeme
+- Implementierung von Industrie 4.0-Lösungen
+
+KENNZAHLEN UND TRENDS
+
+QUALITÄTSKENNZAHLEN
+
+Kundenreklamationen:
+- Q1 2024: 23 (Target: <25)
+- Q4 2023: 28
+- Trend: Verbesserung
+
+Interne Ausschussrate:
+- Q1 2024: 1,2% (Target: <1,5%)
+- Q4 2023: 1,8%
+- Trend: Deutliche Verbesserung
+
+Liefertreue:
+- Q1 2024: 98,1% (Target: >95%)
+- Q4 2023: 96,8%
+- Trend: Positive Entwicklung
+
+Mitarbeiterschulungen:
+- Q1 2024: 87% termingerecht (Target: >90%)
+- Q4 2023: 82%
+- Trend: Verbesserung, aber Target noch nicht erreicht
+
+AUDIT-PERFORMANCE
+
+Konformitätsgrad:
+- Gesamt: 94,2%
+- Produktion: 96,1%
+- Unterstützende Prozesse: 92,3%
+
+Verbesserung gegenüber letztem Audit:
+- Hauptabweichungen: 2 (vorher: 4)
+- Kleinere Abweichungen: 8 (vorher: 12)
+- Beobachtungen: 15 (vorher: 18)
+
+NACHVERFOLGUNG
+
+KORREKTURMASSNAHMEN-PLAN
+
+Hauptabweichungen:
+- MA-001: Lieferantenbewertung bis 30.06.2024
+- MA-002: Kalibrierung bis 30.04.2024
+
+Kleinere Abweichungen:
+- Alle bis 31.05.2024
+
+Verantwortlichkeiten:
+- Qualitätsmanager: Gesamtkoordination
+- Einkaufsleiter: MA-001
+- Produktionsleiter: MA-002
+- Abteilungsleiter: Kleinere Abweichungen
+
+WIRKSAMKEITSPRÜFUNG
+
+Nächste Überprüfung:
+- Zwischenaudit: 15. Juni 2024
+- Vollständige Wirksamkeitsprüfung: 15. September 2024
+
+Erfolgskriterien:
+- Alle Abweichungen geschlossen
+- Verbesserungsmaßnahmen umgesetzt
+- Kennzahlen-Targets erreicht
+
+NÄCHSTE SCHRITTE
+
+1. Verteilung des Auditberichts an alle Beteiligten
+2. Korrekturmaßnahmen-Meeting am 22. März 2024
+3. Monatliche Fortschrittskontrolle
+4. Zwischenaudit-Planung für Juni 2024
+
+ANHÄNGE
+
+Anhang A: Audit-Checklisten
+Anhang B: Dokumentenverzeichnis
+Anhang C: Interviewprotokolle
+Anhang D: Fotodokumentation
+Anhang E: Korrekturmaßnahmen-Formular
+
+BESTÄTIGUNGEN
+
+Auditteam:
+Klaus Müller (Leitender Auditor)
+Maria Schmidt (Auditorin)
+Thomas Weber (Auditor)
+Dr. Anna Becker (Auditorin)
+
+Auditierte Organisation:
+Heinrich Steiner (Geschäftsführer)
+Dr. Sarah Weber (Qualitätsmanagerin)
+Michael Hoffmann (Produktionsleiter)
+
+Berichtsdatum: 15. März 2024
+Verteilungsverzeichnis: QM-Handbuch Anhang F
+
+© 2024 ProQuality Solutions GmbH - Vertraulich

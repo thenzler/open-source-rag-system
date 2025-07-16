@@ -25,6 +25,10 @@ from pydantic import BaseModel
 from contextlib import asynccontextmanager
 import uvicorn
 
+# Configure logging early
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Document processing imports
 try:
     import PyPDF2
@@ -35,17 +39,17 @@ try:
     from sklearn.metrics.pairwise import cosine_similarity
     PDF_SUPPORT = True
 except ImportError as e:
-    print(f"Some dependencies not installed: {e}")
+    logger.error(f"Some dependencies not installed: {e}")
     PDF_SUPPORT = False
 
 # FAISS vector search import
 try:
     from services.vector_search import OptimizedVectorStore, FAISSVectorSearch
     FAISS_AVAILABLE = True
-    print("OK: FAISS vector search loaded successfully!")
+    logger.info("OK: FAISS vector search loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: FAISS not available, using fallback search: {e}")
-    print("   Install FAISS for 10-100x faster search: pip install faiss-cpu")
+    logger.warning(f"FAISS not available, using fallback search: {e}")
+    logger.info("   Install FAISS for 10-100x faster search: pip install faiss-cpu")
     FAISS_AVAILABLE = False
     OptimizedVectorStore = None
 
@@ -53,9 +57,9 @@ except ImportError as e:
 try:
     from services.async_processor import AsyncDocumentProcessor, ProcessingStatus, ProcessingJob, get_async_processor
     ASYNC_PROCESSING_AVAILABLE = True
-    print("OK: Async document processing loaded successfully!")
+    logger.info("OK: Async document processing loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Async processing not available: {e}")
+    logger.warning(f"Async processing not available: {e}")
     ASYNC_PROCESSING_AVAILABLE = False
     AsyncDocumentProcessor = None
 
@@ -63,9 +67,9 @@ except ImportError as e:
 try:
     from services.auth import AuthManager, User, UserRole, get_auth_manager
     AUTH_AVAILABLE = True
-    print("OK: Authentication system loaded successfully!")
+    logger.info("OK: Authentication system loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Authentication not available: {e}")
+    logger.warning(f"Authentication not available: {e}")
     AUTH_AVAILABLE = False
     AuthManager = None
 
@@ -73,9 +77,9 @@ except ImportError as e:
 try:
     from services.validation import InputValidator, ValidationResult, ValidationError, get_input_validator
     VALIDATION_AVAILABLE = True
-    print("OK: Input validation system loaded successfully!")
+    logger.info("OK: Input validation system loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Input validation not available: {e}")
+    logger.warning(f"Input validation not available: {e}")
     VALIDATION_AVAILABLE = False
     InputValidator = None
 
@@ -83,9 +87,9 @@ except ImportError as e:
 try:
     from services.document_manager import DocumentManager, DocumentMetadata, DocumentStatus, get_document_manager
     DOCUMENT_MANAGER_AVAILABLE = True
-    print("OK: Document management system loaded successfully!")
+    logger.info("OK: Document management system loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Document manager not available: {e}")
+    logger.warning(f"Document manager not available: {e}")
     DOCUMENT_MANAGER_AVAILABLE = False
     DocumentManager = None
 
@@ -93,9 +97,9 @@ except ImportError as e:
 try:
     from services.smart_answer import SmartAnswerEngine, get_smart_answer_engine, AnswerType
     SMART_ANSWER_AVAILABLE = True
-    print("OK: Smart answer engine loaded successfully!")
+    logger.info("OK: Smart answer engine loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Smart answer engine not available: {e}")
+    logger.warning(f"Smart answer engine not available: {e}")
     SMART_ANSWER_AVAILABLE = False
     SmartAnswerEngine = None
 
@@ -103,9 +107,9 @@ except ImportError as e:
 try:
     from services.improved_chunking import get_improved_chunker, chunk_text_improved
     IMPROVED_CHUNKING_AVAILABLE = True
-    print("OK: Improved chunking system loaded successfully!")
+    logger.info("OK: Improved chunking system loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Improved chunking not available: {e}")
+    logger.warning(f"Improved chunking not available: {e}")
     IMPROVED_CHUNKING_AVAILABLE = False
     chunk_text_improved = None
 
@@ -113,9 +117,9 @@ except ImportError as e:
 try:
     from services.query_expansion import get_query_expander
     QUERY_EXPANSION_AVAILABLE = True
-    print("OK: Query expansion loaded successfully!")
+    logger.info("OK: Query expansion loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Query expansion not available: {e}")
+    logger.warning(f"Query expansion not available: {e}")
     QUERY_EXPANSION_AVAILABLE = False
     get_query_expander = None
 
@@ -123,9 +127,9 @@ except ImportError as e:
 try:
     from services.reranking import get_reranker
     RERANKING_AVAILABLE = True
-    print("OK: Chunk reranking loaded successfully!")
+    logger.info("OK: Chunk reranking loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Chunk reranking not available: {e}")
+    logger.warning(f"Chunk reranking not available: {e}")
     RERANKING_AVAILABLE = False
     get_reranker = None
 
@@ -133,9 +137,9 @@ except ImportError as e:
 try:
     from services.hybrid_search import get_hybrid_search
     HYBRID_SEARCH_AVAILABLE = True
-    print("OK: Hybrid search loaded successfully!")
+    logger.info("OK: Hybrid search loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: Hybrid search not available: {e}")
+    logger.warning(f"Hybrid search not available: {e}")
     HYBRID_SEARCH_AVAILABLE = False
     get_hybrid_search = None
 
@@ -144,22 +148,20 @@ try:
     from ollama_client import get_ollama_client
     OLLAMA_SUPPORT = True
 except ImportError as e:
-    print(f"Ollama client not available: {e}")
+    logger.warning(f"Ollama client not available: {e}")
     OLLAMA_SUPPORT = False
 
 # LLM Manager import
 try:
     from services.llm_manager import get_llm_manager
     LLM_MANAGER_AVAILABLE = True
-    print("OK: LLM Manager loaded successfully!")
+    logger.info("OK: LLM Manager loaded successfully!")
 except ImportError as e:
-    print(f"WARNING: LLM Manager not available: {e}")
+    logger.warning(f"LLM Manager not available: {e}")
     LLM_MANAGER_AVAILABLE = False
     get_llm_manager = None
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Logger already configured at the top
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -202,13 +204,27 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add CORS middleware
+# Add CORS middleware - secure configuration
+# For development, allow localhost origins. For production, specify exact domains.
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:8001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:8001",
+]
+
+# Allow environment variable override for production
+if os.getenv("RAG_ALLOWED_ORIGINS"):
+    ALLOWED_ORIGINS = os.getenv("RAG_ALLOWED_ORIGINS").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for widget integration
+    allow_origins=ALLOWED_ORIGINS,  # Specific origins only for security
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
+    allow_headers=["Content-Type", "Authorization"],  # Specific headers only
 )
 
 # Create directories
@@ -224,9 +240,18 @@ memory_safe_storage = None
 # Try persistent storage first (preferred)
 try:
     from services.persistent_storage import get_persistent_storage, init_persistent_storage
-    persistent_storage = init_persistent_storage("rag_database.db")
+    
+    # Use relative path or environment variable for database location
+    db_path = os.getenv("RAG_DATABASE_PATH", "./rag_database.db")
+    
+    # Ensure the database path is relative to the current working directory
+    if not os.path.isabs(db_path):
+        db_path = os.path.join(os.getcwd(), db_path)
+    
+    persistent_storage = init_persistent_storage(db_path)
     storage_stats = persistent_storage.get_stats()
     logger.info(f"[OK] Persistent storage initialized - {storage_stats['documents']} documents, {storage_stats['database_size_mb']} MB")
+    logger.info(f"[DB] Using database at: {db_path}")
 except ImportError as e:
     logger.warning(f"Persistent storage not available: {e} - falling back to memory-safe storage")
 except Exception as e:
@@ -276,9 +301,10 @@ if OLLAMA_SUPPORT:
         if ollama_client.is_available():
             logger.info(f"Ollama client initialized successfully with model: {ollama_client.model}")
         else:
-            logger.warning("Ollama client initialized but not available")
+            logger.warning("Ollama client initialized but not available - will retry on demand")
     except Exception as e:
         logger.error(f"Failed to initialize Ollama client: {e}")
+        logger.info("Will attempt to reconnect when needed")
         ollama_client = None
 
 # Initialize async processor
@@ -359,10 +385,11 @@ MAX_CONTEXT_LENGTH = 4000  # Maximum context length for LLM
 
 # Performance Caching System
 class FastCache:
-    """Fast in-memory cache for embeddings and search results"""
+    """Fast in-memory cache for embeddings, search results, and LLM responses"""
     def __init__(self, max_size=1000):
         self.query_cache = {}
         self.embedding_cache = {}
+        self.response_cache = {}  # Cache for full LLM responses
         self.max_size = max_size
         self.access_times = {}
     
@@ -392,9 +419,33 @@ class FastCache:
         self.embedding_cache[text_hash] = embedding
         self.access_times[text_hash] = time.time()
     
+    def get_response_cache(self, query_hash: str):
+        """Get cached LLM response"""
+        if query_hash in self.response_cache:
+            cached_data = self.response_cache[query_hash]
+            # Check if cache is still valid (30 minutes for responses)
+            if time.time() - cached_data['timestamp'] < 1800:
+                self.access_times[query_hash] = time.time()
+                return cached_data['response']
+            else:
+                # Remove expired cache
+                del self.response_cache[query_hash]
+                if query_hash in self.access_times:
+                    del self.access_times[query_hash]
+        return None
+    
+    def set_response_cache(self, query_hash: str, response):
+        """Set cached LLM response"""
+        self._cleanup_if_needed()
+        self.response_cache[query_hash] = {
+            'response': response,
+            'timestamp': time.time()
+        }
+        self.access_times[query_hash] = time.time()
+    
     def _cleanup_if_needed(self):
         """Remove oldest entries if cache is full"""
-        total_items = len(self.query_cache) + len(self.embedding_cache)
+        total_items = len(self.query_cache) + len(self.embedding_cache) + len(self.response_cache)
         if total_items >= self.max_size:
             # Remove 20% of oldest entries
             items_to_remove = int(total_items * 0.2)
@@ -406,18 +457,23 @@ class FastCache:
                     del self.query_cache[key]
                 if key in self.embedding_cache:
                     del self.embedding_cache[key]
-                del self.access_times[key]
+                if key in self.response_cache:
+                    del self.response_cache[key]
+                if key in self.access_times:
+                    del self.access_times[key]
     
     def clear_all(self):
         """Clear all cached data"""
         self.query_cache.clear()
         self.embedding_cache.clear()
+        self.response_cache.clear()
         self.access_times.clear()
     
     def clear(self):
         """Clear all caches"""
         self.query_cache.clear()
         self.embedding_cache.clear()
+        self.response_cache.clear()
         self.access_times.clear()
 
 # Initialize performance cache
@@ -472,7 +528,7 @@ class LLMQueryResponse(BaseModel):
 class ChatRequest(BaseModel):
     query: str
     chat_history: Optional[List[dict]] = []
-    max_tokens: Optional[int] = 1000
+    max_tokens: Optional[int] = 2048
     temperature: Optional[float] = 0.7
     context_limit: Optional[int] = 5
 
@@ -998,12 +1054,15 @@ def prepare_context_for_llm(similar_chunks: List[dict], max_length: int = 3000) 
     context_parts = []
     current_length = 0
     
-    for chunk_data in similar_chunks:
-        if chunk_data['chunk_id'] < len(document_chunks):
-            chunk_info = document_chunks[chunk_data['chunk_id']]
+    # Check if we're using hybrid storage results (has 'text' field) or legacy format
+    if similar_chunks and 'text' in similar_chunks[0]:
+        # Hybrid storage format - text is directly available
+        for chunk_data in similar_chunks:
+            filename = chunk_data.get('filename', 'Unknown')
+            text = chunk_data.get('text', '')
             
             # Format: [Document: filename] content
-            chunk_text = f"[Document: {chunk_info['filename']}]\n{chunk_info['text']}\n"
+            chunk_text = f"[Document: {filename}]\n{text}\n"
             
             # Check if adding this chunk would exceed max length
             if current_length + len(chunk_text) > max_length:
@@ -1011,6 +1070,22 @@ def prepare_context_for_llm(similar_chunks: List[dict], max_length: int = 3000) 
             
             context_parts.append(chunk_text)
             current_length += len(chunk_text)
+    else:
+        # Legacy format - need to look up in document_chunks
+        for chunk_data in similar_chunks:
+            chunk_id = chunk_data['chunk_id']
+            if chunk_id < len(document_chunks):
+                chunk_info = document_chunks[chunk_id]
+                
+                # Format: [Document: filename] content
+                chunk_text = f"[Document: {chunk_info['filename']}]\n{chunk_info['text']}\n"
+                
+                # Check if adding this chunk would exceed max length
+                if current_length + len(chunk_text) > max_length:
+                    break
+                
+                context_parts.append(chunk_text)
+                current_length += len(chunk_text)
     
     return "\n".join(context_parts)
 
@@ -1025,15 +1100,26 @@ def generate_llm_answer(query: str, context: str) -> Optional[str]:
     Returns:
         Optional[str]: Generated answer or None if failed
     """
-    if not ollama_client or not ollama_client.is_available():
+    logger.info(f"generate_llm_answer called with query: '{query[:50]}...', context length: {len(context)}")
+    
+    if not ollama_client:
+        logger.warning("Ollama client is None")
+        return None
+        
+    logger.info(f"Ollama client exists, checking availability...")
+    if not ollama_client.is_available():
         logger.warning("Ollama not available for answer generation")
         return None
     
+    logger.info(f"Ollama available, calling generate_answer...")
     try:
         answer = ollama_client.generate_answer(query, context)
+        logger.info(f"Ollama generate_answer returned: {type(answer)}, length: {len(answer) if answer else 0}")
         return answer
     except Exception as e:
         logger.error(f"Error generating LLM answer: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return None
 
 def format_sources_for_response(similar_chunks: List[dict]) -> List[dict]:
@@ -1098,23 +1184,47 @@ def sanitize_filename(filename: str) -> str:
     Returns:
         str: Sanitized filename
     """
-    if not filename:
+    if not filename or not filename.strip():
         return "untitled"
     
-    # Remove path components
-    filename = os.path.basename(filename)
+    # Remove path components and normalize
+    filename = os.path.basename(filename.strip())
+    
+    # Check for OS-reserved names (Windows)
+    reserved_names = {
+        'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5',
+        'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4',
+        'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'
+    }
+    
+    name_part = os.path.splitext(filename)[0].upper()
+    if name_part in reserved_names:
+        filename = f"file_{filename}"
     
     # Remove or replace dangerous characters
     sanitized = "".join(c for c in filename if c in ALLOWED_FILENAME_CHARS)
+    
+    # Remove leading dots and ensure it doesn't start with a dot
+    sanitized = sanitized.lstrip('.')
+    if not sanitized or sanitized[0] == '.':
+        sanitized = "file_" + sanitized
     
     # Ensure filename is not too long
     if len(sanitized) > MAX_FILENAME_LENGTH:
         name, ext = os.path.splitext(sanitized)
         sanitized = name[:MAX_FILENAME_LENGTH - len(ext)] + ext
     
-    # Ensure filename is not empty
-    if not sanitized:
+    # Ensure filename is not empty and has valid extension
+    if not sanitized or sanitized.isspace():
         sanitized = "untitled"
+    
+    # Validate extension
+    if '.' in sanitized:
+        ext = sanitized.lower().split('.')[-1]
+        if f'.{ext}' not in {'.pdf', '.docx', '.txt', '.csv'}:
+            sanitized = os.path.splitext(sanitized)[0] + '.txt'
+    else:
+        sanitized += '.txt'
     
     return sanitized
 
@@ -1655,6 +1765,495 @@ async def list_users(admin_user: Any = Depends(require_admin)):
         for user in users
     ]
 
+def check_for_duplicate_document(sanitized_filename: str, original_filename: str) -> Dict[str, Any]:
+    """
+    Check if a document with the same filename already exists in any storage system.
+    Returns information about duplicate status and existing document if found.
+    """
+    try:
+        # Check persistent storage first
+        if persistent_storage:
+            try:
+                # Get all documents and check for filename matches
+                stored_docs = persistent_storage.get_all_documents(limit=1000)
+                for doc in stored_docs:
+                    doc_filename = doc.get("filename", "")
+                    doc_original = doc.get("original_filename", "")
+                    
+                    # Check both sanitized and original filename matches
+                    if (doc_filename == sanitized_filename or 
+                        doc_original == original_filename or
+                        doc_filename == original_filename):
+                        
+                        return {
+                            "is_duplicate": True,
+                            "existing_id": doc.get("id"),
+                            "storage_type": "persistent",
+                            "document_info": {
+                                "id": doc.get("id"),
+                                "filename": doc_filename,
+                                "original_filename": doc_original,
+                                "upload_date": str(doc.get("upload_timestamp", "unknown")),
+                                "chunks_count": doc.get("chunk_count", 0)
+                            }
+                        }
+            except Exception as e:
+                logger.warning(f"Error checking duplicates in persistent storage: {e}")
+        
+        # Check memory-safe storage if persistent storage not available or failed
+        if memory_safe_storage:
+            try:
+                stored_docs = memory_safe_storage.get_all_documents(limit=1000)
+                for doc in stored_docs:
+                    doc_filename = doc.get("filename", "")
+                    doc_original = doc.get("metadata", {}).get("original_filename", "")
+                    
+                    if (doc_filename == sanitized_filename or 
+                        doc_original == original_filename or
+                        doc_filename == original_filename):
+                        
+                        return {
+                            "is_duplicate": True,
+                            "existing_id": doc.get("id"),
+                            "storage_type": "memory_safe",
+                            "document_info": {
+                                "id": doc.get("id"),
+                                "filename": doc_filename,
+                                "original_filename": doc_original,
+                                "upload_date": str(doc.get("upload_timestamp", "unknown")),
+                                "chunks_count": doc.get("chunk_count", 0)
+                            }
+                        }
+            except Exception as e:
+                logger.warning(f"Error checking duplicates in memory-safe storage: {e}")
+        
+        # Check legacy storage
+        for doc in documents:
+            doc_filename = doc.get("filename", "")
+            doc_original = doc.get("original_filename", "")
+            
+            if (doc_filename == sanitized_filename or 
+                doc_original == original_filename or
+                doc_filename == original_filename):
+                
+                return {
+                    "is_duplicate": True,
+                    "existing_id": doc.get("id"),
+                    "storage_type": "legacy",
+                    "document_info": {
+                        "id": doc.get("id"),
+                        "filename": doc_filename,
+                        "original_filename": doc_original,
+                        "upload_date": doc.get("upload_date", "unknown"),
+                        "chunks_count": doc.get("chunks_count", 0)
+                    }
+                }
+        
+        # No duplicate found
+        return {
+            "is_duplicate": False,
+            "existing_id": None,
+            "storage_type": None,
+            "document_info": None
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in duplicate checking: {e}")
+        # Return safe default - assume not duplicate to allow upload
+        return {
+            "is_duplicate": False,
+            "existing_id": None,
+            "storage_type": None,
+            "document_info": None
+        }
+
+def get_fast_max_tokens() -> int:
+    """
+    Get appropriate max_tokens for fast queries based on model configuration
+    
+    Returns:
+        int: Token limit for fast queries
+    """
+    try:
+        if LLM_MANAGER_AVAILABLE:
+            llm_manager = get_llm_manager()
+            model_config = llm_manager.get_model_config()
+            configured_max = model_config.get("max_tokens", 2048)
+            
+            # For fast queries, use the configured max tokens
+            # Allow models to use their full capability for better responses
+            return configured_max
+        else:
+            # Fallback to higher default for better responses
+            return 2048
+    except Exception as e:
+        logger.warning(f"Error getting fast max tokens: {e}")
+        return 2048
+
+def check_and_reinitialize_llm() -> Dict[str, Any]:
+    """
+    Check LLM availability and attempt to reinitialize if needed.
+    Returns status information about LLM connectivity.
+    """
+    global ollama_client
+    
+    try:
+        # First check if current client is working
+        if ollama_client:
+            try:
+                if ollama_client.is_available():
+                    return {
+                        "status": "ok",
+                        "available": True,
+                        "model": getattr(ollama_client, 'model', 'unknown'),
+                        "message": "LLM is working correctly"
+                    }
+            except Exception as e:
+                logger.warning(f"Current LLM client failed health check: {e}")
+        
+        # Try to reinitialize if not working or not available
+        if OLLAMA_SUPPORT:
+            try:
+                logger.info("Attempting to reinitialize LLM client...")
+                
+                # Load current model from config
+                import yaml
+                try:
+                    config_path = "C:/Users/THE/open-source-rag-system/config/llm_config.yaml"
+                    with open(config_path, 'r') as f:
+                        config = yaml.safe_load(f)
+                    
+                    default_model_key = config.get("default_model", "tinyllama")
+                    models = config.get("models", {})
+                    
+                    if default_model_key in models:
+                        model_name = models[default_model_key]["name"]
+                        logger.info(f"Using model from config: {model_name}")
+                    else:
+                        model_name = "tinyllama:latest"
+                        logger.warning(f"Default model key '{default_model_key}' not found, using fallback")
+                        
+                except Exception as config_error:
+                    logger.error(f"Error loading config: {config_error}")
+                    model_name = "tinyllama:latest"
+                
+                # Create new client instance with config model
+                from ollama_client import OllamaClient
+                new_client = OllamaClient(
+                    base_url="http://localhost:11434",
+                    model=model_name,
+                    timeout=300
+                )
+                
+                if new_client and new_client.is_available():
+                    ollama_client = new_client
+                    logger.info(f"LLM client successfully reinitialized with model: {ollama_client.model}")
+                    return {
+                        "status": "reinitialized",
+                        "available": True,
+                        "model": ollama_client.model,
+                        "message": f"LLM client reinitialized successfully with model: {ollama_client.model}"
+                    }
+                else:
+                    return {
+                        "status": "failed",
+                        "available": False,
+                        "model": model_name,
+                        "message": f"LLM client could not be initialized with {model_name} - Ollama may not be running or model not available"
+                    }
+            except Exception as e:
+                logger.error(f"Failed to reinitialize LLM client: {e}")
+                return {
+                    "status": "error",
+                    "available": False,
+                    "model": None,
+                    "message": f"LLM reinitialization failed: {str(e)}"
+                }
+        else:
+            return {
+                "status": "not_supported",
+                "available": False,
+                "model": None,
+                "message": "Ollama support not available"
+            }
+    
+    except Exception as e:
+        logger.error(f"Error checking LLM status: {e}")
+        return {
+            "status": "error", 
+            "available": False,
+            "model": None,
+            "message": f"Error checking LLM: {str(e)}"
+        }
+
+@app.get("/api/v1/llm/status")
+async def get_llm_status():
+    """Get LLM status and attempt reconnection if needed"""
+    return check_and_reinitialize_llm()
+
+@app.post("/api/v1/llm/reconnect")
+async def reconnect_llm():
+    """Force LLM reconnection with current config"""
+    global ollama_client
+    ollama_client = None  # Force reinitialization
+    return check_and_reinitialize_llm()
+
+@app.post("/api/v1/llm/reload-config")
+async def reload_llm_config():
+    """Reload LLM configuration and reinitialize client"""
+    global ollama_client
+    
+    try:
+        # Force reinitialization
+        ollama_client = None
+        
+        # Load current config
+        import yaml
+        config_path = "C:/Users/THE/open-source-rag-system/config/llm_config.yaml"
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        default_model_key = config.get("default_model", "tinyllama")
+        models = config.get("models", {})
+        
+        if default_model_key in models:
+            model_name = models[default_model_key]["name"]
+            logger.info(f"Reloading config with model: {model_name}")
+            
+            # Create new client with the config model
+            from ollama_client import OllamaClient
+            ollama_client = OllamaClient(
+                base_url="http://localhost:11434",
+                model=model_name,
+                timeout=300
+            )
+            
+            if ollama_client.is_available():
+                return {
+                    "success": True,
+                    "message": f"Configuration reloaded with model: {model_name}",
+                    "model": model_name,
+                    "model_key": default_model_key,
+                    "available": True
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"Configuration reloaded but model {model_name} not available",
+                    "model": model_name,
+                    "model_key": default_model_key,
+                    "available": False,
+                    "suggestion": f"Try: ollama pull {model_name}"
+                }
+        else:
+            return {
+                "success": False,
+                "message": f"Default model key '{default_model_key}' not found in config",
+                "model_key": default_model_key,
+                "available": False
+            }
+            
+    except Exception as e:
+        logger.error(f"Error reloading LLM config: {e}")
+        return {
+            "success": False,
+            "message": f"Error reloading configuration: {str(e)}",
+            "error": str(e)
+        }
+
+@app.post("/api/v1/llm/preload")
+async def preload_llm():
+    """Preload the current LLM model to reduce response time"""
+    global ollama_client
+    
+    if not ollama_client:
+        llm_status = check_and_reinitialize_llm()
+        if not llm_status.get("available", False):
+            return {
+                "success": False,
+                "message": "LLM not available for preloading",
+                "error": llm_status.get("message", "Unknown error")
+            }
+    
+    try:
+        start_time = time.time()
+        success = ollama_client.preload_model()
+        preload_time = time.time() - start_time
+        
+        if success:
+            return {
+                "success": True,
+                "message": f"Model {ollama_client.model} preloaded successfully",
+                "model": ollama_client.model,
+                "preload_time": round(preload_time, 2)
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"Failed to preload model {ollama_client.model}",
+                "model": ollama_client.model,
+                "preload_time": round(preload_time, 2)
+            }
+            
+    except Exception as e:
+        logger.error(f"Error preloading LLM: {e}")
+        return {
+            "success": False,
+            "message": f"Error preloading LLM: {str(e)}",
+            "error": str(e)
+        }
+
+@app.get("/api/v1/llm/models")
+async def get_available_models():
+    """Get available LLM models and current selection"""
+    try:
+        # Try to load LLM config
+        import yaml
+        config_path = "C:/Users/THE/open-source-rag-system/config/llm_config.yaml"
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        return {
+            "models": config.get("models", {}),
+            "current_model": config.get("default_model", "unknown"),
+            "available": True
+        }
+    except Exception as e:
+        logger.error(f"Error loading LLM models: {e}")
+        return {
+            "models": {
+                "mistral": {
+                    "name": "mistral:latest",
+                    "description": "Currently available model"
+                }
+            },
+            "current_model": "mistral",
+            "available": False,
+            "error": str(e)
+        }
+
+@app.post("/api/v1/llm/switch")
+async def switch_llm_model(request: dict):
+    """Switch the active LLM model with proper reinitialization"""
+    try:
+        model_key = request.get("model")
+        if not model_key:
+            raise HTTPException(status_code=400, detail="Model key required")
+        
+        # Load current config
+        import yaml
+        config_path = "C:/Users/THE/open-source-rag-system/config/llm_config.yaml"
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        # Check if model exists
+        if model_key not in config.get("models", {}):
+            raise HTTPException(status_code=400, detail=f"Model '{model_key}' not found in configuration")
+        
+        model_info = config["models"][model_key]
+        model_name = model_info["name"]
+        
+        # Update default model
+        config["default_model"] = model_key
+        
+        # Save updated config
+        with open(config_path, 'w') as f:
+            yaml.dump(config, f, default_flow_style=False)
+        
+        # Force LLM client reinitialization with new model
+        global ollama_client
+        try:
+            logger.info(f"Switching from current model to: {model_name}")
+            
+            # Clear existing client
+            ollama_client = None
+            
+            # Import fresh client
+            from ollama_client import OllamaClient
+            logger.info(f"Reinitializing Ollama client with model: {model_name}")
+            
+            # Create new client instance with the specific model
+            ollama_client = OllamaClient(
+                base_url="http://localhost:11434",
+                model=model_name,
+                timeout=300
+            )
+            
+            # Test the new model availability
+            if ollama_client.is_available():
+                logger.info(f"Successfully switched to model: {model_name}")
+                return {
+                    "success": True,
+                    "message": f"Successfully switched to {model_name}",
+                    "new_model": model_name,
+                    "model_key": model_key,
+                    "llm_available": True,
+                    "description": model_info.get("description", ""),
+                    "max_tokens": model_info.get("max_tokens", 2048),
+                    "context_length": model_info.get("context_length", 4096)
+                }
+            else:
+                # Model switch failed, try to pull the model
+                logger.warning(f"Model {model_name} not available, attempting to pull...")
+                
+                # Try to pull model
+                pull_success = ollama_client.pull_model(model_name)
+                if pull_success:
+                    # Test again after pulling
+                    if ollama_client.is_available():
+                        logger.info(f"Successfully pulled and switched to model: {model_name}")
+                        return {
+                            "success": True,
+                            "message": f"Successfully pulled and switched to {model_name}",
+                            "new_model": model_name,
+                            "model_key": model_key,
+                            "llm_available": True,
+                            "description": model_info.get("description", ""),
+                            "pulled": True
+                        }
+                    else:
+                        logger.error(f"Model {model_name} pulled but still not available")
+                        return {
+                            "success": False,
+                            "message": f"Model {model_name} was pulled but is not responding",
+                            "new_model": model_name,
+                            "model_key": model_key,
+                            "llm_available": False,
+                            "error": "Model pulled but not responding",
+                            "suggestion": f"Check if Ollama is running and try again"
+                        }
+                else:
+                    logger.error(f"Failed to pull model {model_name}")
+                    return {
+                        "success": False,
+                        "message": f"Failed to pull model {model_name}",
+                        "new_model": model_name,
+                        "model_key": model_key,
+                        "llm_available": False,
+                        "error": "Model pull failed",
+                        "suggestion": f"Try manually: ollama pull {model_name}"
+                    }
+        
+        except Exception as init_error:
+            logger.error(f"Error reinitializing Ollama client: {init_error}")
+            return {
+                "success": False,
+                "message": f"Failed to initialize with {model_name}: {str(init_error)}",
+                "new_model": model_name,
+                "model_key": model_key,
+                "llm_available": False,
+                "error": str(init_error)
+            }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error switching LLM model: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to switch model: {str(e)}")
+
 @app.post("/api/v1/documents", response_model=DocumentResponse)
 async def upload_document(file: UploadFile = File(...), current_user: Optional[Any] = Depends(optional_auth)):
     """Upload a document for processing with comprehensive validation"""
@@ -1683,6 +2282,20 @@ async def upload_document(file: UploadFile = File(...), current_user: Optional[A
         # Sanitize filename
         sanitized_filename = sanitize_filename(file.filename)
         logger.info(f"Processing document: {file.filename} -> {sanitized_filename}")
+        
+        # Check for duplicate documents BEFORE processing
+        duplicate_check = check_for_duplicate_document(sanitized_filename, file.filename)
+        if duplicate_check["is_duplicate"]:
+            logger.info(f"Duplicate document detected: {file.filename}")
+            return {
+                "message": "Document already exists in the database",
+                "document_id": duplicate_check["existing_id"],
+                "filename": sanitized_filename,
+                "original_filename": file.filename,
+                "status": "duplicate",
+                "existing_document": duplicate_check["document_info"],
+                "action": "skipped_duplicate"
+            }
         
         # Read file content
         content = await file.read()
@@ -2316,6 +2929,15 @@ async def get_processing_stats():
         }
     }
 
+@app.get("/api/v1/documents-debug")
+async def debug_documents():
+    """Debug endpoint to test if API routing works"""
+    return {
+        "status": "debug_working",
+        "message": "API routing is functional",
+        "timestamp": str(datetime.now())
+    }
+
 @app.get("/api/v1/documents")
 async def list_documents():
     """List all uploaded documents"""
@@ -2323,25 +2945,33 @@ async def list_documents():
     # Get documents from persistent storage first
     if persistent_storage:
         try:
-            stored_docs = persistent_storage.get_all_documents(limit=1000)
+            logger.info("Attempting to get documents from persistent storage...")
+            stored_docs = persistent_storage.get_all_documents(limit=100)
+            logger.info(f"Retrieved {len(stored_docs)} documents from persistent storage")
+            
             formatted_docs = []
             
-            for doc in stored_docs:
-                # Convert persistent storage format to expected API format
-                formatted_doc = {
-                    "id": doc["id"],
-                    "filename": doc["filename"],
-                    "original_filename": doc.get("original_filename", doc["filename"]),
-                    "file_type": doc.get("file_type", "unknown"),
-                    "file_size": doc.get("file_size", 0),
-                    "size": doc.get("file_size", 0),
-                    "content_type": doc.get("content_type", "unknown"),
-                    "status": doc.get("status", "processed"),
-                    "upload_date": doc.get("metadata", {}).get("upload_date", doc["upload_timestamp"].isoformat()),
-                    "chunks_count": doc["chunk_count"]
-                }
-                formatted_docs.append(formatted_doc)
+            for i, doc in enumerate(stored_docs):
+                try:
+                    # Convert persistent storage format to expected API format
+                    formatted_doc = {
+                        "id": doc.get("id", f"doc_{i}"),
+                        "filename": doc.get("filename", "unknown"),
+                        "original_filename": doc.get("original_filename", doc.get("filename", "unknown")),
+                        "file_type": doc.get("file_type", "unknown"),
+                        "file_size": doc.get("file_size", 0),
+                        "size": doc.get("file_size", 0),
+                        "content_type": doc.get("content_type", "unknown"),
+                        "status": doc.get("status", "processed"),
+                        "upload_date": str(doc.get("upload_timestamp", "unknown")),
+                        "chunks_count": doc.get("chunk_count", 0)
+                    }
+                    formatted_docs.append(formatted_doc)
+                except Exception as doc_error:
+                    logger.warning(f"Error formatting document {i}: {doc_error}")
+                    continue
             
+            logger.info(f"Successfully formatted {len(formatted_docs)} documents")
             return {
                 "documents": formatted_docs,
                 "total": len(formatted_docs)
@@ -2353,7 +2983,8 @@ async def list_documents():
     # Get documents from memory-safe storage as fallback
     if memory_safe_storage:
         try:
-            stored_docs = memory_safe_storage.get_all_documents(limit=1000)
+            logger.info("Attempting to get documents from memory-safe storage...")
+            stored_docs = memory_safe_storage.get_all_documents(limit=100)
             formatted_docs = []
             
             for doc in stored_docs:
@@ -2367,7 +2998,7 @@ async def list_documents():
                     "size": doc.get("metadata", {}).get("file_size", 0),
                     "content_type": doc.get("metadata", {}).get("file_type", "unknown"),
                     "status": "processed",
-                    "upload_date": doc.get("metadata", {}).get("upload_date", doc["upload_timestamp"].isoformat()),
+                    "upload_date": doc.get("metadata", {}).get("upload_date", str(doc["upload_timestamp"])),
                     "chunks_count": doc["chunk_count"]
                 }
                 formatted_docs.append(formatted_doc)
@@ -2380,25 +3011,43 @@ async def list_documents():
             logger.error(f"Failed to get documents from memory-safe storage: {e}")
             # Fall through to legacy
     
-    # Legacy documents list
-    return {
-        "documents": [
-            {
-                "id": doc["id"],
-                "filename": doc["filename"],
-                "original_filename": doc["original_filename"],
-                "file_type": doc["file_type"],
-                "file_size": doc["file_size"],
-                "size": doc["size"],
-                "content_type": doc["content_type"],
-                "status": doc["status"],
-                "upload_date": doc["upload_date"],
-                "chunks_count": doc["chunks_count"]
-            }
-            for doc in documents
-        ],
-        "total": len(documents)
-    }
+    # Legacy documents list - simplified to avoid hanging
+    try:
+        logger.info("Using legacy documents list as final fallback")
+        legacy_docs = []
+        for i, doc in enumerate(documents[:50]):  # Limit to first 50 to avoid hanging
+            try:
+                formatted_doc = {
+                    "id": doc.get("id", f"legacy_{i}"),
+                    "filename": doc.get("filename", "unknown"),
+                    "original_filename": doc.get("original_filename", doc.get("filename", "unknown")),
+                    "file_type": doc.get("file_type", "unknown"),
+                    "file_size": doc.get("file_size", 0),
+                    "size": doc.get("size", 0),
+                    "content_type": doc.get("content_type", "unknown"),
+                    "status": doc.get("status", "processed"),
+                    "upload_date": doc.get("upload_date", "unknown"),
+                    "chunks_count": doc.get("chunks_count", 0)
+                }
+                legacy_docs.append(formatted_doc)
+            except Exception as legacy_error:
+                logger.warning(f"Error formatting legacy document {i}: {legacy_error}")
+                continue
+        
+        return {
+            "documents": legacy_docs,
+            "total": len(legacy_docs),
+            "message": "Using legacy storage - some features may be limited"
+        }
+    except Exception as e:
+        logger.error(f"Failed to process legacy documents: {e}")
+        # Ultimate fallback - return empty list with error info
+        return {
+            "documents": [],
+            "total": 0,
+            "error": "All storage systems failed",
+            "message": "No documents could be retrieved. Please try uploading new documents."
+        }
 
 @app.post("/api/v1/query", response_model=QueryResponse)
 async def query_documents(request: QueryRequest):
@@ -2569,43 +3218,106 @@ async def query_documents_enhanced(request: QueryRequest):
         if use_llm is None:
             use_llm = USE_LLM_DEFAULT
         
+        logger.info(f"LLM usage decision: use_llm={use_llm}, request.use_llm={sanitized_request.use_llm}, USE_LLM_DEFAULT={USE_LLM_DEFAULT}")
+        
+        # Remove timeout constraints - let LLM take time it needs
+        use_llm = True
+        logger.info(f"Using LLM with no timeout constraints")
+        
         sources = format_sources_for_response(similar_chunks)
         
         # Try LLM generation if requested and available
-        if use_llm and ollama_client:
-            try:
-                # Check if Ollama is available (this may trigger a fresh check)
-                if not ollama_client.is_available():
-                    logger.warning("Ollama not available, falling back to vector search")
+        if use_llm and sources:
+            # Check if LLM is available, attempt reconnection if needed
+            if not ollama_client:
+                logger.info("LLM client not initialized, attempting to connect...")
+                llm_status = check_and_reinitialize_llm()
+                if not llm_status["available"]:
+                    logger.warning(f"LLM reconnection failed: {llm_status['message']}")
                     method = "vector_search_fallback"
                 else:
-                    # Prepare context for LLM
-                    context = prepare_context_for_llm(similar_chunks)
-                    
-                    if not context:
-                        logger.warning("No context available for LLM generation")
-                        method = "vector_search_fallback"
-                    else:
-                        # Generate answer
-                        llm_answer = generate_llm_answer(sanitized_request.query, context)
-                        
-                        if llm_answer:
-                            logger.info(f"LLM query successful: '{sanitized_request.query}'")
-                            return LLMQueryResponse(
-                                query=sanitized_request.query,
-                                answer=llm_answer,
-                                method="llm_generated",
-                                sources=sources,
-                                total_sources=len(sources),
-                                processing_time=time.time() - start_time
-                            )
-                        else:
-                            logger.warning("LLM generation failed, falling back to vector search")
-                            method = "vector_search_fallback"
+                    logger.info(f"LLM reconnected successfully: {llm_status['message']}")
             
-            except Exception as e:
-                logger.error(f"LLM generation error: {e}, falling back to vector search")
-                method = "vector_search_fallback"
+            if ollama_client:
+                try:
+                    # Check if Ollama is available (this may trigger a fresh check)
+                    if not ollama_client.is_available():
+                        logger.warning("Ollama not available, attempting reconnection...")
+                        llm_status = check_and_reinitialize_llm()
+                        if not llm_status["available"]:
+                            logger.warning("Ollama reconnection failed, falling back to vector search")
+                            method = "vector_search_fallback"
+                        else:
+                            logger.info("Ollama reconnected successfully")
+                    
+                    if ollama_client and ollama_client.is_available():
+                        # Prepare context for LLM
+                        context = prepare_context_for_llm(similar_chunks)
+                        
+                        # Prepare context - use source content directly
+                        context_parts = []
+                        for source in sources[:5]:  # Use top 5 sources for better context
+                            content = source.get('content', '')
+                            filename = source.get('source_document', 'Unknown')
+                            if content:
+                                context_parts.append(f"[Document: {filename}]\n{content[:2000]}\n")
+                        context = "\n".join(context_parts)
+                        
+                        if not context:
+                            logger.warning("No context available for LLM generation")
+                            method = "vector_search_fallback"
+                        else:
+                            logger.info(f"Context prepared for LLM, length: {len(context)}, sources: {len(context_parts)}")
+                            # Generate answer with no artificial timeout constraints
+                            logger.info(f"Calling LLM with query: '{sanitized_request.query[:50]}...'")
+                            logger.info(f"DEBUG: About to call ollama_client.generate_answer")
+                            logger.info(f"DEBUG: ollama_client type: {type(ollama_client)}")
+                            logger.info(f"DEBUG: ollama_client.is_available(): {ollama_client.is_available()}")
+                            
+                            # Get model configuration for proper token limits
+                            if LLM_MANAGER_AVAILABLE:
+                                llm_manager = get_llm_manager()
+                                model_config = llm_manager.get_model_config()
+                                max_tokens = model_config.get("max_tokens", 2048)
+                                temperature = model_config.get("temperature", 0.7)
+                            else:
+                                # Fallback to higher limits if LLM manager not available
+                                max_tokens = 2048
+                                temperature = 0.7
+                            
+                            llm_answer = ollama_client.generate_answer(
+                                sanitized_request.query, 
+                                context, 
+                                max_tokens=max_tokens,
+                                temperature=temperature
+                            )
+                            
+                            logger.info(f"DEBUG: LLM response received")
+                            logger.info(f"DEBUG: llm_answer type: {type(llm_answer)}")
+                            logger.info(f"DEBUG: llm_answer is None: {llm_answer is None}")
+                            if llm_answer:
+                                logger.info(f"DEBUG: llm_answer length: {len(llm_answer)}")
+                                logger.info(f"DEBUG: llm_answer stripped: '{llm_answer.strip()[:100]}...'")
+                            
+                            if llm_answer and llm_answer.strip():
+                                logger.info(f"SUCCESS: LLM generated answer successfully: {len(llm_answer)} chars")
+                                return LLMQueryResponse(
+                                    query=sanitized_request.query,
+                                    answer=llm_answer.strip(),
+                                    method="llm_generated",
+                                    sources=sources,
+                                    total_sources=len(sources),
+                                    processing_time=time.time() - start_time
+                                )
+                            else:
+                                logger.error(f"FAILURE: LLM returned empty/None response - llm_answer={llm_answer}")
+                                method = "vector_search_fallback"
+                    else:
+                        method = "vector_search_fallback"
+                
+                except Exception as e:
+                    logger.error(f"LLM generation error: {e}, falling back to vector search")
+                    method = "vector_search_fallback"
         
         # Fallback to vector search results
         if sources:
@@ -2694,8 +3406,18 @@ async def query_documents_stream(request: QueryRequest):
                 # Stream LLM response
                 yield f"data: {json.dumps({'type': 'answer_start'})}\n\n"
                 
+                # Get model configuration for proper token limits
+                if LLM_MANAGER_AVAILABLE:
+                    llm_manager = get_llm_manager()
+                    model_config = llm_manager.get_model_config()
+                    max_tokens = model_config.get("max_tokens", 2048)
+                    temperature = model_config.get("temperature", 0.7)
+                else:
+                    max_tokens = 2048
+                    temperature = 0.7
+                
                 answer_chunks = []
-                for chunk in ollama_client.generate_answer_stream(sanitized_request.query, context):
+                for chunk in ollama_client.generate_answer_stream(sanitized_request.query, context, max_tokens=max_tokens, temperature=temperature):
                     if chunk:
                         answer_chunks.append(chunk)
                         yield f"data: {json.dumps({'type': 'answer_chunk', 'content': chunk})}\n\n"
@@ -2727,14 +3449,14 @@ async def query_documents_stream(request: QueryRequest):
 
 @app.delete("/api/v1/documents/{document_id}")
 async def delete_document(document_id: str):
-    """Delete a document with validation"""
-    global documents
+    """Delete a document with validation - supports all storage types"""
+    global documents, document_chunks, document_embeddings
     
-    # Validate document ID
-    if not validate_document_id(document_id):
+    # Validate document ID format
+    if not document_id:
         raise HTTPException(
             status_code=400,
-            detail="Invalid document ID format"
+            detail="Document ID is required"
         )
     
     # Rate limiting check
@@ -2744,42 +3466,143 @@ async def delete_document(document_id: str):
             detail="Rate limit exceeded. Please try again later."
         )
     
-    document_id_int = int(document_id)
-    document = next((doc for doc in documents if doc["id"] == document_id_int), None)
-    if not document:
-        raise HTTPException(status_code=404, detail="Document not found")
+    deleted_info = {
+        "deleted": False,
+        "storage_type": None,
+        "chunks_removed": 0,
+        "filename": None
+    }
     
     try:
-        # Remove file if it exists
-        if os.path.exists(document["file_path"]):
-            os.remove(document["file_path"])
+        # Try persistent storage first
+        if persistent_storage:
+            try:
+                logger.info(f"Attempting to delete document {document_id} from persistent storage")
+                
+                # Convert document_id to integer for persistent storage
+                try:
+                    doc_id_int = int(document_id)
+                except ValueError:
+                    logger.warning(f"Document ID {document_id} is not a valid integer for persistent storage")
+                    # Skip persistent storage if ID is not numeric
+                    pass
+                else:
+                    # Get document info before deletion
+                    doc_info = persistent_storage.get_document_by_id(doc_id_int)
+                    if doc_info:
+                        deleted_info["filename"] = doc_info.get("filename", "unknown")
+                        
+                        # Delete from persistent storage
+                        success = persistent_storage.delete_document(doc_id_int)
+                        if success:
+                            deleted_info["deleted"] = True
+                            deleted_info["storage_type"] = "persistent"
+                            deleted_info["chunks_removed"] = doc_info.get("chunk_count", 0)
+                            
+                            # Clear cache since we deleted data
+                            fast_cache.clear_all()
+                            
+                            logger.info(f"Document {document_id} deleted from persistent storage")
+                            return {
+                                "message": f"Document '{deleted_info['filename']}' deleted successfully",
+                                "storage_type": "persistent",
+                                "chunks_removed": deleted_info["chunks_removed"]
+                            }
+            except Exception as e:
+                logger.error(f"Error deleting from persistent storage: {e}")
+                # Continue to try other storage types
         
-        # Remove from documents list
-        documents = [doc for doc in documents if doc["id"] != document_id_int]
+        # Try memory-safe storage
+        if memory_safe_storage and not deleted_info["deleted"]:
+            try:
+                logger.info(f"Attempting to delete document {document_id} from memory-safe storage")
+                
+                # Get document info
+                doc_info = memory_safe_storage.get_document(document_id)
+                if doc_info:
+                    deleted_info["filename"] = doc_info.get("filename", "unknown")
+                    
+                    # Delete from memory-safe storage
+                    success = memory_safe_storage.delete_document(document_id)
+                    if success:
+                        deleted_info["deleted"] = True
+                        deleted_info["storage_type"] = "memory_safe"
+                        deleted_info["chunks_removed"] = doc_info.get("chunk_count", 0)
+                        
+                        # Clear cache since we deleted data
+                        fast_cache.clear_all()
+                        
+                        logger.info(f"Document {document_id} deleted from memory-safe storage")
+                        return {
+                            "message": f"Document '{deleted_info['filename']}' deleted successfully",
+                            "storage_type": "memory_safe",
+                            "chunks_removed": deleted_info["chunks_removed"]
+                        }
+            except Exception as e:
+                logger.error(f"Error deleting from memory-safe storage: {e}")
         
-        # Also remove associated chunks and embeddings
-        # Note: This is a simplified approach - in a production system,
-        # you'd want more efficient chunk/embedding management
-        global document_chunks, document_embeddings
-        original_chunk_count = len(document_chunks)
+        # Try legacy storage as last resort
+        if not deleted_info["deleted"]:
+            # Handle numeric document IDs for legacy storage
+            try:
+                document_id_int = int(document_id)
+                document = next((doc for doc in documents if doc["id"] == document_id_int), None)
+                
+                if document:
+                    deleted_info["filename"] = document.get("filename", "unknown")
+                    
+                    # Remove file if it exists
+                    if "file_path" in document and os.path.exists(document["file_path"]):
+                        try:
+                            os.remove(document["file_path"])
+                        except Exception as e:
+                            logger.warning(f"Failed to remove file: {e}")
+                    
+                    # Remove from documents list
+                    documents = [doc for doc in documents if doc["id"] != document_id_int]
+                    
+                    # Remove associated chunks and embeddings
+                    original_chunk_count = len(document_chunks)
+                    document_chunks = [chunk for chunk in document_chunks if chunk.get("document_id") != document_id_int]
+                    chunks_removed = original_chunk_count - len(document_chunks)
+                    
+                    # Remove corresponding embeddings
+                    if chunks_removed > 0 and len(document_embeddings) >= chunks_removed:
+                        document_embeddings = document_embeddings[:-chunks_removed]
+                    
+                    deleted_info["deleted"] = True
+                    deleted_info["storage_type"] = "legacy"
+                    deleted_info["chunks_removed"] = chunks_removed
+                    
+                    # Clear cache since we deleted data
+                    fast_cache.clear_all()
+                    
+                    logger.info(f"Document deleted from legacy storage: {deleted_info['filename']} (ID: {document_id_int})")
+                    return {
+                        "message": f"Document '{deleted_info['filename']}' deleted successfully",
+                        "storage_type": "legacy",
+                        "chunks_removed": chunks_removed
+                    }
+            except ValueError:
+                # Non-numeric ID, not found in legacy storage
+                pass
         
-        # Remove chunks for this document
-        document_chunks = [chunk for chunk in document_chunks if chunk["document_id"] != document_id_int]
+        # Document not found in any storage
+        if not deleted_info["deleted"]:
+            logger.warning(f"Document {document_id} not found in any storage")
+            raise HTTPException(
+                status_code=404,
+                detail=f"Document with ID '{document_id}' not found in any storage system"
+            )
         
-        # Remove corresponding embeddings (assuming same order)
-        # This is a simplified approach - a real system would need proper indexing
-        chunks_removed = original_chunk_count - len(document_chunks)
-        if chunks_removed > 0:
-            # Remove the same number of embeddings from the end
-            # This assumes chunks and embeddings are in the same order
-            document_embeddings = document_embeddings[:-chunks_removed] if chunks_removed < len(document_embeddings) else []
-        
-        logger.info(f"Document deleted: {document['filename']} (ID: {document_id_int}), removed {chunks_removed} chunks")
-        return {"message": "Document deleted successfully", "chunks_removed": chunks_removed}
-        
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error deleting document: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
+        logger.error(f"Unexpected error deleting document: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error deleting document: {str(e)}"
+        )
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
@@ -2917,9 +3740,153 @@ async def chat_endpoint(request: ChatRequest):
         logger.error(f"Error in chat endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error processing chat request: {str(e)}")
 
+@app.post("/api/v1/query/fast", response_model=ChatResponse)
+async def query_documents_fast(request: ChatRequest):
+    """Fast query with aggressive timeouts and intelligent fallback"""
+    start_time = time.time()
+    
+    try:
+        # Rate limiting check
+        if not rate_limit_check("query"):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please try again later."
+            )
+        
+        # Validate and sanitize request
+        sanitized_query = sanitize_query_string(request.query)
+        if not sanitized_query:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid query after sanitization"
+            )
+        
+        # Check if we have documents
+        if not has_documents():
+            return ChatResponse(
+                response="Please upload documents first so I can help you!",
+                query=sanitized_query,
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Find similar chunks
+        similar_chunks = find_similar_chunks(sanitized_query, 5)
+        
+        if not similar_chunks:
+            return ChatResponse(
+                response="I couldn't find relevant information in the uploaded documents for your question.",
+                query=sanitized_query,
+                context=[],
+                confidence=0.0,
+                processing_time=time.time() - start_time
+            )
+        
+        # Format context sources
+        context_sources = format_sources_for_response(similar_chunks)
+        
+        # Try LLM with aggressive timeout (10 seconds max)
+        if ollama_client and ollama_client.is_available():
+            try:
+                # Use a shorter timeout for fast mode
+                import asyncio
+                from concurrent.futures import ThreadPoolExecutor
+                
+                # Use context manager to ensure proper resource cleanup
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    context_text = prepare_context_for_llm(similar_chunks)
+                    
+                    # Run LLM generation in thread with timeout
+                    loop = asyncio.get_event_loop()
+                    future = loop.run_in_executor(
+                        executor,
+                        lambda: ollama_client.generate_answer(
+                            sanitized_query,
+                            context_text,
+                            max_tokens=get_fast_max_tokens(),  # Use config-based tokens with fast fallback
+                            temperature=0.3   # Lower temp for faster generation
+                        )
+                    )
+                    
+                    try:
+                        llm_response = await asyncio.wait_for(future, timeout=10.0)  # 10 second timeout
+                        
+                        if llm_response and llm_response.strip():
+                            avg_confidence = sum(chunk['similarity'] for chunk in similar_chunks) / len(similar_chunks)
+                            return ChatResponse(
+                                response=llm_response,
+                                query=sanitized_query,
+                                context=context_sources,
+                                confidence=avg_confidence,
+                                processing_time=time.time() - start_time,
+                                method="llm_fast"
+                            )
+                            
+                    except asyncio.TimeoutError:
+                        logger.warning("LLM generation timed out in fast mode, falling back to vector search")
+                    
+            except Exception as e:
+                logger.error(f"LLM generation error in fast mode: {e}")
+        
+        # Fallback to enhanced vector search response
+        if context_sources:
+            top_source = context_sources[0]
+            content = top_source['content']
+            
+            # Extract key sentences
+            sentences = content.split('.')
+            key_sentences = []
+            query_words = set(sanitized_query.lower().split())
+            
+            for sentence in sentences:
+                sentence = sentence.strip()
+                if len(sentence) > 10:
+                    sentence_words = set(sentence.lower().split())
+                    if query_words.intersection(sentence_words):
+                        key_sentences.append(sentence)
+                        if len(key_sentences) >= 2:
+                            break
+            
+            if key_sentences:
+                response_text = '. '.join(key_sentences) + '.'
+            else:
+                response_text = content[:200] + '...' if len(content) > 200 else content
+            
+            response_text += f"\n\nSource: {top_source['source_document']}"
+            
+            if len(context_sources) > 1:
+                other_sources = [s['source_document'] for s in context_sources[1:3]]
+                response_text += f"\nAdditional sources: {', '.join(other_sources)}"
+            
+            avg_confidence = sum(chunk['similarity'] for chunk in similar_chunks) / len(similar_chunks)
+            return ChatResponse(
+                response=response_text,
+                query=sanitized_query,
+                context=context_sources,
+                confidence=avg_confidence,
+                processing_time=time.time() - start_time,
+                method="vector_fast"
+            )
+        
+        # No results found
+        return ChatResponse(
+            response="I couldn't find specific information about that topic in the uploaded documents.",
+            query=sanitized_query,
+            context=[],
+            confidence=0.0,
+            processing_time=time.time() - start_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in fast query: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+
 @app.post("/api/v1/query/optimized", response_model=ChatResponse)
 async def query_documents_optimized(request: ChatRequest):
-    """Optimized query with faster timeouts and better fallback formatting"""
+    """Optimized query with caching, faster timeouts and better fallback formatting"""
     start_time = time.time()
     
     try:
@@ -2943,6 +3910,23 @@ async def query_documents_optimized(request: ChatRequest):
             raise HTTPException(
                 status_code=400,
                 detail="Invalid query after sanitization"
+            )
+        
+        # Check response cache first
+        query_hash = hashlib.md5(sanitized_query.encode()).hexdigest()
+        cached_response = fast_cache.get_response_cache(query_hash)
+        if cached_response:
+            logger.info(f"Serving cached response for query: {sanitized_query[:50]}...")
+            # Mark as cached and return immediately
+            cached_response = cached_response.copy()  # Don't modify original
+            cached_response.processing_time = time.time() - start_time
+            return ChatResponse(
+                response=cached_response.response,
+                query=cached_response.query,
+                context=cached_response.context,
+                confidence=cached_response.confidence,
+                processing_time=time.time() - start_time,
+                method="cached"
             )
         
         # Check if we have any documents
@@ -2978,10 +3962,10 @@ async def query_documents_optimized(request: ChatRequest):
         # Prepare context for response using only relevant chunks
         context_sources = format_sources_for_response(relevant_chunks)
         
-        # Try LLM with reduced timeout (5 seconds) - skip if Ollama unavailable
+        # Try LLM with reasonable timeout (45 seconds) - skip if Ollama unavailable
         if ollama_client and ollama_client.is_available():
             try:
-                context_text = prepare_context_for_llm(relevant_chunks[:5])  # Use more chunks for better context
+                context_text = prepare_context_for_llm(relevant_chunks[:2])  # Use fewer chunks for speed
                 
                 if context_text:
                     # Create a practical, user-friendly prompt with filtering
@@ -3022,22 +4006,26 @@ async def query_documents_optimized(request: ChatRequest):
                     import concurrent.futures
                     
                     def quick_llm_call():
-                        return ollama_client.generate_answer(prompt, max_tokens=150)
+                        return ollama_client.generate_answer(sanitized_query, context_text, max_tokens=get_fast_max_tokens())  # Use config-based tokens
                     
                     with concurrent.futures.ThreadPoolExecutor() as executor:
                         future = executor.submit(quick_llm_call)
                         try:
-                            llm_response = future.result(timeout=5)  # 5 second timeout
+                            llm_response = future.result(timeout=300)  # 5 minute timeout for laptop performance
                             if llm_response:
-                                return ChatResponse(
+                                response_obj = ChatResponse(
                                     response=llm_response + f"\n\nQuelle: {context_sources[0]['source_document']}",
                                     query=sanitized_query,
                                     context=context_sources,
                                     confidence=avg_confidence,
-                                    processing_time=time.time() - start_time
+                                    processing_time=time.time() - start_time,
+                                    method="llm_optimized"
                                 )
+                                # Cache the response
+                                fast_cache.set_response_cache(query_hash, response_obj)
+                                return response_obj
                         except concurrent.futures.TimeoutError:
-                            logger.warning("LLM timeout after 5 seconds, falling back to vector search")
+                            logger.warning("LLM timeout after 5 minutes, falling back to vector search")
             except Exception as e:
                 logger.error(f"LLM generation failed: {e}")
         
@@ -3072,13 +4060,17 @@ async def query_documents_optimized(request: ChatRequest):
             # Add source
             response_text += f"\n\nQuelle: {top_source['source_document']}"
             
-            return ChatResponse(
+            response_obj = ChatResponse(
                 response=response_text,
                 query=sanitized_query,
                 context=context_sources,
                 confidence=avg_confidence,
-                processing_time=time.time() - start_time
+                processing_time=time.time() - start_time,
+                method="vector_optimized"
             )
+            # Cache the response
+            fast_cache.set_response_cache(query_hash, response_obj)
+            return response_obj
         
         # No relevant content found
         return ChatResponse(
@@ -3804,12 +4796,19 @@ async def list_llm_models():
     
     llm_manager = get_llm_manager()
     models = llm_manager.list_available_models()
-    current_model = llm_manager.get_current_model()
+    current_model_name = llm_manager.get_current_model()
+    
+    # Find the key for the current model
+    current_model_key = None
+    for key, model_info in models.items():
+        if model_info.get('name') == current_model_name:
+            current_model_key = key
+            break
     
     return {
-        "current_model": current_model,
-        "available_models": models,
-        "model_config": llm_manager.get_model_config()
+        "models": models,
+        "current_model": current_model_key or "mistral",
+        "available": True
     }
 
 @app.post("/api/v1/llm/switch/{model_key}")
@@ -3915,6 +4914,31 @@ async def pull_ollama_model(model_name: str):
             raise HTTPException(status_code=500, detail=f"Failed to pull model: {model_name}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error pulling model: {str(e)}")
+
+@app.post("/api/v1/llm/test")
+async def test_llm_generation():
+    """Test LLM generation directly"""
+    try:
+        test_query = "What is the waste collection schedule?"
+        test_context = "The waste collection happens on Mondays and Thursdays."
+        
+        result = generate_llm_answer(test_query, test_context)
+        
+        return {
+            "success": result is not None,
+            "result": result,
+            "result_type": type(result).__name__,
+            "result_length": len(result) if result else 0,
+            "ollama_client_exists": ollama_client is not None,
+            "ollama_available": ollama_client.is_available() if ollama_client else False
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "ollama_client_exists": ollama_client is not None,
+            "ollama_available": ollama_client.is_available() if ollama_client else False
+        }
 
 if __name__ == "__main__":
     import uvicorn

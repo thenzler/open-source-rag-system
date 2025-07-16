@@ -1,0 +1,48 @@
+ACME Corporation - Employee Policy Manual
+
+REMOTE WORK POLICY
+
+Effective Date: January 1, 2024
+
+1. ELIGIBILITY
+All full-time employees who have completed their probationary period (6 months) are eligible for remote work arrangements. Part-time employees may be considered on a case-by-case basis.
+
+2. WORK SCHEDULE
+Remote workers must maintain core hours between 9:00 AM and 3:00 PM in their local time zone. Flexible hours are permitted outside of core hours with manager approval.
+
+3. EQUIPMENT AND TECHNOLOGY
+- Company will provide laptop, monitor, and necessary software
+- Employees must have reliable internet connection (minimum 25 Mbps)
+- Home office setup must meet ergonomic standards
+- IT support available during business hours
+
+4. COMMUNICATION REQUIREMENTS
+- Daily check-ins with immediate supervisor
+- Weekly team meetings via video conference
+- Response time: Email within 4 hours, Slack within 1 hour during business hours
+- Quarterly in-person meetings required
+
+5. PERFORMANCE EXPECTATIONS
+Performance will be measured by results, not hours worked. Key metrics include:
+- Project completion rates
+- Quality of deliverables
+- Team collaboration effectiveness
+- Customer satisfaction scores
+
+6. SECURITY PROTOCOLS
+- VPN connection required for all work
+- Company data must not be stored on personal devices
+- Regular security training mandatory
+- Report security incidents immediately
+
+7. TERMINATION OF REMOTE WORK
+Remote work privileges may be revoked for:
+- Consistent performance issues
+- Security violations
+- Failure to meet communication requirements
+- Business needs requiring on-site presence
+
+For questions, contact HR at hr@acmecorp.com or call 555-0123.
+
+Last updated: March 15, 2024
+Policy Review Date: January 1, 2025

@@ -1,16 +1,25 @@
 #!/usr/bin/env python3
 """
 Ollama Client for Local LLM Integration
-Handles communication with Ollama API for answer generation
+Handles communication with Ollama API for answer generation using official Ollama Python client
 """
 import logging
-import requests
-import json
 import time
 from typing import Optional, Dict, List, Any, Generator
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+# Try to import official Ollama client first, fallback to requests
+try:
+    import ollama
+    OFFICIAL_OLLAMA_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("Using official Ollama Python client for better timeout handling")
+except ImportError:
+    import requests
+    import json
+    OFFICIAL_OLLAMA_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Official Ollama client not available, using requests fallback")
 
 class OllamaClient:
     """Client for communicating with Ollama API"""
@@ -18,9 +27,9 @@ class OllamaClient:
     def __init__(self, 
                  base_url: str = "http://localhost:11434",
                  model: str = None,
-                 timeout: int = 10):
+                 timeout: int = 300):  # 5 minutes for laptop performance
         """
-        Initialize Ollama client
+        Initialize Ollama client with official client for better timeout handling
         
         Args:
             base_url: Ollama API base URL
@@ -30,6 +39,16 @@ class OllamaClient:
         self.base_url = base_url.rstrip('/')
         self.timeout = timeout
         self.available = None
+        self._last_check_time = None
+        
+        # Initialize official Ollama client if available
+        if OFFICIAL_OLLAMA_AVAILABLE:
+            # Configure timeout in the official client
+            self.client = ollama.Client(host=base_url, timeout=timeout)
+            logger.info(f"Initialized official Ollama client with {timeout}s timeout")
+        else:
+            self.client = None
+            logger.warning("Using requests fallback for Ollama communication")
         
         # Try to use LLM manager for model selection
         try:
@@ -44,13 +63,46 @@ class OllamaClient:
             logger.info("LLM manager not available, using auto-detection")
             self.llm_manager = None
         
-        # Auto-detect available model if not specified
+        # Load model from config if not specified
+        if model is None:
+            model = self._load_model_from_config()
+        
+        # Auto-detect available model if still not specified
         if model is None:
             self.model = self._auto_detect_model()
         else:
             self.model = model
         
         logger.info(f"Initialized Ollama client: {base_url}, model: {self.model}")
+    
+    def _load_model_from_config(self) -> Optional[str]:
+        """
+        Load model from configuration file
+        
+        Returns:
+            Optional[str]: Model name from config or None if not found
+        """
+        try:
+            import yaml
+            config_path = "C:/Users/THE/open-source-rag-system/config/llm_config.yaml"
+            
+            with open(config_path, 'r') as f:
+                config = yaml.safe_load(f)
+            
+            default_model_key = config.get("default_model", "tinyllama")
+            models = config.get("models", {})
+            
+            if default_model_key in models:
+                model_name = models[default_model_key]["name"]
+                logger.info(f"Loaded model from config: {model_name} (key: {default_model_key})")
+                return model_name
+            else:
+                logger.warning(f"Default model key '{default_model_key}' not found in config")
+                return None
+                
+        except Exception as e:
+            logger.warning(f"Error loading model from config: {e}")
+            return None
     
     def _auto_detect_model(self) -> str:
         """
@@ -102,6 +154,55 @@ class OllamaClient:
             logger.warning(f"Error auto-detecting model: {e}")
             return "llama3.1:8b"  # fallback
     
+    def preload_model(self) -> bool:
+        """
+        Preload the model to reduce initial response time
+        
+        Returns:
+            bool: True if preloading successful, False otherwise
+        """
+        if not self.is_available():
+            return False
+        
+        try:
+            logger.info(f"Preloading model: {self.model}")
+            
+            # Simple generation request to load model into memory
+            if OFFICIAL_OLLAMA_AVAILABLE and self.client:
+                response = self.client.generate(
+                    model=self.model,
+                    prompt="Hello",
+                    options={"num_predict": 1, "temperature": 0.1},
+                    stream=False
+                )
+                preload_success = bool(response.get('response', '').strip())
+            else:
+                payload = {
+                    "model": self.model,
+                    "prompt": "Hello",
+                    "options": {"num_predict": 1, "temperature": 0.1},
+                    "stream": False
+                }
+                
+                import requests
+                response = requests.post(
+                    f"{self.base_url}/api/generate",
+                    json=payload,
+                    timeout=60  # Shorter timeout for preloading
+                )
+                preload_success = response.status_code == 200 and bool(response.json().get('response', '').strip())
+            
+            if preload_success:
+                logger.info(f"Successfully preloaded model: {self.model}")
+                return True
+            else:
+                logger.warning(f"Preloading failed for model: {self.model}")
+                return False
+                
+        except Exception as e:
+            logger.warning(f"Error preloading model {self.model}: {e}")
+            return False
+    
     def is_available(self) -> bool:
         """
         Check if Ollama is running and available with improved error handling
@@ -118,17 +219,33 @@ class OllamaClient:
         
         self._last_check_time = current_time
         
-        try:
-            response = requests.get(f"{self.base_url}/api/tags", timeout=5)
-            if response.status_code == 200:
-                # Check if our model is available
-                models = response.json().get('models', [])
-                model_names = [model.get('name', '') for model in models]
+        # Use official client if available, fallback to requests
+        if OFFICIAL_OLLAMA_AVAILABLE and self.client:
+            try:
+                models_response = self.client.list()
+                # Handle both possible response formats
+                if hasattr(models_response, 'models'):
+                    models = models_response.models
+                elif isinstance(models_response, dict) and 'models' in models_response:
+                    models = models_response['models']
+                else:
+                    models = models_response
+                
+                model_names = []
+                for model in models:
+                    if hasattr(model, 'model'):  # Official client uses 'model' not 'name'
+                        model_names.append(model.model)
+                    elif hasattr(model, 'name'):  # Fallback for other formats
+                        model_names.append(model.name)
+                    elif isinstance(model, dict) and 'name' in model:
+                        model_names.append(model['name'])
+                    else:
+                        logger.warning(f"Unexpected model format: {model}")
                 
                 # Check if our target model exists
                 if any(self.model in name for name in model_names):
                     self.available = True
-                    logger.info(f"Ollama is available with model {self.model}")
+                    logger.info(f"Ollama is available with model {self.model} (official client)")
                 else:
                     # Try to find similar models
                     similar_models = [name for name in model_names if self.model.split(':')[0] in name]
@@ -137,18 +254,37 @@ class OllamaClient:
                     else:
                         logger.warning(f"Ollama is running but model {self.model} not found. Available models: {model_names}")
                     self.available = False
-            else:
+            except Exception as e:
                 self.available = False
-                logger.warning(f"Ollama health check failed with status {response.status_code}: {response.text}")
-        except requests.ConnectionError:
-            self.available = False
-            logger.warning("Cannot connect to Ollama - is it running?")
-        except requests.Timeout:
-            self.available = False
-            logger.warning("Ollama connection timed out")
-        except Exception as e:
-            self.available = False
-            logger.warning(f"Ollama availability check failed: {e}")
+                logger.warning(f"Ollama official client check failed: {e}")
+        else:
+            # Fallback to requests
+            try:
+                import requests
+                response = requests.get(f"{self.base_url}/api/tags", timeout=5)
+                if response.status_code == 200:
+                    # Check if our model is available
+                    models = response.json().get('models', [])
+                    model_names = [model.get('name', '') for model in models]
+                    
+                    # Check if our target model exists
+                    if any(self.model in name for name in model_names):
+                        self.available = True
+                        logger.info(f"Ollama is available with model {self.model} (requests fallback)")
+                    else:
+                        # Try to find similar models
+                        similar_models = [name for name in model_names if self.model.split(':')[0] in name]
+                        if similar_models:
+                            logger.warning(f"Exact model {self.model} not found, but similar models available: {similar_models}")
+                        else:
+                            logger.warning(f"Ollama is running but model {self.model} not found. Available models: {model_names}")
+                        self.available = False
+                else:
+                    self.available = False
+                    logger.warning(f"Ollama health check failed with status {response.status_code}: {response.text}")
+            except Exception as e:
+                self.available = False
+                logger.warning(f"Ollama requests check failed: {e}")
         
         return self.available
     
@@ -209,7 +345,7 @@ class OllamaClient:
                        temperature: float = 0.7,
                        max_retries: int = 3) -> Optional[str]:
         """
-        Generate an answer using Ollama with improved error handling and retry logic
+        Generate an answer using Ollama with official client for better timeout handling
         
         Args:
             query: User's question
@@ -237,9 +373,61 @@ class OllamaClient:
             logger.warning(f"Prompt too long ({len(prompt)} chars), truncating")
             prompt = prompt[:32000] + "..."
         
+        # Use official client if available, fallback to requests
+        if OFFICIAL_OLLAMA_AVAILABLE and self.client:
+            return self._generate_with_official_client(prompt, max_tokens, temperature, max_retries)
+        else:
+            return self._generate_with_requests(prompt, max_tokens, temperature, max_retries)
+    
+    def _generate_with_official_client(self, prompt: str, max_tokens: int, temperature: float, max_retries: int) -> Optional[str]:
+        """Generate answer using official Ollama client with proper timeout handling"""
         for attempt in range(max_retries):
             try:
-                logger.info(f"Generating answer for query: '{query[:50]}...' (attempt {attempt + 1}/{max_retries})")
+                logger.info(f"Generating answer with official client (attempt {attempt + 1}/{max_retries})")
+                
+                # Use the official client with proper timeout handling
+                response = self.client.generate(
+                    model=self.model,
+                    prompt=prompt,
+                    options={
+                        'num_predict': max_tokens,
+                        'temperature': temperature,
+                        'top_p': 0.9,
+                        'stop': ["\n\nHuman:", "\n\nQuestion:", "\n\nUser:"]
+                    },
+                    stream=False
+                )
+                
+                answer = response.get('response', '').strip()
+                if answer:
+                    logger.info(f"Generated answer ({len(answer)} chars) on attempt {attempt + 1}")
+                    return answer
+                else:
+                    logger.warning(f"Empty response from Ollama on attempt {attempt + 1}")
+                    if attempt < max_retries - 1:
+                        time.sleep(1)
+                        continue
+                    return None
+                    
+            except Exception as e:
+                logger.error(f"Official client error on attempt {attempt + 1}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(2)
+                    continue
+                return None
+        
+        logger.error(f"Failed to generate answer after {max_retries} attempts with official client")
+        return None
+    
+    def _generate_with_requests(self, prompt: str, max_tokens: int, temperature: float, max_retries: int) -> Optional[str]:
+        """Fallback: Generate answer using requests (original implementation)"""
+        if not OFFICIAL_OLLAMA_AVAILABLE:
+            # We're using the requests fallback, so requests should be available
+            import requests
+        
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"Generating answer with requests fallback (attempt {attempt + 1}/{max_retries})")
                 
                 payload = {
                     "model": self.model,
@@ -248,7 +436,7 @@ class OllamaClient:
                         "num_predict": max_tokens,
                         "temperature": temperature,
                         "top_p": 0.9,
-                        "stop": ["Human:", "Assistant:", "\n\nHuman:", "\n\nQuestion:"]
+                        "stop": ["\n\nHuman:", "\n\nQuestion:", "\n\nUser:"]
                     },
                     "stream": False
                 }
@@ -256,7 +444,7 @@ class OllamaClient:
                 response = requests.post(
                     f"{self.base_url}/api/generate",
                     json=payload,
-                    timeout=self.timeout
+                    timeout=self.timeout  # Use full timeout
                 )
                 
                 if response.status_code == 200:
@@ -366,7 +554,7 @@ class OllamaClient:
                     "num_predict": max_tokens,
                     "temperature": temperature,
                     "top_p": 0.9,
-                    "stop": ["Human:", "Assistant:", "\n\nHuman:", "\n\nQuestion:"]
+                    "stop": ["\n\nHuman:", "\n\nQuestion:", "\n\nUser:"]
                 },
                 "stream": True
             }
@@ -569,6 +757,9 @@ ANTWORT (nur basierend auf den Dokumenten):"""
         Returns:
             Dict: Health status information
         """
+        # Import requests for health check regardless of official client availability
+        import requests
+        
         status = {
             "available": False,
             "model": self.model,

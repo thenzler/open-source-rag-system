@@ -1,0 +1,305 @@
+QM-SOFTWARE TEST PROMPTS
+ProQuality Manager Demo - Testfragen für RAG-System
+
+BASIC FACTUAL QUESTIONS - EINFACHE FAKTEN
+
+SOFTWARE SPECIFICATIONS:
+1. "Welche Version von ProQuality Manager wird beschrieben?"
+2. "Wer ist der Projektmanager für ProQuality Manager?"
+3. "Welche ISO-Standards werden von der Software unterstützt?"
+4. "Wie hoch ist das Budget für die Entwicklung von ProQuality Manager?"
+5. "Welche Datenbank wird für das System verwendet?"
+6. "Wann ist das nächste Review-Datum der Software-Spezifikation?"
+7. "Welche Programmiersprachen werden für die Entwicklung verwendet?"
+8. "Wie viele gleichzeitige Benutzer kann das System unterstützen?"
+9. "Welche Cloud-Plattform wird für die Infrastruktur genutzt?"
+10. "Was ist die erwartete Systemverfügbarkeit?"
+
+USER MANUAL QUESTIONS:
+11. "Wie meldet man sich bei ProQuality Manager an?"
+12. "Welche Hauptbereiche gibt es in der Navigation?"
+13. "Wie erstellt man ein neues Dokument?"
+14. "Wie funktioniert der Genehmigungsworkflow?"
+15. "Welche Tastenkombination öffnet die Hilfe?"
+16. "Wie kann man ein Dashboard konfigurieren?"
+17. "Welche mobilen Geräte werden unterstützt?"
+18. "Wie exportiert man Daten aus dem System?"
+19. "Welche Browser werden unterstützt?"
+20. "Wie kontaktiert man den Support?"
+
+AUDIT REPORT QUESTIONS:
+21. "Wer war der leitende Auditor für das interne Audit?"
+22. "Wie viele Hauptabweichungen wurden gefunden?"
+23. "Welche Bereiche wurden auditiert?"
+24. "Wie hoch ist der Konformitätsgrad?"
+25. "Bis wann müssen die Korrekturmaßnahmen umgesetzt sein?"
+26. "Wie viele Interviews wurden durchgeführt?"
+27. "Welche Auditstandards wurden verwendet?"
+28. "Wann findet das nächste Audit statt?"
+29. "Wie viele kleinere Abweichungen gab es?"
+30. "Welche Kundenzufriedenheitswerte wurden erreicht?"
+
+PROCESS DOCUMENTATION QUESTIONS:
+31. "Was ist der Zweck des CAPA-Systems?"
+32. "Wer ist der CAPA-Manager?"
+33. "Welche Analysemethoden werden für Root-Cause-Analyse verwendet?"
+34. "Wie werden CAPAs priorisiert?"
+35. "Welche Dokumente werden als Referenz verwendet?"
+36. "Was sind die Hauptrollen im CAPA-Prozess?"
+37. "Wie oft wird das Verfahren überprüft?"
+38. "Welche Eskalationsstufen gibt es?"
+39. "Wie wird die Wirksamkeit von CAPAs gemessen?"
+40. "Welche Software unterstützt den CAPA-Prozess?"
+
+COMPLIANCE CHECKLIST QUESTIONS:
+41. "Wie viele ISO 9001-Kapitel wurden bewertet?"
+42. "Welche Gesamterfüllung wurde erreicht?"
+43. "Welcher Bereich braucht Verbesserung?"
+44. "Wer hat die Compliance-Bewertung durchgeführt?"
+45. "Wann ist die nächste Bewertung geplant?"
+46. "Wie viele Anforderungen wurden vollständig erfüllt?"
+47. "Welche Kapitel haben 100% Erfüllung?"
+48. "Was ist der Hauptverbesserungsbedarf?"
+49. "Welche Empfehlungen wurden gegeben?"
+50. "Wie wird die Dokumentation bewertet?"
+
+TEST PROTOCOL QUESTIONS:
+51. "Wie viele Testfälle wurden insgesamt durchgeführt?"
+52. "Welche Testerin hat das Protokoll erstellt?"
+53. "Wie hoch ist die Erfolgsrate der Tests?"
+54. "Welche Module wurden getestet?"
+55. "Wie viele Bugs wurden gefunden?"
+56. "Welche Browser wurden für Kompatibilitätstests verwendet?"
+57. "Wie lange dauerte der längste Testfall?"
+58. "Wie viele gleichzeitige Benutzer wurden getestet?"
+59. "Welche Sicherheitstests wurden durchgeführt?"
+60. "Ist das System für Produktionseinsatz freigegeben?"
+
+TRAINING MATERIAL QUESTIONS:
+61. "Wie lange dauert die Grundschulung?"
+62. "Wer ist der Trainer für ProQuality Manager?"
+63. "Welche Lernziele hat die Schulung?"
+64. "Wie viele Übungen gibt es in der Schulung?"
+65. "Welche Zertifizierung erhalten Teilnehmer?"
+66. "Wie lange ist das Zertifikat gültig?"
+67. "Welche Bewertungskriterien gibt es?"
+68. "Welche Supportmöglichkeiten werden angeboten?"
+69. "Wie viele Module hat die Schulung?"
+70. "Welche Aufbauschulungen gibt es?"
+
+CROSS-DOCUMENT QUESTIONS - DOKUMENTENÜBERGREIFEND
+
+INTEGRATION QUESTIONS:
+71. "Wie unterstützt die Software den CAPA-Prozess aus der Verfahrensanweisung?"
+72. "Welche Audit-Befunde aus dem Bericht können mit der Software vermieden werden?"
+73. "Wie hilft die Schulung bei der Compliance-Bewertung?"
+74. "Welche Testfälle prüfen die CAPA-Funktionalität?"
+75. "Wie unterstützt das System die ISO 9001-Anforderungen?"
+
+PROCESS IMPROVEMENT QUESTIONS:
+76. "Welche Verbesserungen wurden zwischen Software-Version und Tests gemacht?"
+77. "Wie werden die Audit-Abweichungen durch das System behoben?"
+78. "Welche Schulungsinhalte adressieren die gefundenen Compliance-Lücken?"
+79. "Wie kann das System die Audit-Effizienz verbessern?"
+80. "Welche Automatisierungen reduzieren manuelle Prozesse?"
+
+ANALYTICAL QUESTIONS - ANALYSEN
+
+PERFORMANCE ANALYSIS:
+81. "Wie effizient ist das CAPA-System laut Testprotokoll?"
+82. "Welche Performance-Verbesserungen sind in der Software geplant?"
+83. "Wie schnell können Audits mit der Software durchgeführt werden?"
+84. "Welche Zeitersparnis bringt das System bei der Dokumentenverwaltung?"
+85. "Wie verbessert sich die Compliance-Bewertung durch die Software?"
+
+COST-BENEFIT ANALYSIS:
+86. "Wie hoch sind die Gesamtkosten für das QM-System?"
+87. "Welche Einsparungen werden durch die Software erwartet?"
+88. "Wie rechtfertigt sich die Investition in das System?"
+89. "Welche Schulungskosten entstehen bei der Einführung?"
+90. "Wie amortisiert sich das System?"
+
+RISK ASSESSMENT:
+91. "Welche Risiken wurden bei der Systemeinführung identifiziert?"
+92. "Wie wird die Datensicherheit gewährleistet?"
+93. "Welche Backup-Strategien sind implementiert?"
+94. "Wie wird die Systemverfügbarkeit sichergestellt?"
+95. "Welche Ausfallrisiken gibt es?"
+
+COMPLEX SYNTHESIS QUESTIONS - KOMPLEXE SYNTHESE
+
+STRATEGIC QUESTIONS:
+96. "Wie trägt das QM-System zur Unternehmensstrategie bei?"
+97. "Welche langfristigen Vorteile bringt das System?"
+98. "Wie verbessert sich die Wettbewerbsfähigkeit?"
+99. "Welche Kundenvorteile entstehen durch das System?"
+100. "Wie unterstützt das System die Digitalisierungsstrategie?"
+
+IMPLEMENTATION QUESTIONS:
+101. "Welche Schritte sind für die erfolgreiche Einführung notwendig?"
+102. "Wie wird die Benutzerakzeptanz sichergestellt?"
+103. "Welche Change-Management-Maßnahmen sind erforderlich?"
+104. "Wie werden die Mitarbeiter auf das System vorbereitet?"
+105. "Welche Erfolgsfaktoren sind kritisch?"
+
+COMPLIANCE INTEGRATION:
+106. "Wie unterstützt das System die vollständige ISO 9001-Compliance?"
+107. "Welche Audit-Vorbereitungen werden durch das System vereinfacht?"
+108. "Wie wird die kontinuierliche Verbesserung gefördert?"
+109. "Welche Managementberichte werden automatisiert?"
+110. "Wie wird die Nachverfolgung von Maßnahmen sichergestellt?"
+
+TECHNICAL DEEP-DIVE QUESTIONS - TECHNISCHE DETAILS
+
+ARCHITECTURE QUESTIONS:
+111. "Welche Systemarchitektur wird verwendet?"
+112. "Wie ist die Datenbankstruktur aufgebaut?"
+113. "Welche Sicherheitsmaßnahmen sind implementiert?"
+114. "Wie funktioniert die Systemintegration?"
+115. "Welche APIs stehen zur Verfügung?"
+
+FUNCTIONALITY QUESTIONS:
+116. "Welche Workflow-Engine wird verwendet?"
+117. "Wie funktioniert die Volltextsuche?"
+118. "Welche Reporting-Tools sind integriert?"
+119. "Wie wird die Versionsverwaltung realisiert?"
+120. "Welche Backup-Mechanismen existieren?"
+
+TESTING SCENARIOS - TESTSZENARIEN
+
+USER EXPERIENCE TESTING:
+121. "Wie intuitiv ist die Benutzeroberfläche laut Testprotokoll?"
+122. "Welche Usability-Verbesserungen wurden identifiziert?"
+123. "Wie zufrieden sind die Testbenutzer?"
+124. "Welche Schulungsbedarfe wurden erkannt?"
+125. "Wie ist die Lernkurve für neue Benutzer?"
+
+LOAD TESTING:
+126. "Wie verhält sich das System unter Last?"
+127. "Welche Performance-Limits wurden getestet?"
+128. "Wie skaliert das System?"
+129. "Welche Flaschenhälse wurden identifiziert?"
+130. "Wie ist die Systemstabilität unter Dauerlast?"
+
+TROUBLESHOOTING QUESTIONS - PROBLEMLÖSUNG
+
+COMMON ISSUES:
+131. "Wie löst man Anmeldungsprobleme?"
+132. "Was tun bei langsamer Systemperformance?"
+133. "Wie behebt man Synchronisationsprobleme?"
+134. "Welche Schritte bei Datenverlust?"
+135. "Wie löst man Workflow-Blockaden?"
+
+ESCALATION PROCEDURES:
+136. "Wann eskaliert man technische Probleme?"
+137. "Welche Support-Level gibt es?"
+138. "Wie kontaktiert man den technischen Support?"
+139. "Welche Informationen braucht der Support?"
+140. "Wie wird die Problemlösung dokumentiert?"
+
+BUSINESS PROCESS QUESTIONS - GESCHÄFTSPROZESSE
+
+WORKFLOW OPTIMIZATION:
+141. "Wie optimiert das System bestehende Workflows?"
+142. "Welche Prozessverbesserungen sind möglich?"
+143. "Wie wird die Effizienz gemessen?"
+144. "Welche Automatisierungen sind implementiert?"
+145. "Wie wird die Prozesskonformität überwacht?"
+
+STAKEHOLDER MANAGEMENT:
+146. "Welche Stakeholder sind von dem System betroffen?"
+147. "Wie wird die Kommunikation mit Stakeholdern sichergestellt?"
+148. "Welche Reporting-Anforderungen gibt es?"
+149. "Wie werden Feedback-Schleifen implementiert?"
+150. "Welche Governance-Strukturen sind notwendig?"
+
+FUTURE DEVELOPMENT QUESTIONS - ZUKUNFTSENTWICKLUNG
+
+ROADMAP QUESTIONS:
+151. "Welche Funktionen sind für zukünftige Versionen geplant?"
+152. "Wie wird sich das System weiterentwickeln?"
+153. "Welche Technologie-Trends werden berücksichtigt?"
+154. "Wie wird das System an neue Anforderungen angepasst?"
+155. "Welche Innovationen sind geplant?"
+
+SCALABILITY QUESTIONS:
+156. "Wie skaliert das System für größere Organisationen?"
+157. "Welche Erweiterungsmöglichkeiten gibt es?"
+158. "Wie wird Multi-Site-Unterstützung implementiert?"
+159. "Welche Internationalisierungsfeatures sind geplant?"
+160. "Wie wird die Systemerweiterung geplant?"
+
+DEMO SCRIPT SUGGESTIONS - DEMO-SKRIPT VORSCHLÄGE
+
+BASIC DEMO FLOW:
+1. Start with simple factual questions (1-20)
+2. Progress to process-specific questions (21-70)
+3. Show cross-document synthesis (71-85)
+4. Demonstrate complex analysis (86-110)
+5. Test technical understanding (111-125)
+6. Showcase troubleshooting (126-140)
+7. Explore business value (141-155)
+8. Discuss future potential (156-160)
+
+ADVANCED DEMO SCENARIOS:
+- "Simulate a complete audit process using the system"
+- "Walk through a CAPA from identification to closure"
+- "Demonstrate management reporting capabilities"
+- "Show compliance tracking and reporting"
+- "Explain system integration with existing tools"
+
+CONVERSATION STARTERS:
+- "Tell me about the QM-System's main benefits"
+- "How does this system improve audit efficiency?"
+- "What training is needed for new users?"
+- "Explain the CAPA process in detail"
+- "How does this system ensure ISO 9001 compliance?"
+
+FOLLOW-UP QUESTIONS:
+- "Can you provide more details about [specific topic]?"
+- "What are the implications of [specific finding]?"
+- "How does this compare to [alternative approach]?"
+- "What would happen if [specific scenario]?"
+- "How do you measure success of [specific process]?"
+
+EDGE CASE TESTING:
+- Ask about information not in documents
+- Test with ambiguous questions
+- Request impossible combinations
+- Ask for opinions vs. facts
+- Test with technical jargon
+
+MULTILINGUAL TESTING:
+- Ask questions in German and English
+- Test technical terminology understanding
+- Verify consistent responses across languages
+- Test with mixed-language queries
+
+PERFORMANCE TESTING:
+- Ask rapid-fire questions
+- Request complex multi-part answers
+- Test with very long queries
+- Verify response time consistency
+
+TIPS FOR EFFECTIVE DEMONSTRATION:
+
+1. START SIMPLE: Begin with basic factual questions
+2. BUILD COMPLEXITY: Gradually increase question difficulty
+3. SHOW VERSATILITY: Mix different document types
+4. DEMONSTRATE ACCURACY: Verify specific details
+5. TEST SYNTHESIS: Ask cross-document questions
+6. SHOW LIMITATIONS: Test with unavailable information
+7. HIGHLIGHT BENEFITS: Focus on practical applications
+8. ENGAGE AUDIENCE: Ask follow-up questions
+9. MEASURE PERFORMANCE: Track response quality
+10. COLLECT FEEDBACK: Note user reactions
+
+EXPECTED OUTCOMES:
+- Accurate fact retrieval from multiple documents
+- Intelligent synthesis of information
+- Clear source attribution
+- Appropriate handling of unavailable information
+- Professional and helpful responses
+- Consistent performance across question types
+
+© 2024 ProQuality Solutions GmbH - Demo Testing Guide

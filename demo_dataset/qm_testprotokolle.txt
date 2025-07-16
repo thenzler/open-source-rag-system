@@ -1,0 +1,557 @@
+QM-SOFTWARE TESTPROTOKOLL
+ProQuality Manager v4.2 - Funktionstest
+
+TESTINFORMATIONEN
+
+Testtyp: Funktionstest
+Software: ProQuality Manager v4.2
+Testdatum: 10. - 12. März 2024
+Tester: Emma Davis, QA-Ingenieurin
+Testumgebung: Staging-System
+Build-Version: 4.2.0-rc.3
+
+TESTUMFANG
+
+Getestete Module:
+- Dokumentenmanagement
+- Audit-Management
+- CAPA-System
+- Risikomanagement
+- Berichtswesen
+- Benutzerverwaltung
+
+Testarten:
+- Funktionstest
+- Usability-Test
+- Performance-Test
+- Sicherheitstest
+- Kompatibilitätstest
+
+TESTUMGEBUNG
+
+HARDWARE:
+- Server: Dell PowerEdge R740
+- CPU: Intel Xeon Silver 4210R
+- RAM: 32 GB DDR4
+- Storage: 1 TB NVMe SSD
+- Netzwerk: 1 Gbps Ethernet
+
+SOFTWARE:
+- Betriebssystem: Windows Server 2019
+- Webserver: IIS 10.0
+- Datenbank: SQL Server 2019
+- Browser: Chrome 122, Firefox 124, Edge 122
+
+TESTDATEN:
+- 150 Testdokumente
+- 25 Testbenutzer
+- 50 Audit-Datensätze
+- 75 CAPA-Einträge
+- 30 Risikobewertungen
+
+TESTFÄLLE
+
+MODUL 1: DOKUMENTENMANAGEMENT
+
+TC-DOC-001: Dokument hochladen
+Beschreibung: PDF-Dokument erfolgreich hochladen
+Eingabe: test_document.pdf (2.5 MB)
+Erwartetes Ergebnis: Dokument erfolgreich hochgeladen und in Liste angezeigt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.2 Sekunden
+Kommentar: Upload funktioniert einwandfrei
+
+TC-DOC-002: Dokument bearbeiten
+Beschreibung: Metadaten eines Dokuments ändern
+Eingabe: Titel, Beschreibung, Kategorie ändern
+Erwartetes Ergebnis: Änderungen gespeichert, neue Version erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.8 Sekunden
+Kommentar: Versionierung funktioniert korrekt
+
+TC-DOC-003: Dokument löschen
+Beschreibung: Dokument aus System entfernen
+Eingabe: Löschbefehl für Testdokument
+Erwartetes Ergebnis: Dokument gelöscht, nicht mehr in Liste
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.1 Sekunden
+Kommentar: Löschung mit Bestätigung funktioniert
+
+TC-DOC-004: Dokumentensuche
+Beschreibung: Dokument über Suchfunktion finden
+Eingabe: Suchbegriff "Qualitätshandbuch"
+Erwartetes Ergebnis: Relevante Dokumente in Ergebnisliste
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 0.8 Sekunden
+Kommentar: Suchfunktion sehr schnell und präzise
+
+TC-DOC-005: Genehmigungsworkflow
+Beschreibung: Dokument durch Genehmigungsworkflow leiten
+Eingabe: Dokument zur Genehmigung senden
+Erwartetes Ergebnis: E-Mail an Genehmiger, Status aktualisiert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.5 Sekunden
+Kommentar: Workflow-Engine funktioniert zuverlässig
+
+TC-DOC-006: Versionsverwaltung
+Beschreibung: Verschiedene Dokumentenversionen verwalten
+Eingabe: Mehrere Versionen eines Dokuments
+Erwartetes Ergebnis: Versionshistorie korrekt angezeigt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.3 Sekunden
+Kommentar: Versionsverwaltung übersichtlich
+
+TC-DOC-007: Bulk-Upload
+Beschreibung: Mehrere Dokumente gleichzeitig hochladen
+Eingabe: 10 Dokumente (ZIP-Datei)
+Erwartetes Ergebnis: Alle Dokumente erfolgreich hochgeladen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 15.7 Sekunden
+Kommentar: Bulk-Upload funktioniert, könnte schneller sein
+
+TC-DOC-008: Dokumentenfilter
+Beschreibung: Dokumente nach Kriterien filtern
+Eingabe: Filter nach Typ, Datum, Status
+Erwartetes Ergebnis: Gefilterte Dokumentenliste
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.2 Sekunden
+Kommentar: Filter funktionieren intuitiv
+
+MODUL 2: AUDIT-MANAGEMENT
+
+TC-AUD-001: Audit erstellen
+Beschreibung: Neues Audit anlegen
+Eingabe: Auditname, Typ, Datum, Auditoren
+Erwartetes Ergebnis: Audit erstellt, in Liste angezeigt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.1 Sekunden
+Kommentar: Audit-Erstellung einfach und intuitiv
+
+TC-AUD-002: Audit-Checkliste
+Beschreibung: Checkliste für Audit verwenden
+Eingabe: Vordefinierte ISO 9001-Checkliste
+Erwartetes Ergebnis: Checkliste geladen, bearbeitbar
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.5 Sekunden
+Kommentar: Checklisten gut strukturiert
+
+TC-AUD-003: Befunde dokumentieren
+Beschreibung: Audit-Befunde erfassen
+Eingabe: Abweichung mit Beschreibung und Foto
+Erwartetes Ergebnis: Befund gespeichert, Foto hochgeladen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.8 Sekunden
+Kommentar: Foto-Upload funktioniert einwandfrei
+
+TC-AUD-004: Audit-Bericht generieren
+Beschreibung: Automatischen Audit-Bericht erstellen
+Eingabe: Abgeschlossenes Audit
+Erwartetes Ergebnis: PDF-Bericht generiert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 4.2 Sekunden
+Kommentar: Bericht-Layout professionell
+
+TC-AUD-005: Mobile Audit-App
+Beschreibung: Audit mit mobiler App durchführen
+Eingabe: Tablet-Nutzung für Audit
+Erwartetes Ergebnis: Synchronisation mit Hauptsystem
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 6.1 Sekunden
+Kommentar: Mobile App funktioniert gut
+
+TC-AUD-006: Audit-Planung
+Beschreibung: Jahresauditplan erstellen
+Eingabe: Auditzyklen, Ressourcen, Termine
+Erwartetes Ergebnis: Planungskalender erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.8 Sekunden
+Kommentar: Planungstools sehr hilfreich
+
+TC-AUD-007: Auditoren-Qualifikation
+Beschreibung: Auditor-Qualifikationen verwalten
+Eingabe: Zertifikate, Schulungen, Kompetenzen
+Erwartetes Ergebnis: Qualifikationsmatrix aktualisiert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.9 Sekunden
+Kommentar: Qualifikationsmanagement übersichtlich
+
+TC-AUD-008: Audit-Statistiken
+Beschreibung: Audit-Kennzahlen anzeigen
+Eingabe: Zeitraum für Auswertung
+Erwartetes Ergebnis: Dashboard mit Kennzahlen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.3 Sekunden
+Kommentar: Dashboard informativ und übersichtlich
+
+MODUL 3: CAPA-SYSTEM
+
+TC-CAP-001: CAPA erstellen
+Beschreibung: Neue Korrekturmaßnahme anlegen
+Eingabe: Problembeschreibung, Priorität, Verantwortlicher
+Erwartetes Ergebnis: CAPA-Eintrag erstellt, Nummer zugewiesen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.7 Sekunden
+Kommentar: CAPA-Erstellung strukturiert
+
+TC-CAP-002: 5-Why-Analyse
+Beschreibung: Root-Cause-Analyse durchführen
+Eingabe: Problemstellung für Analyse
+Erwartetes Ergebnis: 5-Why-Diagramm erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.4 Sekunden
+Kommentar: Analyse-Tool sehr hilfreich
+
+TC-CAP-003: Maßnahmenplanung
+Beschreibung: Korrekturmaßnahmen planen
+Eingabe: Maßnahmen, Termine, Ressourcen
+Erwartetes Ergebnis: Maßnahmenplan erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.1 Sekunden
+Kommentar: Planungstools gut durchdacht
+
+TC-CAP-004: Wirksamkeitsprüfung
+Beschreibung: Erfolg der Maßnahmen prüfen
+Eingabe: Prüfkriterien, Messergebnisse
+Erwartetes Ergebnis: Wirksamkeit bewertet, CAPA geschlossen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.6 Sekunden
+Kommentar: Prüfprozess gut strukturiert
+
+TC-CAP-005: CAPA-Eskalation
+Beschreibung: Überfällige CAPAs eskalieren
+Eingabe: Überfällige CAPA-Einträge
+Erwartetes Ergebnis: Eskalations-E-Mails versendet
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.8 Sekunden
+Kommentar: Eskalation funktioniert automatisch
+
+TC-CAP-006: CAPA-Berichte
+Beschreibung: CAPA-Statistiken generieren
+Eingabe: Zeitraum, Filter-Kriterien
+Erwartetes Ergebnis: Statistikbericht erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.5 Sekunden
+Kommentar: Berichte sehr detailliert
+
+TC-CAP-007: Ishikawa-Diagramm
+Beschreibung: Ursache-Wirkungs-Diagramm erstellen
+Eingabe: Problemstellung, Kategorien
+Erwartetes Ergebnis: Diagramm visuell dargestellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.9 Sekunden
+Kommentar: Diagramm-Tool intuitiv
+
+TC-CAP-008: CAPA-Workflow
+Beschreibung: Kompletten CAPA-Workflow testen
+Eingabe: Vollständiger Lebenszyklus
+Erwartetes Ergebnis: Alle Phasen erfolgreich durchlaufen
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 45.3 Sekunden
+Kommentar: Workflow-Integration sehr gut
+
+MODUL 4: RISIKOMANAGEMENT
+
+TC-RIS-001: Risiko identifizieren
+Beschreibung: Neues Risiko erfassen
+Eingabe: Risikobeschreibung, Kategorie, Kontext
+Erwartetes Ergebnis: Risiko im Register erfasst
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.9 Sekunden
+Kommentar: Risiko-Erfassung strukturiert
+
+TC-RIS-002: Risiko bewerten
+Beschreibung: Wahrscheinlichkeit und Auswirkung bewerten
+Eingabe: Bewertungsskala 1-5
+Erwartetes Ergebnis: Risikoscore automatisch berechnet
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.4 Sekunden
+Kommentar: Bewertungslogik korrekt
+
+TC-RIS-003: Risikomatrix
+Beschreibung: Risiken in Matrix visualisieren
+Eingabe: Bewertete Risiken
+Erwartetes Ergebnis: Risikomatrix-Darstellung
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.1 Sekunden
+Kommentar: Visualisierung sehr übersichtlich
+
+TC-RIS-004: Risikominderung
+Beschreibung: Maßnahmen zur Risikominderung planen
+Eingabe: Maßnahmen, Termine, Verantwortliche
+Erwartetes Ergebnis: Maßnahmenplan erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.7 Sekunden
+Kommentar: Maßnahmenplanung gut integriert
+
+TC-RIS-005: Risiko-Monitoring
+Beschreibung: Risiken regelmäßig überwachen
+Eingabe: Risikobewertung aktualisieren
+Erwartetes Ergebnis: Risikoverlauf dokumentiert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.8 Sekunden
+Kommentar: Monitoring-Features hilfreich
+
+TC-RIS-006: Risikoberichte
+Beschreibung: Risikomanagement-Berichte generieren
+Eingabe: Berichtszeitraum, Filter
+Erwartetes Ergebnis: Risikobericht erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.2 Sekunden
+Kommentar: Berichte sehr informativ
+
+MODUL 5: BERICHTSWESEN
+
+TC-REP-001: Standard-Berichte
+Beschreibung: Vordefinierte Berichte generieren
+Eingabe: Berichtstyp auswählen
+Erwartetes Ergebnis: Bericht im gewünschten Format
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.8 Sekunden
+Kommentar: Berichte professionell formatiert
+
+TC-REP-002: Dashboard-Konfiguration
+Beschreibung: Persönliches Dashboard erstellen
+Eingabe: Widget-Auswahl, Layout
+Erwartetes Ergebnis: Dashboard nach Wunsch konfiguriert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 3.4 Sekunden
+Kommentar: Dashboard sehr flexibel
+
+TC-REP-003: Datenexport
+Beschreibung: Daten in verschiedene Formate exportieren
+Eingabe: Excel, CSV, PDF-Export
+Erwartetes Ergebnis: Dateien erfolgreich exportiert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 4.1 Sekunden
+Kommentar: Export-Funktionen vollständig
+
+TC-REP-004: Automatische Berichte
+Beschreibung: Berichte automatisch versenden
+Eingabe: Zeitplan, E-Mail-Empfänger
+Erwartetes Ergebnis: Berichte automatisch versendet
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.9 Sekunden
+Kommentar: Automatisierung funktioniert gut
+
+TC-REP-005: Kennzahlen-Tracking
+Beschreibung: KPIs über Zeit verfolgen
+Eingabe: KPI-Auswahl, Zeitraum
+Erwartetes Ergebnis: Trend-Diagramme erstellt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.6 Sekunden
+Kommentar: Trend-Analyse sehr hilfreich
+
+MODUL 6: BENUTZERVERWALTUNG
+
+TC-USR-001: Benutzer anlegen
+Beschreibung: Neuen Benutzer erstellen
+Eingabe: Benutzerdaten, Rollen, Berechtigungen
+Erwartetes Ergebnis: Benutzer erfolgreich angelegt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 2.2 Sekunden
+Kommentar: Benutzeranlage intuitiv
+
+TC-USR-002: Rollen-Management
+Beschreibung: Benutzerrollen verwalten
+Eingabe: Rollen erstellen, Berechtigungen zuweisen
+Erwartetes Ergebnis: Rollen korrekt konfiguriert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.8 Sekunden
+Kommentar: Rollensystem sehr flexibel
+
+TC-USR-003: Passwort-Richtlinien
+Beschreibung: Passwort-Sicherheit prüfen
+Eingabe: Verschiedene Passwort-Kombinationen
+Erwartetes Ergebnis: Richtlinien durchgesetzt
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 0.9 Sekunden
+Kommentar: Sicherheitsrichtlinien wirksam
+
+TC-USR-004: Single Sign-On
+Beschreibung: SSO-Integration testen
+Eingabe: Active Directory Anmeldung
+Erwartetes Ergebnis: Automatische Anmeldung
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.3 Sekunden
+Kommentar: SSO-Integration funktioniert
+
+TC-USR-005: Benutzer-Audit
+Beschreibung: Benutzeraktivitäten verfolgen
+Eingabe: Benutzeraktionen
+Erwartetes Ergebnis: Aktivitäten protokolliert
+Testergebnis: ✓ BESTANDEN
+Ausführungszeit: 1.1 Sekunden
+Kommentar: Audit-Trail vollständig
+
+PERFORMANCE-TESTS
+
+PER-001: Systemstart
+Beschreibung: Startzeit der Anwendung messen
+Erwartetes Ergebnis: < 10 Sekunden
+Testergebnis: ✓ BESTANDEN
+Gemessene Zeit: 7.3 Sekunden
+Kommentar: Startzeit im akzeptablen Bereich
+
+PER-002: Concurrent Users
+Beschreibung: 100 gleichzeitige Benutzer
+Erwartetes Ergebnis: Stabile Performance
+Testergebnis: ✓ BESTANDEN
+Antwortzeit: 1.2 Sekunden (Durchschnitt)
+Kommentar: System bewältigt Last gut
+
+PER-003: Database Queries
+Beschreibung: Datenbankabfrage-Performance
+Erwartetes Ergebnis: < 1 Sekunde
+Testergebnis: ✓ BESTANDEN
+Durchschnittliche Zeit: 0.4 Sekunden
+Kommentar: Datenbankperformance sehr gut
+
+PER-004: File Upload
+Beschreibung: Große Dateien hochladen (50 MB)
+Erwartetes Ergebnis: < 60 Sekunden
+Testergebnis: ✓ BESTANDEN
+Gemessene Zeit: 23.7 Sekunden
+Kommentar: Upload-Performance akzeptabel
+
+PER-005: Report Generation
+Beschreibung: Große Berichte generieren
+Erwartetes Ergebnis: < 30 Sekunden
+Testergebnis: ✓ BESTANDEN
+Gemessene Zeit: 18.4 Sekunden
+Kommentar: Berichterstellung schnell
+
+SICHERHEITSTESTS
+
+SEC-001: SQL Injection
+Beschreibung: SQL-Injection-Versuche
+Erwartetes Ergebnis: Schutz vor Injection
+Testergebnis: ✓ BESTANDEN
+Kommentar: Eingabevalidierung effektiv
+
+SEC-002: XSS Protection
+Beschreibung: Cross-Site-Scripting-Tests
+Erwartetes Ergebnis: XSS-Schutz aktiv
+Testergebnis: ✓ BESTANDEN
+Kommentar: XSS-Schutz funktioniert
+
+SEC-003: Authentication
+Beschreibung: Authentifizierung prüfen
+Erwartetes Ergebnis: Sichere Anmeldung
+Testergebnis: ✓ BESTANDEN
+Kommentar: Authentifizierung robust
+
+SEC-004: Authorization
+Beschreibung: Berechtigungen prüfen
+Erwartetes Ergebnis: Zugriffskontrolle wirksam
+Testergebnis: ✓ BESTANDEN
+Kommentar: Berechtigungssystem sicher
+
+SEC-005: Data Encryption
+Beschreibung: Datenverschlüsselung prüfen
+Erwartetes Ergebnis: Daten verschlüsselt
+Testergebnis: ✓ BESTANDEN
+Kommentar: Verschlüsselung implementiert
+
+KOMPATIBILITÄTSTESTS
+
+COMP-001: Chrome Browser
+Beschreibung: Funktionalität in Chrome
+Erwartetes Ergebnis: Alle Funktionen verfügbar
+Testergebnis: ✓ BESTANDEN
+Version: Chrome 122
+Kommentar: Vollständige Kompatibilität
+
+COMP-002: Firefox Browser
+Beschreibung: Funktionalität in Firefox
+Erwartetes Ergebnis: Alle Funktionen verfügbar
+Testergebnis: ✓ BESTANDEN
+Version: Firefox 124
+Kommentar: Vollständige Kompatibilität
+
+COMP-003: Edge Browser
+Beschreibung: Funktionalität in Edge
+Erwartetes Ergebnis: Alle Funktionen verfügbar
+Testergebnis: ✓ BESTANDEN
+Version: Edge 122
+Kommentar: Vollständige Kompatibilität
+
+COMP-004: Mobile Devices
+Beschreibung: Mobile Responsive Design
+Erwartetes Ergebnis: Optimierte Darstellung
+Testergebnis: ✓ BESTANDEN
+Getestet: iOS Safari, Android Chrome
+Kommentar: Responsive Design funktioniert
+
+COMP-005: Tablets
+Beschreibung: Tablet-Optimierung
+Erwartetes Ergebnis: Touch-optimierte Bedienung
+Testergebnis: ✓ BESTANDEN
+Getestet: iPad, Android Tablet
+Kommentar: Touch-Bedienung intuitiv
+
+FEHLERPROTOKOLL
+
+BUG-001: Dokumenten-Upload
+Beschreibung: Fehler beim Upload großer PDF-Dateien
+Schweregrad: Niedrig
+Status: Behoben
+Lösung: Timeout-Wert erhöht
+
+BUG-002: Dashboard-Refresh
+Beschreibung: Dashboard aktualisiert sich nicht automatisch
+Schweregrad: Mittel
+Status: Behoben
+Lösung: Auto-Refresh-Funktion korrigiert
+
+BUG-003: E-Mail-Benachrichtigungen
+Beschreibung: Benachrichtigungen teilweise nicht versendet
+Schweregrad: Hoch
+Status: Behoben
+Lösung: SMTP-Konfiguration korrigiert
+
+ZUSAMMENFASSUNG
+
+TESTSTATISTIK:
+- Gesamte Testfälle: 42
+- Bestanden: 42
+- Fehlgeschlagen: 0
+- Erfolgrate: 100%
+
+PERFORMANCE:
+- Durchschnittliche Antwortzeit: 2.1 Sekunden
+- Maximale Antwortzeit: 6.1 Sekunden
+- Minimale Antwortzeit: 0.8 Sekunden
+- Concurrent Users: 100 (stabil)
+
+SICHERHEIT:
+- Alle Sicherheitstests bestanden
+- Keine kritischen Sicherheitslücken
+- Empfohlene Sicherheitspraktiken implementiert
+
+BENUTZERFREUNDLICHKEIT:
+- Intuitive Benutzeroberfläche
+- Responsive Design funktioniert
+- Accessibility-Standards erfüllt
+
+EMPFEHLUNGEN:
+1. Bulk-Upload-Performance optimieren
+2. Auto-Refresh-Intervalle konfigurierbar machen
+3. Zusätzliche Sicherheitsfeatures erwägen
+4. Performance-Monitoring implementieren
+
+FREIGABE-EMPFEHLUNG:
+✓ FREIGABE FÜR PRODUKTIONSEINSATZ
+
+Das System ProQuality Manager v4.2 erfüllt alle Anforderungen und kann für den Produktionseinsatz freigegeben werden.
+
+TESTABSCHLUSS:
+Datum: 12. März 2024
+Tester: Emma Davis
+Unterschrift: [Elektronisch signiert]
+
+Freigabe durch: Dr. Sarah Weber
+Funktion: Qualitätsmanagerin
+Datum: 12. März 2024
+Unterschrift: [Elektronisch signiert]
+
+© 2024 ProQuality Solutions GmbH - Vertraulich

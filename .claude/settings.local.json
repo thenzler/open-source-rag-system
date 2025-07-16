@@ -14,7 +14,19 @@
       "Bash(npm start)",
       "Bash(npm install)",
       "Bash(npm install:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(rg:*)",
+      "Bash(findstr:*)",
+      "Bash(find:*)",
+      "Bash(del test_token_fix.py)",
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "Bash(taskkill:*)",
+      "Bash(C:\\Users\\THE\\AppData\\Local\\Programs\\Ollama\\ollama.exe serve)",
+      "Bash(\"C:\\\\Users\\\\THE\\\\AppData\\\\Local\\\\Programs\\\\Ollama\\\\ollama.exe\" serve)",
+      "Bash(wmic process where:*)",
+      "Bash(mv:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
