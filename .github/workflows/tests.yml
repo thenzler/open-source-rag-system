@@ -12,7 +12,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: ["3.9", "3.10", "3.11"]
     
     steps:
     - uses: actions/checkout@v4
@@ -72,7 +72,7 @@ jobs:
         cat test_report.txt
     
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results-${{ matrix.python-version }}
@@ -132,7 +132,7 @@ jobs:
         safety check --json --output safety-report.json || true
     
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports
