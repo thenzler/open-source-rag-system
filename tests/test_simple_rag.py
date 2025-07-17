@@ -15,13 +15,13 @@ def test_api_health():
     try:
         response = requests.get(f"{API_BASE}/health")
         if response.status_code == 200:
-            print("✓ API health check passed")
+            print("+ API health check passed")
             return True
         else:
-            print(f"✗ API health check failed: {response.status_code}")
+            print(f"X API health check failed: {response.status_code}")
             return False
     except Exception as e:
-        print(f"✗ API health check failed: {e}")
+        print(f"X API health check failed: {e}")
         return False
 
 def test_document_upload():
@@ -53,18 +53,18 @@ def test_document_upload():
         
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Document uploaded successfully: {result['filename']}")
+            print(f"+ Document uploaded successfully: {result['filename']}")
             print(f"  Status: {result['status']}")
             print(f"  Size: {result['size']} bytes")
             test_file.unlink()  # Clean up
             return True
         else:
-            print(f"✗ Document upload failed: {response.status_code}")
+            print(f"X Document upload failed: {response.status_code}")
             print(f"  Error: {response.text}")
             test_file.unlink()  # Clean up
             return False
     except Exception as e:
-        print(f"✗ Document upload failed: {e}")
+        print(f"X Document upload failed: {e}")
         if test_file.exists():
             test_file.unlink()  # Clean up
         return False
@@ -93,16 +93,16 @@ def test_document_query():
             
             if response.status_code == 200:
                 result = response.json()
-                print(f"✓ Query successful: {result['total_results']} results")
+                print(f"+ Query successful: {result['total_results']} results")
                 for i, res in enumerate(result['results']):
                     print(f"  Result {i+1}: Score {res['score']:.3f}")
                     print(f"    Content: {res['content'][:100]}...")
             else:
-                print(f"✗ Query failed: {response.status_code}")
+                print(f"X Query failed: {response.status_code}")
                 print(f"  Error: {response.text}")
                 return False
         except Exception as e:
-            print(f"✗ Query failed: {e}")
+            print(f"X Query failed: {e}")
             return False
     
     return True
@@ -114,13 +114,13 @@ def test_documents_list():
         response = requests.get(f"{API_BASE}/api/v1/documents")
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Documents list retrieved: {result['total']} documents")
+            print(f"+ Documents list retrieved: {result['total']} documents")
             return True
         else:
-            print(f"✗ Documents list failed: {response.status_code}")
+            print(f"X Documents list failed: {response.status_code}")
             return False
     except Exception as e:
-        print(f"✗ Documents list failed: {e}")
+        print(f"X Documents list failed: {e}")
         return False
 
 def main():
@@ -129,25 +129,25 @@ def main():
     
     # Test API health
     if not test_api_health():
-        print("\n❌ API is not running. Please start the API first with: python simple_api.py")
+        print("\nX API is not running. Please start the API first with: python simple_api.py")
         return
     
     # Test document upload
     if not test_document_upload():
-        print("\n❌ Document upload test failed")
+        print("\nX Document upload test failed")
         return
     
     # Test document query
     if not test_document_query():
-        print("\n❌ Document query test failed")
+        print("\nX Document query test failed")
         return
     
     # Test documents list
     if not test_documents_list():
-        print("\n❌ Documents list test failed")
+        print("\nX Documents list test failed")
         return
     
-    print("\n✅ All tests passed! The RAG system is working correctly.")
+    print("\n+ All tests passed! The RAG system is working correctly.")
     print("\nYou can now:")
     print("1. Open http://localhost:8001/simple_frontend.html in your browser")
     print("2. Upload documents and ask questions")
