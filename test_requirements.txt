@@ -1,0 +1,21 @@
+# Testing dependencies
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+requests>=2.28.0
+
+# Optional but recommended
+pytest-cov>=4.0.0  # Coverage reporting
+pytest-xdist>=3.0.0  # Parallel test execution
+pytest-mock>=3.10.0  # Enhanced mocking
+
+# Linting and formatting
+flake8>=5.0.0
+black>=22.0.0
+isort>=5.10.0
+
+# Security scanning  
+bandit>=1.7.0
+safety>=2.0.0
+
+# Performance testing
+locust>=2.0.0

@@ -11,19 +11,19 @@ API_BASE = "http://localhost:8001"
 
 def test_system_status():
     """Test system status endpoint"""
-    print("🔧 Testing system status...")
+    print("Testing system status...")
     try:
         response = requests.get(f"{API_BASE}/api/v1/status")
         if response.status_code == 200:
             status = response.json()
-            print("✓ System status retrieved")
+            print("+ System status retrieved")
             print(f"  - Service: {status['service']}")
-            print(f"  - Vector Search: {'✅' if status['features']['vector_search'] else '❌'}")
-            print(f"  - LLM Generation: {'✅' if status['features']['llm_generation'] else '❌'}")
-            print(f"  - Document Processing: {'✅' if status['features']['document_processing'] else '❌'}")
+            print(f"  - Vector Search: {'OK' if status['features']['vector_search'] else 'FAIL'}")
+            print(f"  - LLM Generation: {'OK' if status['features']['llm_generation'] else 'FAIL'}")
+            print(f"  - Document Processing: {'OK' if status['features']['document_processing'] else 'FAIL'}")
             
             if 'ollama' in status:
-                print(f"  - Ollama Available: {'✅' if status['ollama']['available'] else '❌'}")
+                print(f"  - Ollama Available: {'OK' if status['ollama']['available'] else 'FAIL'}")
                 if status['ollama']['available']:
                     print(f"    Model: {status['ollama'].get('model', 'Unknown')}")
                     print(f"    Available Models: {status['ollama'].get('models', [])}")
@@ -32,29 +32,29 @@ def test_system_status():
             
             return status
         else:
-            print(f"✗ System status failed: {response.status_code}")
+            print(f"X System status failed: {response.status_code}")
             return None
     except Exception as e:
-        print(f"✗ System status failed: {e}")
+        print(f"X System status failed: {e}")
         return None
 
 def test_ollama_client():
     """Test Ollama client directly"""
-    print("\n🤖 Testing Ollama client directly...")
+    print("\nTesting Ollama client directly...")
     try:
         from ollama_client import test_ollama_connection
         result = test_ollama_connection()
         return result
     except ImportError:
-        print("✗ Ollama client module not found")
+        print("X Ollama client module not found")
         return False
     except Exception as e:
-        print(f"✗ Ollama client test failed: {e}")
+        print(f"X Ollama client test failed: {e}")
         return False
 
 def upload_test_document():
     """Upload a test document for LLM testing"""
-    print("\n📄 Uploading test document...")
+    print("\nUploading test document...")
     
     # Create a comprehensive test document
     test_content = """
@@ -118,24 +118,24 @@ def upload_test_document():
         
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Test document uploaded: {result['filename']}")
+            print(f"+ Test document uploaded: {result['filename']}")
             print(f"  Status: {result['status']}")
             test_file.unlink()  # Clean up
             return True
         else:
-            print(f"✗ Document upload failed: {response.status_code}")
+            print(f"X Document upload failed: {response.status_code}")
             print(f"  Error: {response.text}")
             test_file.unlink()  # Clean up
             return False
     except Exception as e:
-        print(f"✗ Document upload failed: {e}")
+        print(f"X Document upload failed: {e}")
         if test_file.exists():
             test_file.unlink()  # Clean up
         return False
 
 def test_vector_search():
     """Test vector search endpoint"""
-    print("\n🔍 Testing vector search...")
+    print("\n Testing vector search...")
     
     test_query = "What is machine learning?"
     
@@ -148,21 +148,21 @@ def test_vector_search():
         
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Vector search successful: {result['total_results']} results")
+            print(f"+ Vector search successful: {result['total_results']} results")
             for i, res in enumerate(result['results']):
                 print(f"  Result {i+1}: Score {res['score']:.3f} from {res['source_document']}")
             return True
         else:
-            print(f"✗ Vector search failed: {response.status_code}")
+            print(f"X Vector search failed: {response.status_code}")
             return False
     except Exception as e:
-        print(f"✗ Vector search failed: {e}")
+        print(f"X Vector search failed: {e}")
         return False
 
 def test_enhanced_query(use_llm=True):
     """Test enhanced query with LLM"""
     mode = "LLM" if use_llm else "fallback"
-    print(f"\n🤖 Testing enhanced query ({mode})...")
+    print(f"\n Testing enhanced query ({mode})...")
     
     test_queries = [
         "What is machine learning and how does it work?",
@@ -188,7 +188,7 @@ def test_enhanced_query(use_llm=True):
             
             if response.status_code == 200:
                 result = response.json()
-                print(f"✓ Query successful ({elapsed:.2f}s)")
+                print(f"+ Query successful ({elapsed:.2f}s)")
                 print(f"  Method: {result['method']}")
                 print(f"  Sources: {result['total_sources']}")
                 
@@ -199,18 +199,18 @@ def test_enhanced_query(use_llm=True):
                 
                 success_count += 1
             else:
-                print(f"✗ Query failed: {response.status_code}")
+                print(f"X Query failed: {response.status_code}")
                 print(f"  Error: {response.text}")
                 
         except Exception as e:
-            print(f"✗ Query failed: {e}")
+            print(f"X Query failed: {e}")
     
     print(f"\n{mode} queries: {success_count}/{len(test_queries)} successful")
     return success_count == len(test_queries)
 
 def test_ollama_setup_instructions():
     """Provide Ollama setup instructions if not available"""
-    print("\n📋 Ollama Setup Instructions")
+    print("\n Ollama Setup Instructions")
     print("=" * 50)
     print("If Ollama is not available, follow these steps:")
     print()
@@ -238,7 +238,7 @@ def main():
     # Test system status
     status = test_system_status()
     if not status:
-        print("\n❌ Cannot connect to API. Make sure the server is running:")
+        print("\nX Cannot connect to API. Make sure the server is running:")
         print("python simple_api.py")
         return
     
@@ -247,7 +247,7 @@ def main():
     
     # Upload test document
     if not upload_test_document():
-        print("\n❌ Cannot test queries without documents")
+        print("\nX Cannot test queries without documents")
         return
     
     # Wait for processing
@@ -255,7 +255,7 @@ def main():
     
     # Test vector search
     if not test_vector_search():
-        print("\n❌ Vector search failed")
+        print("\nX Vector search failed")
         return
     
     # Test enhanced queries
@@ -265,25 +265,25 @@ def main():
         llm_success = test_enhanced_query(use_llm=True)
         
         if llm_success:
-            print("\n✅ All LLM tests passed!")
-            print("\n🎉 Your RAG system with Ollama is working perfectly!")
+            print("\n+ All LLM tests passed!")
+            print("\n Your RAG system with Ollama is working perfectly!")
             print("\nYou can now:")
             print("1. Open http://localhost:8001/simple_frontend.html")
             print("2. Upload your own documents")
             print("3. Ask questions and get AI-generated answers")
         else:
-            print("\n⚠️ Some LLM tests failed")
+            print("\n! Some LLM tests failed")
     else:
         print("\n" + "="*50)
         print("Ollama not available - testing fallback mode...")
         fallback_success = test_enhanced_query(use_llm=False)
         
         if fallback_success:
-            print("\n✅ Fallback mode works!")
-            print("\n⚠️ Install Ollama for AI-generated answers:")
+            print("\n+ Fallback mode works!")
+            print("\n! Install Ollama for AI-generated answers:")
             test_ollama_setup_instructions()
         else:
-            print("\n❌ Even fallback mode failed")
+            print("\nX Even fallback mode failed")
 
 if __name__ == "__main__":
     main()

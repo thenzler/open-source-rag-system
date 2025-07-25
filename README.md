@@ -10,15 +10,12 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 ## Table of Contents
 
 - [Features](#features)
-- [System Requirements](#system-requirements)
-- [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Architecture](#architecture)
-- [API Documentation](#api-documentation)
-- [Configuration](#configuration)
-- [Security Considerations](#security-considerations)
-- [Troubleshooting](#troubleshooting)
+- [Municipal AI Features](#municipal-ai-features)
+- [Documentation](#documentation)
+- [Business Strategy](#business-strategy)
 - [Development](#development)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
@@ -41,6 +38,14 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 - **Persistent Storage**: SQLite database for document metadata
 - **Embeddable Widget**: Easy integration into any website
 - **Performance Optimizations**: Caching, optimized search, and streaming responses
+
+### Municipal AI Features 🏛️
+- **Municipal-Specific Training**: Specialized for Swiss government services
+- **150+ Use Cases**: Comprehensive coverage of citizen inquiries
+- **Multilingual Support**: German, French, and Italian
+- **Automated Web Scraping**: Extract municipal data automatically
+- **Importance Scoring**: Prioritize official documents and services
+- **Custom Model Training**: Train LLMs on municipal-specific data
 
 ## System Requirements
 
@@ -108,20 +113,78 @@ python test_widget_server.py
 # Then visit: http://localhost:3000/widget/
 ```
 
-## 📖 Usage Overview
+## 🏛️ Municipal AI Features
 
-This project provides a **production-ready**, open-source RAG (Retrieval-Augmented Generation) AI system designed to run entirely locally while delivering enterprise-grade performance. Version 1.3.0 introduces major performance optimizations and streaming capabilities.
+This system includes specialized features for Swiss municipalities and government services:
 
-### 🎯 Key Features
+### Quick Municipal Setup
+```bash
+# Set up municipal RAG for Arlesheim
+python municipal_setup.py arlesheim --scrape --max-pages 50
 
-- **🚀 High Performance**: 5x-10x faster with intelligent caching and optimized vector search
-- **⚡ Streaming Responses**: Real-time answer generation with immediate user feedback
-- **🔍 Advanced Vector Search**: Semantic search with early termination and batch processing
-- **🤖 LLM Integration**: Ollama support with automatic model detection and fallback
-- **📄 Multi-format Support**: PDF, Word (.docx), Excel (.xlsx), CSV, and text files
-- **🔒 Production Ready**: Comprehensive error handling, rate limiting, and dependency validation
-- **🛠️ Developer Friendly**: One-click setup, testing utilities, and detailed logging
-- **🌐 REST API**: Clean, well-documented API with streaming endpoint support
+# Test municipal queries
+python municipal_setup.py arlesheim --query "Was sind die Öffnungszeiten der Gemeindeverwaltung?"
+
+# Train custom municipal model
+python train_arlesheim_model.py
+```
+
+### Supported Municipalities
+- **Arlesheim** (BL) - Complete implementation with trained model
+- **Basel, Bern, Zürich, Geneva, Lausanne** - Configuration ready
+- **Custom municipalities** - Easy to add with municipal_setup.py
+
+### Use Cases Covered
+Our system handles **150+ municipal use cases** including:
+- Citizen services and document requests
+- Building permits and property services  
+- Business licensing and commercial permits
+- Transportation and parking information
+- Parks, recreation, and environmental services
+- Emergency preparedness and safety
+
+See [strategy/MUNICIPAL_USE_CASES.md](strategy/MUNICIPAL_USE_CASES.md) for the complete list.
+
+## 📚 Documentation
+
+### Quick Navigation
+- **[Get Started](docs/QUICKSTART.md)** - Quick setup guide
+- **[API Reference](docs/API_DOCUMENTATION.md)** - Complete API documentation
+- **[Municipal Guide](docs/MUNICIPAL_RAG_GUIDE.md)** - Municipal-specific features
+- **[Testing Guide](TESTING.md)** - Testing framework and guidelines
+
+### Documentation Structure
+```
+📁 docs/           - Technical documentation
+📁 strategy/       - Business strategy and planning
+📁 tests/         - Test suite and examples
+📁 tools/         - Municipal tools and utilities
+```
+
+### Key Documents
+- **[Architecture Overview](docs/ARCHITECTURE.md)** - System design and components
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment
+- **[Security Guidelines](docs/SECURITY.md)** - Security best practices
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+
+## 💼 Business Strategy
+
+### Market Opportunity
+**Target**: Swiss municipalities seeking AI-powered citizen services
+- **Market Size**: 300+ municipalities with digital transformation budgets
+- **Revenue Potential**: CHF 660,000 ARR by Year 3
+- **Business Model**: SaaS subscription (CHF 500-2,000/month)
+
+### Key Strategic Documents
+- **[Business Strategy](strategy/BUSINESS_STRATEGY.md)** - Complete business plan and market analysis
+- **[Technical Roadmap](strategy/TECHNICAL_ROADMAP.md)** - Development roadmap and architecture evolution
+- **[Municipal Use Cases](strategy/MUNICIPAL_USE_CASES.md)** - 150 comprehensive use cases
+
+### Go-to-Market Strategy
+1. **Perfect Arlesheim demo** (proven working system)
+2. **Add 3-5 municipalities** (demonstrate scalability)
+3. **Direct municipal outreach** (target IT departments)
+4. **Build partner network** (municipal software vendors)
 
 ### Core Principles
 
