@@ -67,7 +67,7 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/open-source-rag-system.git
+git clone https://github.com/thenzler/open-source-rag-system.git
 cd open-source-rag-system
 
 # Install dependencies
