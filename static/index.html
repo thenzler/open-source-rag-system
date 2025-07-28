@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG System - Modern Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .settings-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .settings-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .settings-button i {
+            margin-right: 8px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: border-color 0.3s, background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .upload-zone i {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone.dragover i {
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .search-modes {
+            margin-bottom: 1rem;
+        }
+
+        .results-container {
+            margin-top: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .result-score {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .result-content {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .status-loading {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .system-info {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/admin" class="settings-button" title="Admin Settings">
+            <i class="fas fa-cog"></i>
+            Settings
+        </a>
+        <h1><i class="fas fa-brain"></i> RAG System</h1>
+        <p>Intelligent Document Search & Analysis Platform</p>
+    </div>
+
+    <div class="container">
+        <!-- System Status -->
+        <div class="system-info">
+            <h3><i class="fas fa-server"></i> System Status</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-value" id="status-indicator">🟢</div>
+                    <div class="info-label">Status</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="document-count">-</div>
+                    <div class="info-label">Documents</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-value" id="llm-status">-</div>
+                    <div class="info-label">AI Model</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Document Upload -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Upload Documents</h3>
+                </div>
+                <div class="upload-zone" id="uploadZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>Drop files here or click to browse</h4>
+                    <p>Supports PDF, DOCX, TXT, MD, CSV files</p>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.docx,.txt,.md,.csv" style="display: none;">
+                </div>
+                <div id="uploadProgress"></div>
+            </div>
+
+            <!-- Document Query -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-search"></i>
+                    <h3>Search Documents</h3>
+                </div>
+                
+                <div class="search-modes">
+                    <div style="padding: 12px; background: #e8f5e8; border-radius: 8px; color: #2c5530; text-align: center;">
+                        🤖 <strong>AI Answers Only</strong> - Professional zero-hallucination responses with source citations
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="queryInput">Enter your question</label>
+                    <input type="text" id="queryInput" class="form-input" 
+                           placeholder="What would you like to know about your documents?">
+                </div>
+
+                <button class="btn btn-primary" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+
+                <div class="loading" id="searchLoading">
+                    <div class="spinner"></div>
+                    <p>Searching documents...</p>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <i class="fas fa-list"></i>
+                    <h3>Search Results</h3>
+                </div>
+                <div id="searchResults">
+                    <p class="text-center">No search performed yet. Upload documents and try searching!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE = window.location.origin;
+        
+        // Global state  
+        let isSearching = false;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            loadSystemStatus();
+            loadDocumentCount();
+        });
+
+        function initializeEventListeners() {
+            // File upload
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            uploadZone.addEventListener('click', () => fileInput.click());
+            uploadZone.addEventListener('dragover', handleDragOver);
+            uploadZone.addEventListener('dragleave', handleDragLeave);
+            uploadZone.addEventListener('drop', handleDrop);
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // AI-only mode - no mode buttons to handle
+
+            // Search
+            const searchBtn = document.getElementById('searchBtn');
+            const queryInput = document.getElementById('queryInput');
+            
+            searchBtn.addEventListener('click', performSearch);
+            queryInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        // File upload handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            uploadFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            uploadFiles(files);
+        }
+
+        async function uploadFiles(files) {
+            const progressDiv = document.getElementById('uploadProgress');
+            progressDiv.innerHTML = '';
+
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const progressItem = document.createElement('div');
+                progressItem.className = 'status-indicator status-loading';
+                progressItem.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Uploading ${file.name}...`;
+                progressDiv.appendChild(progressItem);
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/v1/documents`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        progressItem.className = 'status-indicator status-success';
+                        progressItem.innerHTML = `<i class="fas fa-check"></i> ${file.name} uploaded successfully`;
+                        loadDocumentCount(); // Refresh document count
+                    } else {
+                        const error = await response.json();
+                        progressItem.className = 'status-indicator status-error';
+                        progressItem.innerHTML = `<i class="fas fa-times"></i> Error uploading ${file.name}: ${error.detail}`;
+                    }
+                } catch (error) {
+                    progressItem.className = 'status-indicator status-error';
+                    progressItem.innerHTML = `<i class="fas fa-times"></i> Network error uploading ${file.name}`;
+                }
+            }
+        }
+
+        async function performSearch() {
+            if (isSearching) return;
+
+            const query = document.getElementById('queryInput').value.trim();
+            if (!query) {
+                alert('Please enter a search query');
+                return;
+            }
+
+            isSearching = true;
+            const searchBtn = document.getElementById('searchBtn');
+            const loadingDiv = document.getElementById('searchLoading');
+            const resultsDiv = document.getElementById('searchResults');
+
+            searchBtn.disabled = true;
+            loadingDiv.classList.add('show');
+            resultsDiv.innerHTML = '';
+
+            try {
+                // Use single AI-only endpoint
+                const endpoint = '/api/v1/query';
+                const requestBody = { query };
+
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('API Response:', result); // Debug log
+                    displaySearchResults(result);
+                } else {
+                    const error = await response.json();
+                    console.log('API Error:', error); // Debug log
+                    resultsDiv.innerHTML = `<div class="status-indicator status-error">
+                        <i class="fas fa-exclamation-triangle"></i> Search failed: ${error.detail}
+                    </div>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="status-indicator status-error">
+                    <i class="fas fa-exclamation-triangle"></i> Network error during search
+                </div>`;
+            } finally {
+                isSearching = false;
+                searchBtn.disabled = false;
+                loadingDiv.classList.remove('show');
+            }
+        }
+
+        function displaySearchResults(result) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            console.log('Displaying results:', result); // Debug log
+            
+            if (!result || !result.answer) {
+                resultsDiv.innerHTML = '<p>No results found for your query.</p>';
+                return;
+            }
+
+            let html = '';
+            
+            try {
+                // Show AI answer (this is the main response format from our API)
+                html += `<div class="result-item" style="border-left: 4px solid var(--primary-color);">
+                    <div class="result-header">
+                        <span class="result-title"><i class="fas fa-robot"></i> AI Answer</span>
+                        <span class="result-score">Confidence: ${((result.confidence || 0) * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="result-content" style="white-space: pre-wrap;">${result.answer}</div>
+                </div>`;
+
+                // Show sources if available
+                if (result.sources && result.sources.length > 0) {
+                    html += `<div class="result-item">
+                        <div class="result-header">
+                            <span class="result-title"><i class="fas fa-book"></i> Sources (${result.sources.length})</span>
+                        </div>
+                        <div class="result-content">`;
+                    
+                    result.sources.forEach((source, index) => {
+                        html += `<div style="margin-bottom: 0.5rem;">
+                            <strong>Source ${source.id}:</strong> Document ${source.document_id} 
+                            (Similarity: ${((source.similarity || 0) * 100).toFixed(1)}%)
+                            <br><a href="${source.download_url}" target="_blank">Download Document</a>
+                        </div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                }
+
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Error displaying results:', error);
+                resultsDiv.innerHTML = `<div class="status-indicator status-error">
+                    <i class="fas fa-exclamation-triangle"></i> Error displaying results
+                </div>`;
+            }
+        }
+
+        async function loadSystemStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const status = response.ok ? '🟢 Online' : '🔴 Offline';
+                document.getElementById('status-indicator').textContent = status;
+            } catch (error) {
+                document.getElementById('status-indicator').textContent = '🔴 Offline';
+            }
+        }
+
+        async function loadDocumentCount() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/documents`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('document-count').textContent = data.total || 0;
+                }
+            } catch (error) {
+                document.getElementById('document-count').textContent = '-';
+            }
+        }
+
+        // Load LLM status
+        async function loadLLMStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/llm/status`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('llm-status').textContent = data.available ? '✅ Ready' : '❌ Unavailable';
+                } else {
+                    document.getElementById('llm-status').textContent = '❌ Unavailable';
+                }
+            } catch (error) {
+                document.getElementById('llm-status').textContent = '❌ Unavailable';
+            }
+        }
+
+        // Initialize LLM status
+        loadLLMStatus();
+    </script>
+</body>
+</html>

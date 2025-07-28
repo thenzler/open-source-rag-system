@@ -8,19 +8,34 @@
 
 ## 🏗️ Project Structure
 
-### **Primary Directory**
+### **Production Architecture**
 ```
 C:\Users\THE\open-source-rag-system\
-├── simple_api.py              # Main FastAPI server with LLM integration
-├── ollama_client.py           # Ollama LLM client with robust error handling
-├── simple_requirements.txt    # Python dependencies
-├── simple_frontend.html       # Web interface with AI/vector search modes
-├── start_simple_rag.py       # Startup script
-├── test_simple_rag.py        # Basic tests
-├── test_ollama_integration.py # Comprehensive LLM tests
-├── storage/                  # Document storage (uploads/, processed/)
-├── SIMPLE_RAG_README.md     # User documentation
-└── CLAUDE.md                # This file (AI assistant instructions)
+├── core/                      # Modular FastAPI application
+│   ├── main.py               # FastAPI entry point
+│   ├── ollama_client.py      # Ollama LLM client with robust error handling
+│   ├── routers/              # API endpoints
+│   │   ├── query.py          # Single AI-only query endpoint
+│   │   ├── documents.py      # Document management
+│   │   ├── system.py         # System status
+│   │   └── llm.py           # LLM management
+│   ├── services/             # Business logic
+│   │   ├── simple_rag_service.py  # Core RAG processing
+│   │   ├── document_service.py    # Document processing
+│   │   └── query_service.py       # Query processing
+│   ├── repositories/         # Data access layer
+│   └── di/                  # Dependency injection
+├── run_core.py              # Production startup script
+├── requirements.txt         # Python dependencies
+├── static/index.html        # Web interface (AI answers only)
+├── data/                    # SQLite databases and document storage
+│   ├── rag_database.db      # Main database
+│   ├── audit.db            # Audit logging
+│   └── storage/            # Document storage (uploads/, processed/)
+├── config/llm_config.yaml  # LLM configuration
+├── tests/                   # Comprehensive test suite
+├── .archive/               # Legacy files (safely archived)
+└── CLAUDE.md              # This file (AI assistant instructions)
 ```
 
 ## 🧠 AI Assistant Guidelines
@@ -59,17 +74,21 @@ C:\Users\THE\open-source-rag-system\
 
 ### **Technology Stack**
 
-#### **Backend**
-- **Framework**: FastAPI with comprehensive error handling
-- **LLM Integration**: Ollama client with retry logic and health checks
-- **Vector Search**: Sentence Transformers with cosine similarity
-- **Document Processing**: PyPDF2, python-docx, pandas
-- **Storage**: Local filesystem with proper validation
+#### **Backend Architecture**
+- **Framework**: Modular FastAPI with dependency injection (`core/main.py`)
+- **API Design**: Single AI-only endpoint (`/api/v1/query`) with zero-hallucination protection
+- **LLM Integration**: Ollama client with retry logic and health checks (`core/ollama_client.py`)
+- **RAG Engine**: SimpleRAGService with 4 environment variables for configuration
+- **Vector Search**: FAISS with sentence transformers for high-performance similarity search
+- **Document Processing**: PyPDF2, python-docx, pandas with robust error handling
+- **Storage**: SQLite databases (`data/rag_database.db`, `data/audit.db`) with file system storage
+- **Architecture**: Clean Architecture with repositories, services, and dependency injection
 
 #### **Frontend**
-- **Interface**: Single-page HTML with vanilla JavaScript
-- **Features**: AI/vector search modes, document management, system status
-- **UX**: Progress indicators, helpful error messages, clear feedback
+- **Interface**: Single-page HTML with vanilla JavaScript (`static/index.html`)
+- **Features**: **AI answers only** - single mode with professional zero-hallucination responses
+- **UX**: Source citations, confidence indicators, document download links, system status
+- **Design**: Clean, professional interface optimized for production use
 
 #### **Security & Reliability**
 - **Input Validation**: Filename sanitization, content type checking
@@ -88,29 +107,31 @@ C:\Users\THE\open-source-rag-system\
 
 ## 📋 Current Development Status
 
-### **✅ Completed Features**
-- Core RAG functionality with document upload and querying
-- Ollama LLM integration with fallback to vector search
-- Comprehensive file upload validation and size limits
-- Request validation and sanitization (XSS/injection prevention)
-- Rate limiting on all endpoints
-- Graceful error handling with cleanup
-- Web interface with AI/vector search modes
-- Robust Ollama connection handling with retries
+### **✅ Production-Ready Features**
+- ✅ **Modular Architecture**: Clean FastAPI application with dependency injection
+- ✅ **Single AI-Only Endpoint**: `/api/v1/query` with zero-hallucination protection
+- ✅ **Zero-Hallucination System**: Professional RAG with source citations and confidence scoring
+- ✅ **SimpleRAGService**: Clean, maintainable RAG engine with 4 environment variables
+- ✅ **Fine-tuned arlesheim-german model** for municipality-specific responses
+- ✅ **Document download links** with secure `/api/v1/documents/{id}/download` endpoint
+- ✅ **Production Frontend**: Single-mode interface with AI answers only
+- ✅ **SQLite Storage**: Persistent databases with FAISS vector search
+- ✅ **Repository Organization**: Clean codebase with legacy files safely archived
+- ✅ **Comprehensive Testing**: Test suite with production validation
+- ✅ **Error Handling**: Graceful failure handling with proper cleanup
+- ✅ **Security Features**: Input validation, rate limiting, XSS prevention
 
-### **🔄 In Progress**
-- Startup dependency checks
-- One-click setup script creation
-- Advanced security measures
-- Performance optimizations
+### **🔄 Performance Optimization**
+- ⏳ **Response Time**: AI generation speed optimization for local machines
+- ⏳ **Caching**: Query result caching for repeated questions
+- ⏳ **Memory Management**: Optimize memory usage for large document sets
 
-### **📋 Remaining MVP Tasks**
-1. **Startup Checks**: Verify all dependencies on startup
-2. **Setup Script**: One-click installation and configuration
-3. **Security Hardening**: Optional authentication, CORS configuration
-4. **Performance**: Caching, memory optimization
-5. **Documentation**: Troubleshooting guides, setup instructions
-6. **Testing**: Comprehensive validation under various conditions
+### **📋 Future Enhancements** (Post-MVP)
+1. **Authentication**: Optional user authentication system
+2. **Advanced Monitoring**: Detailed performance metrics and alerts
+3. **Multi-Model Support**: Additional LLM model options
+4. **API Extensions**: Additional endpoints for specific use cases
+5. **Deployment Tools**: Docker containers and cloud deployment scripts
 
 ## 🎯 Success Criteria for MVP
 
@@ -140,33 +161,38 @@ C:\Users\THE\open-source-rag-system\
 
 ## 🔧 Common Development Tasks
 
-### **Running the System**
+### **Running the Production System**
 ```bash
-# Start the RAG system
-python simple_api.py
-
-# Or use startup script
-python start_simple_rag.py
+# Start the production RAG system
+python run_core.py
 
 # Test the system
 python test_simple_rag.py
 python test_ollama_integration.py
+python -m pytest tests/
+
+# Check system status
+curl http://localhost:8000/api/v1/status
+curl http://localhost:8000/api/v1/health
 ```
 
 ### **Key Configuration Settings**
 ```python
-# In simple_api.py
-MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
-MAX_TOTAL_DOCUMENTS = 1000
-USE_LLM_DEFAULT = True
-MAX_CONTEXT_LENGTH = 4000
+# SimpleRAGService Environment Variables (Production)
+RAG_SIMILARITY_THRESHOLD=0.3    # Similarity threshold for document matching
+RAG_MAX_RESULTS=5               # Maximum number of source documents
+RAG_REQUIRE_SOURCES=true        # Require source citations (zero-hallucination)
+RAG_MAX_QUERY_LENGTH=500        # Maximum query length for validation
 
-# Rate limiting
-RATE_LIMITS = {
-    "upload": 10,  # per minute
-    "query": 60,   # per minute  
-    "status": 20   # per minute
-}
+# LLM Configuration (config/llm_config.yaml)
+default_model: arlesheim-german  # Fine-tuned model for municipality
+timeout: 300                     # LLM timeout in seconds
+max_retries: 3                  # Retry attempts for failed requests
+
+# Database Configuration (automatic)
+database_path: data/rag_database.db    # Main SQLite database
+audit_database: data/audit.db          # Audit logging database
+storage_path: data/storage/             # Document storage directory
 ```
 
 ### **Error Handling Patterns**
@@ -221,31 +247,86 @@ except Exception as e:
 - **Testing**: Validate edge cases and error conditions
 - **Performance**: Ensure system scales to 100+ documents
 
+## 🏛️ Fine-tuned Arlesheim Model
+
+### **Model Overview**
+The system now uses a **fine-tuned arlesheim-german model** optimized for municipality-specific responses in German.
+
+### **Model Features**
+- **Professional German responses** (no fake Swiss German)
+- **Document download links** instead of full text dumps
+- **Municipality-specific knowledge** for Arlesheim
+- **Consistent formatting** with download references
+
+### **Model Management**
+```bash
+# Rebuild the model after changes
+cd training_data/arlesheim_german
+ollama create arlesheim-german:latest -f Modelfile_final
+
+# Test the model directly
+ollama run arlesheim-german:latest "Frage über Dokumente"
+
+# Check if model is available
+ollama list | grep arlesheim
+```
+
+### **Model Configuration**
+- **Base Model**: mistral:latest
+- **Temperature**: 0.2 (consistent responses)
+- **Context Length**: 32768 tokens
+- **System Prompt**: Located in `Modelfile_final`
+
+### **Response Format**
+The model now returns:
+1. **Brief content summary** (200 chars max)
+2. **Download URL**: `/api/v1/documents/{document_id}/download`
+3. **Professional German** without fake dialect
+
 ## 📞 Quick Reference
 
-### **File Locations**
-- Main API: `simple_api.py`
-- LLM Client: `ollama_client.py`
-- Frontend: `simple_frontend.html`
-- Tests: `test_*.py`
-- Storage: `storage/uploads/` and `storage/processed/`
+### **File Locations (Production)**
+- **Main API**: `core/main.py` - FastAPI application entry point
+- **Production Startup**: `run_core.py` - Production server startup script
+- **LLM Client**: `core/ollama_client.py` - Ollama integration with retry logic
+- **RAG Engine**: `core/services/simple_rag_service.py` - Core RAG processing logic
+- **Query Router**: `core/routers/query.py` - Single `/api/v1/query` endpoint
+- **Frontend**: `static/index.html` - Production web interface (AI answers only)
+- **Tests**: `tests/` directory and `test_*.py` files in root
+- **Storage**: `data/storage/uploads/` and `data/storage/processed/`
+- **Databases**: `data/rag_database.db` and `data/audit.db`
+- **Configuration**: `config/llm_config.yaml` - LLM model settings
+- **Legacy Files**: `.archive/` directory - safely archived old code
 
-### **Key Functions**
-- Document upload: `upload_document()` in simple_api.py
-- Query processing: `query_documents_enhanced()` in simple_api.py
-- LLM integration: `generate_answer()` in ollama_client.py
-- Error handling: Various validation functions throughout
+### **Key API Endpoints**
+- **Main Query**: `POST /api/v1/query` - Single AI-only endpoint with zero-hallucination
+- **Document Upload**: `POST /api/v1/documents` - Upload and process documents
+- **Document Download**: `GET /api/v1/documents/{id}/download` - Secure document download
+- **System Status**: `GET /api/v1/status` - System health and configuration
+- **Health Check**: `GET /api/v1/health` - Simple health check endpoint
+
+### **Key Services & Functions**
+- **RAG Processing**: `SimpleRAGService.answer_query()` - Main RAG processing logic
+- **Document Management**: `DocumentService` in `core/services/document_service.py`
+- **LLM Integration**: `OllamaClient.generate_answer()` - LLM response generation
+- **Vector Search**: FAISS-based similarity search in repositories
+- **Error Handling**: Comprehensive error handling throughout all services
 
 ### **Common Issues & Solutions**
-- **Ollama not available**: Check if service running, model downloaded
-- **File upload fails**: Verify file size, type, permissions
-- **No search results**: Ensure documents uploaded and processed
-- **Memory issues**: Check document count, restart if needed
+- **System won't start**: Check `python run_core.py` - verify all dependencies installed
+- **Ollama not available**: Check if Ollama service running, model downloaded
+- **arlesheim-german model not found**: Rebuild with `ollama create arlesheim-german:latest -f data/training_data/arlesheim_german/Modelfile_final`
+- **File upload fails**: Check file size limits, storage permissions, database connectivity
+- **No search results**: Ensure documents uploaded, processed, and indexed in FAISS
+- **Slow AI responses**: Performance optimization needed - consider model quantization or caching
+- **Download links not working**: Verify document exists in database and `/api/v1/documents/{id}/download` endpoint
+- **Database errors**: Check SQLite database files in `data/` directory are accessible
+- **Legacy code confusion**: Old code is safely archived in `.archive/` - use production code in `core/`
 
 ---
 
-**Remember**: This is an MVP focused on reliability. Every error is a lost user. Make it work perfectly for the core use case before adding complexity.
+**Remember**: This is now a production-ready system with modular architecture. The core mission remains: reliable RAG system with zero-hallucination protection and professional AI answers.
 
-**Last Updated**: December 2024
-**Version**: 1.0-MVP
-**Focus**: Production readiness and zero-crash reliability
+**Last Updated**: January 2025 
+**Version**: 2.0-Production
+**Focus**: Production-ready modular architecture with single AI-only endpoint and organized codebase

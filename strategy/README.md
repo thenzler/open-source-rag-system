@@ -7,6 +7,7 @@ This directory contains strategic planning documents for the Municipal RAG Syste
 ### Business Strategy
 - **[BUSINESS_STRATEGY.md](BUSINESS_STRATEGY.md)** - Complete business plan, market analysis, and go-to-market strategy
 - **[MUNICIPAL_USE_CASES.md](MUNICIPAL_USE_CASES.md)** - 150 comprehensive use cases for municipal virtual infodesk
+- **[TWO_YEAR_PLAN.md](TWO_YEAR_PLAN.md)** - Comprehensive 2-year strategic plan (2025-2027)
 
 ### Technical Planning  
 - **[TECHNICAL_ROADMAP.md](TECHNICAL_ROADMAP.md)** - Technical development roadmap and architecture evolution
