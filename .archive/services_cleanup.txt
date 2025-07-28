@@ -1,0 +1,13 @@
+Files that need to be removed from services/ directory:
+- async_processor.py (archived)
+- hybrid_storage.py (archived)
+- llm_manager.py (archived)
+- memory_safe_storage.py (archived)
+- persistent_storage.py (archived)
+- vector_search.py (archived)
+- vector_store_db.py (archived)
+
+Files to keep in services/ directory:
+- __init__.py (updated)
+- validation.py (essential for security)
+- document_manager.py (essential for document handling)

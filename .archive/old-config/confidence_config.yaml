@@ -1,0 +1,173 @@
+# Confidence System Configuration
+# This file controls the intelligent multi-tier confidence system
+# All features can be disabled or customized per deployment
+
+# === CORE SETTINGS ===
+enabled: true  # Set to false to use simple threshold-based system
+simple_threshold: 0.4  # Used when intelligent system is disabled
+
+# === CONFIDENCE TIERS ===
+# Base thresholds - can be overridden per deployment
+base_thresholds:
+  high_threshold: 0.65      # AI response with full citations
+  medium_threshold: 0.40    # Vector results + limited AI  
+  low_threshold: 0.25       # Document suggestions only
+  refusal_threshold: 0.20   # Below this = refusal
+
+# === QUERY ANALYSIS ===
+query_analysis:
+  enabled: true  # Set to false to disable intelligent query categorization
+  
+  # Domain-specific terms (fully customizable)
+  domain_terms:
+    # Municipal/waste management (current domain)
+    municipal:
+      terms: ['arlesheim', 'gemeinde', 'abfall', 'entsorgung', 'müll', 'recycling', 'container', 'gewerbe', 'kehricht']
+      adjustment: -0.08  # Lower thresholds (more permissive)
+      priority: 2
+    
+    # Add your own domains here
+    legal:
+      terms: ['vertrag', 'klage', 'recht', 'gesetz', 'paragraph', 'gericht', 'anwalt']
+      adjustment: -0.05
+      priority: 3
+      enabled: false  # Disabled by default
+    
+    medical:
+      terms: ['patient', 'diagnose', 'behandlung', 'medikament', 'therapie', 'symptom']
+      adjustment: -0.06
+      priority: 3  
+      enabled: false  # Disabled by default
+    
+    technical:
+      terms: ['software', 'hardware', 'system', 'konfiguration', 'installation', 'fehler']
+      adjustment: -0.04
+      priority: 3
+      enabled: false  # Disabled by default
+
+  # Factual question indicators (universal)
+  factual_indicators:
+    terms: ['welche', 'wie', 'was', 'wann', 'wo', 'wer', 'regeln', 'kosten', 'gebühren', 'prozess', 'verfahren']
+    adjustment: -0.03
+    enabled: true
+
+  # Irrelevant/unrelated topics (customizable per domain)
+  irrelevant_topics:
+    # Current irrelevant topics for municipal domain
+    space_science:
+      terms: ['raumfahrt', 'weltraum', 'satellit', 'rakete', 'astronaut']
+      adjustment: 0.15
+      enabled: true
+    
+    nuclear:
+      terms: ['kernreaktor', 'atom', 'nuklear', 'radioaktiv', 'uran']
+      adjustment: 0.15  
+      enabled: true
+    
+    # Add more irrelevant categories as needed
+    entertainment:
+      terms: ['film', 'musik', 'spiel', 'sport', 'fernsehen']
+      adjustment: 0.10
+      enabled: false  # Disabled by default
+  
+  # Vague queries (universal) 
+  vague_indicators:
+    terms: ['allgemein', 'übersicht', 'alles über', 'erzähl mir', 'erkläre alles']
+    adjustment: 0.05
+    enabled: true
+
+# === EXTERNAL KNOWLEDGE DETECTION ===
+external_knowledge:
+  enabled: true  # Set to false to disable external knowledge blocking
+  
+  # Time-sensitive patterns
+  temporal:
+    patterns: ['\\b(heute|morgen|gestern|aktuell|derzeit|momentan|jetzt|gerade)\\b']
+    reason: 'aktuelle Informationen'
+    category: 'Aktuelle Ereignisse'
+    enabled: true
+    
+  # Weather patterns  
+  weather:
+    patterns: ['\\b(wetter|temperatur|regen|schnee|sonne|bewölkt|sturm|wind)\\b']
+    reason: 'Wetterinformationen'
+    category: 'Wetter'
+    enabled: true
+    
+  # Financial/market data
+  financial:
+    patterns: ['\\b(börse|aktien|kurs|dax|bitcoin|kryptowährung|wechselkurs)\\b']
+    reason: 'Finanzmarktdaten'
+    category: 'Finanzen'
+    enabled: true
+    
+  # Political information (beyond local)
+  political:
+    patterns: ['\\b(präsident|kanzler|minister|bundestag|parlament|wahlen)\\b']
+    reason: 'politische Informationen'
+    category: 'Politik'
+    enabled: true
+    
+  # Sports and entertainment
+  sports:
+    patterns: ['\\b(fußball|basketball|tennis|olympia|weltmeisterschaft|liga)\\b']
+    reason: 'Sportinformationen'  
+    category: 'Sport'
+    enabled: false  # Disabled by default
+    
+  # Technology/internet services
+  technology:
+    patterns: ['\\b(google|facebook|twitter|instagram|youtube|amazon|ebay)\\b']
+    reason: 'Internet-Dienste'
+    category: 'Technologie'
+    enabled: false  # Disabled by default
+
+# === RESPONSE VALIDATION ===
+response_validation:
+  enabled: true  # Set to false to disable response validation
+  content_similarity_threshold: 0.3
+  require_source_citations: true
+  max_response_length: 2000
+
+# === DEPLOYMENT PROFILES ===
+# Quick profiles for common deployment scenarios
+profiles:
+  # Strict mode - maximum safety
+  strict:
+    base_thresholds:
+      high_threshold: 0.8
+      medium_threshold: 0.6
+      low_threshold: 0.4
+      refusal_threshold: 0.3
+    external_knowledge:
+      enabled: true
+    response_validation:
+      content_similarity_threshold: 0.5
+      
+  # Permissive mode - more answers, less strict
+  permissive:
+    base_thresholds:
+      high_threshold: 0.5
+      medium_threshold: 0.3
+      low_threshold: 0.15
+      refusal_threshold: 0.1
+    external_knowledge:
+      enabled: false
+    response_validation:
+      content_similarity_threshold: 0.2
+      
+  # Simple mode - basic threshold only
+  simple:
+    enabled: false
+    simple_threshold: 0.3
+    query_analysis:
+      enabled: false
+    external_knowledge:
+      enabled: false
+
+# === LOGGING & MONITORING ===
+logging:
+  log_confidence_decisions: true
+  log_query_analysis: true
+  log_threshold_adjustments: true
+  audit_external_knowledge_blocks: true

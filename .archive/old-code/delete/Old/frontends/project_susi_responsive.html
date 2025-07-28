@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project SUSI - Smart Universal Search Intelligence</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4CAF50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --border-color: #2a3f5f;
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-card: linear-gradient(145deg, #16213e 0%, #0f1b2e 100%);
+            --gradient-button: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
+        }
+
+        .header {
+            background: var(--gradient-main);
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--gradient-card);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-main);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Progress Components */
+        .upload-progress, .search-progress {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            animation: slideIn 0.3s ease;
+        }
+
+        .progress-header, .search-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .search-query {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-style: italic;
+            color: var(--primary-color);
+            margin-left: auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-left: auto;
+        }
+
+        .file-status {
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .current-file {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            animation: slideInLeft 0.3s ease;
+        }
+
+        .file-result {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .file-result.success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #81c784;
+        }
+
+        .file-result.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #e57373;
+        }
+
+        .search-steps {
+            margin: 1rem 0;
+        }
+
+        .step-indicator {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+        }
+
+        .step-progress {
+            height: 100%;
+            background: var(--gradient-main);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .step-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .search-animation {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .search-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--primary-color);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent-color);
+            background: rgba(240, 147, 251, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--accent-color);
+            background: rgba(240, 147, 251, 0.2);
+            transform: scale(1.05);
+        }
+
+        .upload-zone.processing {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+            pointer-events: none;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover .upload-icon {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .file-input {
+            margin: 1.5rem 0;
+        }
+
+        .file-input input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient-button);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn {
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 4rem 1.5rem 2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient-button);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-modes {
+            display: flex;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-group:hover {
+            transform: scale(1.05);
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 0.8rem;
+            transform: scale(1.2);
+        }
+
+        .radio-group label {
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            color: var(--primary-color);
+        }
+
+        .status {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #81c784;
+        }
+
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #e57373;
+        }
+
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: #ffb74d;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-container {
+            margin-top: 2rem;
+        }
+
+        .answer-card {
+            background: var(--gradient-card);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease;
+        }
+
+        .typing-indicator {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .typing-indicator.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .search-modes {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Project SUSI</div>
+            <div class="tagline">Smart Universal Search Intelligence</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard">
+            <!-- Upload Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-cloud-upload-alt card-icon"></i>
+                    <h2 class="card-title">Document Upload</h2>
+                </div>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <h3>Drop files here or click to upload</h3>
+                    <p>Supports PDF, Word, Text, and CSV files</p>
+                    
+                    <div class="file-input">
+                        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.csv" multiple>
+                        <label for="fileInput" class="file-input-label">
+                            <i class="fas fa-plus"></i> Choose Files
+                        </label>
+                    </div>
+                    
+                    <button class="btn" onclick="uploadFiles()">
+                        <i class="fas fa-upload"></i> Upload Documents
+                    </button>
+                </div>
+                
+                <div id="uploadStatus"></div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-search card-icon"></i>
+                    <h2 class="card-title">Intelligent Search</h2>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" 
+                           placeholder="Ask anything about your documents..." 
+                           onkeypress="handleSearchKeyPress(event)"
+                           oninput="handleTyping()">
+                    <div class="typing-indicator" id="typingIndicator">Thinking...</div>
+                    <button class="search-btn" onclick="searchDocuments()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="search-modes">
+                    <div class="radio-group">
+                        <input type="radio" name="searchMode" value="enhanced" id="enhanced" checked>
+                        <label for="enhanced"><i class="fas fa-robot"></i> AI Generated Answer</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="searchMode" value="vector" id="vector">
+                        <label for="vector"><i class="fas fa-file-text"></i> Document Chunks</label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="btn" onclick="checkSystemStatus()" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
+                        <i class="fas fa-heartbeat"></i> System Status
+                    </button>
+                    <button class="btn" onclick="loadDocuments()" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <div id="systemStatus"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="result-container" id="searchResults"></div>
+
+        <!-- Documents Section -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-folder-open card-icon"></i>
+                <h2 class="card-title">Document Library</h2>
+            </div>
+            <div id="documentsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Loading documents...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+        let typingTimer;
+
+        // Initialize drag and drop
+        function initializeDragAndDrop() {
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => uploadZone.classList.add('dragover'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => uploadZone.classList.remove('dragover'), false);
+            });
+
+            uploadZone.addEventListener('drop', handleDrop, false);
+            uploadZone.addEventListener('click', () => fileInput.click());
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                uploadFiles();
+            }
+        }
+
+        // Handle typing indicator
+        function handleTyping() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.classList.add('show');
+            
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1000);
+        }
+
+        // Enhanced upload with real-time progress
+        async function uploadFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            const statusDiv = document.getElementById('uploadStatus');
+            const uploadZone = document.getElementById('uploadZone');
+            
+            if (files.length === 0) {
+                showStatus('<i class="fas fa-exclamation-triangle"></i> Please select files to upload', 'error', statusDiv);
+                return;
+            }
+
+            uploadZone.classList.add('processing');
+
+            statusDiv.innerHTML = `
+                <div class="upload-progress">
+                    <div class="progress-header">
+                        <i class="fas fa-upload"></i>
+                        <span>Uploading ${files.length} file(s)...</span>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="file-status"></div>
+                </div>
+            `;
+
+            const progressFill = statusDiv.querySelector('.progress-fill');
+            const progressText = statusDiv.querySelector('.progress-text');
+            const fileStatus = statusDiv.querySelector('.file-status');
+            
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const progressPercent = Math.round(((i + 1) / files.length) * 100);
+                
+                progressFill.style.width = `${progressPercent}%`;
+                progressText.textContent = `${progressPercent}%`;
+                
+                fileStatus.innerHTML = `
+                    <div class="current-file">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Processing: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)
+                    </div>
+                `;
+                
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(`${API_BASE}/api/v1/documents`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                    
+                    if (response.ok) {
+                        successCount++;
+                        fileStatus.innerHTML += `
+                            <div class="file-result success">
+                                <i class="fas fa-check-circle"></i>
+                                <strong>${file.name}</strong> - Uploaded successfully (${duration}s)
+                            </div>
+                        `;
+                    } else {
+                        errorCount++;
+                        fileStatus.innerHTML += `
+                            <div class="file-result error">
+                                <i class="fas fa-times-circle"></i>
+                                <strong>${file.name}</strong> - Failed: ${result.detail || 'Unknown error'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    errorCount++;
+                    fileStatus.innerHTML += `
+                        <div class="file-result error">
+                            <i class="fas fa-times-circle"></i>
+                            <strong>${file.name}</strong> - Network error: ${error.message}
+                        </div>
+                    `;
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
+            // Final results
+            setTimeout(() => {
+                uploadZone.classList.remove('processing');
+                
+                if (successCount > 0 && errorCount === 0) {
+                    statusDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i>
+                            All ${successCount} document(s) uploaded successfully!
+                            <button class="btn" onclick="this.parentElement.style.display='none'" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem;">Dismiss</button>
+                        </div>
+                    `;
+                } else if (successCount > 0 && errorCount > 0) {
+                    statusDiv.innerHTML = `
+                        <div class="status warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            ${successCount} uploaded, ${errorCount} failed. Check details above.
+                            <button class="btn" onclick="this.parentElement.style.display='none'" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem;">Dismiss</button>
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="status error">
+                            <i class="fas fa-times-circle"></i>
+                            All uploads failed. Check your connection and try again.
+                            <button class="btn" onclick="this.parentElement.style.display='none'" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem;">Dismiss</button>
+                        </div>
+                    `;
+                }
+                
+                loadDocuments();
+            }, 1000);
+
+            fileInput.value = '';
+        }
+
+        // Enhanced search with real-time progress
+        async function searchDocuments() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim();
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (!query) {
+                showSearchResults('<i class="fas fa-exclamation-triangle"></i> Please enter a search query', 'error');
+                return;
+            }
+
+            const searchMode = document.querySelector('input[name="searchMode"]:checked').value;
+            const isEnhanced = searchMode === 'enhanced';
+            
+            const steps = isEnhanced ? [
+                'Analyzing your question...',
+                'Searching document database...',
+                'Retrieving relevant content...',
+                'Generating AI response...',
+                'Formatting results...'
+            ] : [
+                'Searching document database...',
+                'Finding relevant chunks...',
+                'Calculating similarities...',
+                'Formatting results...'
+            ];
+            
+            let currentStep = 0;
+            
+            resultsDiv.innerHTML = `
+                <div class="search-progress">
+                    <div class="search-header">
+                        <i class="fas fa-search"></i>
+                        <span class="search-title">${isEnhanced ? 'AI-Powered Search' : 'Document Search'}</span>
+                        <span class="search-query">"${query}"</span>
+                    </div>
+                    <div class="search-steps">
+                        <div class="step-indicator">
+                            <div class="step-progress"></div>
+                        </div>
+                        <div class="step-text">${steps[0]}</div>
+                    </div>
+                    <div class="search-animation">
+                        <div class="search-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const stepProgress = resultsDiv.querySelector('.step-progress');
+            const stepText = resultsDiv.querySelector('.step-text');
+            
+            const stepInterval = setInterval(() => {
+                currentStep++;
+                if (currentStep < steps.length) {
+                    const progressPercent = (currentStep / steps.length) * 100;
+                    stepProgress.style.width = `${progressPercent}%`;
+                    stepText.textContent = steps[currentStep];
+                }
+            }, isEnhanced ? 800 : 400);
+
+            try {
+                const startTime = Date.now();
+                const endpoint = isEnhanced ? 
+                    `${API_BASE}/api/v1/query/optimized` : 
+                    `${API_BASE}/api/v1/query`;
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: query,
+                        top_k: 5,
+                        use_llm: isEnhanced
+                    })
+                });
+
+                clearInterval(stepInterval);
+                
+                const result = await response.json();
+                const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                
+                if (response.ok) {
+                    result.actual_processing_time = duration;
+                    displayResults(result, isEnhanced);
+                } else {
+                    showSearchResults(`<i class="fas fa-times-circle"></i> Error: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                clearInterval(stepInterval);
+                showSearchResults(`<i class="fas fa-times-circle"></i> Network Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Display results with enhanced formatting
+        function displayResults(result, isEnhanced) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            let html = `
+                <div class="answer-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <i class="fas fa-${isEnhanced ? 'robot' : 'search'}"></i>
+                        <h3>${isEnhanced ? 'AI Generated Answer' : 'Search Results'}</h3>
+                        <span style="margin-left: auto; color: var(--text-secondary); font-size: 0.9rem;">
+                            ${result.actual_processing_time}s
+                        </span>
+                    </div>
+            `;
+
+            if (isEnhanced && (result.response || result.answer)) {
+                html += `
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
+                        ${result.response || result.answer}
+                    </div>
+                `;
+            }
+
+            const sources = result.context || result.sources || result.results || [];
+            if (sources && sources.length > 0) {
+                html += `
+                    <h4 style="margin: 1rem 0;">📚 Sources (${sources.length})</h4>
+                `;
+                
+                sources.forEach((source, index) => {
+                    const similarity = source.similarity_score || source.score || 0;
+                    html += `
+                        <div style="background: var(--gradient-card); padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--primary-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <strong>${source.source_document}</strong>
+                                <span style="color: var(--primary-color);">${(similarity * 100).toFixed(1)}%</span>
+                            </div>
+                            <div style="color: var(--text-secondary);">${source.content}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        // Enhanced document loading
+        async function loadDocuments() {
+            const documentsDiv = document.getElementById('documentsList');
+            
+            documentsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Loading document library...</span>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/documents`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    setTimeout(() => {
+                        displayDocuments(result.documents);
+                    }, 300);
+                } else {
+                    documentsDiv.innerHTML = `
+                        <div class="status error">
+                            <i class="fas fa-times-circle"></i> 
+                            Error loading documents
+                            <button class="btn" onclick="loadDocuments()" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem;">Retry</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                documentsDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i> 
+                        Network error: ${error.message}
+                        <button class="btn" onclick="loadDocuments()" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 0.8rem;">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Display documents with summary
+        function displayDocuments(documents) {
+            const documentsDiv = document.getElementById('documentsList');
+            
+            if (documents.length === 0) {
+                documentsDiv.innerHTML = `
+                    <div class="status" style="text-align: center;">
+                        <i class="fas fa-folder-open"></i> 
+                        <h3>No documents yet</h3>
+                        <p>Upload some documents to get started!</p>
+                        <button class="btn" onclick="document.getElementById('fileInput').click()" style="margin-top: 1rem;">
+                            <i class="fas fa-plus"></i> Upload Documents
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalSize = documents.reduce((sum, doc) => sum + doc.size, 0);
+            const totalChunks = documents.reduce((sum, doc) => sum + (doc.chunks_count || 0), 0);
+            
+            let html = `
+                <div style="background: var(--gradient-card); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <h4 style="margin: 0; color: var(--text-primary);">📚 Document Library</h4>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">
+                        ${documents.length} documents • ${(totalSize / 1024 / 1024).toFixed(1)} MB • ${totalChunks} chunks
+                    </p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+            `;
+            
+            documents.forEach((doc, index) => {
+                const fileIcon = getFileIcon(doc.filename);
+                const sizeKB = (doc.size / 1024).toFixed(1);
+                
+                html += `
+                    <div style="background: var(--gradient-card); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color); animation: slideIn 0.3s ease ${index * 0.1}s both;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <i class="${fileIcon}"></i>
+                                    <strong>${doc.filename.length > 20 ? doc.filename.substring(0, 17) + '...' : doc.filename}</strong>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                                    <div>${sizeKB} KB • ${doc.chunks_count || 0} chunks</div>
+                                    <div style="color: var(--success-color);">${doc.status}</div>
+                                </div>
+                            </div>
+                            <button onclick="deleteDocument(${doc.id}, '${doc.filename}')" 
+                                    style="background: var(--error-color); color: white; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            documentsDiv.innerHTML = html;
+        }
+
+        // Enhanced delete with feedback
+        async function deleteDocument(documentId, filename) {
+            if (!confirm(`Delete "${filename}"?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/documents/${documentId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadDocuments();
+                } else {
+                    alert('Error deleting document');
+                }
+            } catch (error) {
+                alert('Network error deleting document');
+            }
+        }
+
+        // System status check
+        async function checkSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            statusDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Checking system status...</span>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/status`);
+                const status = await response.json();
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = `
+                        <div class="status success">
+                            <i class="fas fa-check-circle"></i>
+                            System is healthy • ${status.statistics?.documents_uploaded || 0} documents • ${status.statistics?.total_chunks || 0} chunks
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="status error">
+                            <i class="fas fa-times-circle"></i>
+                            System error
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="status error">
+                        <i class="fas fa-times-circle"></i>
+                        Cannot connect to server
+                    </div>
+                `;
+            }
+        }
+
+        // Helper functions
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'pdf': 'fas fa-file-pdf',
+                'docx': 'fas fa-file-word',
+                'doc': 'fas fa-file-word',
+                'txt': 'fas fa-file-alt',
+                'csv': 'fas fa-file-csv'
+            };
+            return icons[extension] || 'fas fa-file';
+        }
+
+        function showStatus(message, type, container) {
+            container.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showSearchResults(message, type) {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function handleSearchKeyPress(event) {
+            if (event.key === 'Enter') {
+                searchDocuments();
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDragAndDrop();
+            loadDocuments();
+            checkSystemStatus();
+        });
+    </script>
+</body>
+</html>

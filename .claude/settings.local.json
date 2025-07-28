@@ -14,7 +14,8 @@
       "Bash(npm start)",
       "Bash(npm install)",
       "Bash(npm install:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(git merge:*)"
     ],
     "deny": []
   }
