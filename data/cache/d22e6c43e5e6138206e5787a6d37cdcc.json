@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-07-28T17:48:03.857024",
+  "query": "Wie entsorge ich organische Abfälle?",
+  "context_hash": "b618274a9dca8244cdf9b3c6534ff2e5",
+  "response": {
+    "text": "Der Antworten auf die Frage \"Was gehört in den Bioabfall-Container?\" ist:\n\n• Obst, Früchte, Salat, Gemüses, Schnittblumen, Laub, Sträucher, Rasenschnitt, Wuersst, Fleisch, Fisch, Knochen, Brot, Teigwaren, Kaffee- und Teesaetz (mit Filter/Beutele), Eier samt Eierschaeln und -karton, Getreide- und Hülsenfrüchte.\n\nDas entsorgene Abfall ist Bioabfälle richtig organischern und Gelddarmen. Separaet gesammelter Bioabfall entlastet die Haushaltskaassen und ist günstiger als die Entsorgung im Gebührensack. Organisches Material ist ein kostbarer Rohstoff.\n\n📚 Quellen:\n[Quelle 1] Dokument 44 - /api/v1/documents/44/download\n[Quelle 2] Dokument 46 - /api/v1/documents/46/download\n[Quelle 3] Dokument 42 - /api/v1/documents/42/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 44,
+        "similarity": 0.3816280961036682,
+        "download_url": "/api/v1/documents/44/download"
+      },
+      {
+        "id": 2,
+        "document_id": 46,
+        "similarity": 0.3702360987663269,
+        "download_url": "/api/v1/documents/46/download"
+      },
+      {
+        "id": 3,
+        "document_id": 42,
+        "similarity": 0.3518824577331543,
+        "download_url": "/api/v1/documents/42/download"
+      }
+    ],
+    "confidence": 0.3816280961036682,
+    "debug_context": "[Quelle 1]: Bei Festveranstaltungen entstehen am meisten Abfälle durch den Gebrauch von Einwegverpackungen (z. B. Plastikbecher oder Kartonteller) für den Konsum von Essen und Trinken. Welche Massnahmen ergreifen Sie zur Abfallverminderung (System-Beschreibung)? Beispiel: Abgabe von Getränken in Mehrwegbechern mit Pfand à CHF 2.00. Wurst im Brot mit Servietten ohne Kartonteller. 3 3. Abfallaufkommen und –verwertung Damit die Wertstoffe wiederverwertet werden können, müssen sie separat gesammelt ...",
+    "debug_prompt": "Based on these documents about bio waste disposal, answer the question:\n\nDOCUMENTS:\n\nWas gehört in den Bioabfall-Container?\nDas wird gesammelt:\n• Obst, Früchte, Salat, Gemüse\n• Schnittblumen, Laub, Sträucher, Rasenschnitt  \n• Wurst, Fleisch, Fisch, Knochen\n• Brot, Teigwaren\n• Kaffee- und Teesatz (mit Filter/Beutel)\n• Eier samt Eierschalen und -karton\n• Getreide- und Hülsenfrüchte\n\nEntsorgung organischer Abfälle:\nBioabfälle richtig entsorgen und Geld sparen. Separat gesammelter Bioabfall \nentlast..."
+  }
+}

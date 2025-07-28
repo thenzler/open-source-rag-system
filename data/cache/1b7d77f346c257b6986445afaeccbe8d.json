@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-07-28T17:58:01.817187",
+  "query": "Was gehört in den Bioabfall?",
+  "context_hash": "767413262a017684c6aab9eae61f951d",
+  "response": {
+    "text": "Das entsorgte Bioabfall wird komplett, wobei Obst, Früchte, Salat, Gemüses, Schnittblumen, Laub, Sträucher, Rasenschnitt, Wuersst, Fleisch, Fisch, Knochen und Brot, Teigwaren, Kaffee- und Teesaetz (mit Filter/Beutele) sowie Eier, Getreide- und Hülsenfrüchte entsorgt werden. Die Entsorgung organisiert Abfälle wird als richtiges Entsorgungsverfahren angesehen und ist günstiger als die Entsorgung im Gebührensaß. Organisches Material ist ein kostbarer Rohsstoff.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 46 - /api/v1/documents/46/download\n[Quelle 3] Dokument 42 - /api/v1/documents/42/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.43673211336135864,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 46,
+        "similarity": 0.32803916931152344,
+        "download_url": "/api/v1/documents/46/download"
+      },
+      {
+        "id": 3,
+        "document_id": 42,
+        "similarity": 0.3147313892841339,
+        "download_url": "/api/v1/documents/42/download"
+      }
+    ],
+    "confidence": 0.43673211336135864,
+    "debug_context": "[Quelle 1]: Was gehört in den Bioabfall-Container?\nDas wird gesammelt!\n• Obst, Früchte, Salat, Gemüse\n• Schnittblumen, Laub, Sträucher, Rasen -\nschnitt\n• Wurst, Fleisch, Fisch, Knochen\n• Brot\n• Kaffee- und Teesatz (mit Filter/Beutel)\n• Eier samt Eierschalen und -karton\n• Teigwaren\n• Getreide- und Hülsenfrüchte\n• Mehl, Zucker, Kleinmengen Salz, Gewürze\n• Kochfett/alle Arten von Saucen\n• Stallmist von Kaninchen, Hamster\n• Erde aus Blumenkisten\n• Kartoffelprodukte (Pommes Frites, Chips,  \nKartoffel...",
+    "debug_prompt": "Based on these documents about bio waste disposal, answer the question:\n\nDOCUMENTS:\n\nWas gehört in den Bioabfall-Container?\nDas wird gesammelt:\n• Obst, Früchte, Salat, Gemüse\n• Schnittblumen, Laub, Sträucher, Rasenschnitt  \n• Wurst, Fleisch, Fisch, Knochen\n• Brot, Teigwaren\n• Kaffee- und Teesatz (mit Filter/Beutel)\n• Eier samt Eierschalen und -karton\n• Getreide- und Hülsenfrüchte\n\nEntsorgung organischer Abfälle:\nBioabfälle richtig entsorgen und Geld sparen. Separat gesammelter Bioabfall \nentlast..."
+  }
+}

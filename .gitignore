@@ -143,3 +143,20 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Archived code (cleanup results)
+.archive/
+
+# Data files
+data/logs/
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.sqlite
+data/*.sqlite3
+
+# Additional cleanup items
+rag_database.db*
+test_download_endpoint.py
+cleanup_script.py
+CLEANUP_PLAN.md

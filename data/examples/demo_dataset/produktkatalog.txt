@@ -1,0 +1,293 @@
+ACME CORPORATION - Produktkatalog 2024
+
+CLOUD-LÖSUNGEN
+
+1. CLOUDSYNC PRO
+Umfassende Cloud-Speicher- und Synchronisationslösung
+
+Basic Plan:
+- 100 GB Speicherplatz
+- 5 Geräte-Synchronisation
+- Standard-Support
+- Preis: 9,99 €/Monat
+
+Professional Plan:
+- 500 GB Speicherplatz
+- Unbegrenzte Geräte
+- Erweiterte Freigabeoptionen
+- Prioritäts-Support
+- Preis: 19,99 €/Monat
+
+Enterprise Plan:
+- 2 TB Speicherplatz
+- Team-Collaboration-Tools
+- Erweiterte Sicherheitsfeatures
+- Dedizierter Account-Manager
+- Preis: 49,99 €/Monat
+
+2. CLOUDSYNC BUSINESS
+Unternehmensweite Cloud-Infrastruktur
+
+Standard:
+- 10 TB geteilter Speicherplatz
+- Bis zu 100 Benutzer
+- Grundlegende Adminkontrollen
+- E-Mail-Support
+- Preis: 299 €/Monat
+
+Premium:
+- 50 TB geteilter Speicherplatz
+- Bis zu 500 Benutzer
+- Erweiterte Adminkontrollen
+- Telefon- und E-Mail-Support
+- Preis: 799 €/Monat
+
+Enterprise:
+- Unbegrenzter Speicherplatz
+- Unbegrenzte Benutzer
+- Vollständige Adminkontrollen
+- 24/7-Support
+- Preis: Auf Anfrage
+
+HARDWARE-PRODUKTE
+
+1. SECUREBOX PRO NAS
+Netzwerk-Attached Storage für Unternehmen
+
+Modell SB-4000:
+- 4-Bay-Gehäuse
+- Intel Celeron J4125 Prozessor
+- 8 GB DDR4 RAM (erweiterbar auf 32 GB)
+- 2x Gigabit-Ethernet
+- RAID 0, 1, 5, 6, 10 Unterstützung
+- Preis: 899 €
+
+Modell SB-8000:
+- 8-Bay-Gehäuse
+- Intel Core i3-10100 Prozessor
+- 16 GB DDR4 RAM (erweiterbar auf 64 GB)
+- 4x Gigabit-Ethernet
+- 10-GbE-Erweiterungsport
+- Preis: 1.499 €
+
+Modell SB-16000:
+- 16-Bay-Gehäuse
+- Intel Xeon E-2236 Prozessor
+- 32 GB ECC RAM (erweiterbar auf 128 GB)
+- 4x 10-GbE-Ports
+- Redundante Stromversorgung
+- Preis: 2.999 €
+
+2. ULTRABACKUP DRIVE
+Externe Backup-Laufwerke
+
+Modell UB-1TB:
+- 1 TB Speicherkapazität
+- USB 3.0 und USB-C
+- Hardwareverschlüsselung
+- Stoß- und wasserfest
+- Preis: 149 €
+
+Modell UB-4TB:
+- 4 TB Speicherkapazität
+- USB 3.0 und USB-C
+- Hardwareverschlüsselung
+- Stoß- und wasserfest
+- Preis: 299 €
+
+Modell UB-8TB:
+- 8 TB Speicherkapazität
+- USB 3.0, USB-C und Thunderbolt 3
+- Hardwareverschlüsselung
+- Stoß- und wasserfest
+- Preis: 499 €
+
+SOFTWARE-LÖSUNGEN
+
+1. DATASYNC ENTERPRISE
+Unternehmensdatensynchronisation
+
+Standard Edition:
+- Bis zu 10 Server
+- Grundlegende Synchronisationsregeln
+- E-Mail-Benachrichtigungen
+- Standard-Support
+- Preis: 499 €/Jahr
+
+Professional Edition:
+- Bis zu 50 Server
+- Erweiterte Synchronisationsregeln
+- Echtzeit-Überwachung
+- Prioritäts-Support
+- Preis: 1.299 €/Jahr
+
+Enterprise Edition:
+- Unbegrenzte Server
+- Anpassbare Synchronisationsregeln
+- Zentrale Verwaltungskonsole
+- 24/7-Support
+- Preis: 2.999 €/Jahr
+
+2. BACKUP MANAGER PRO
+Automatisierte Backup-Lösung
+
+Basis:
+- Bis zu 5 Geräte
+- Tägliche Backups
+- Cloud-Speicher: 500 GB
+- E-Mail-Support
+- Preis: 29,99 €/Monat
+
+Standard:
+- Bis zu 25 Geräte
+- Stündliche Backups
+- Cloud-Speicher: 2 TB
+- Telefon-Support
+- Preis: 99,99 €/Monat
+
+Premium:
+- Unbegrenzte Geräte
+- Kontinuierliche Backups
+- Cloud-Speicher: 10 TB
+- Dedizierter Support
+- Preis: 299,99 €/Monat
+
+SICHERHEITSLÖSUNGEN
+
+1. ACME SECURITY SUITE
+Umfassende Cybersicherheitslösung
+
+Basic:
+- Antivirus und Anti-Malware
+- Firewall-Schutz
+- E-Mail-Sicherheit
+- Preis: 79,99 €/Jahr
+
+Advanced:
+- Alle Basic-Features
+- Erweiterte Bedrohungserkennung
+- Vulnerability-Scanner
+- Preis: 149,99 €/Jahr
+
+Enterprise:
+- Alle Advanced-Features
+- 24/7-Sicherheitsüberwachung
+- Incident-Response-Service
+- Preis: 399,99 €/Jahr
+
+SUPPORT-PAKETE
+
+Standard-Support:
+- E-Mail-Support (Antwort innerhalb von 24 Stunden)
+- Online-Wissensdatenbank
+- Community-Forum
+- Inklusive bei allen Produkten
+
+Premium-Support:
+- Telefon-Support (Geschäftszeiten)
+- E-Mail-Support (Antwort innerhalb von 4 Stunden)
+- Remote-Desktop-Unterstützung
+- Preis: 199 €/Jahr
+
+Enterprise-Support:
+- 24/7-Telefon-Support
+- Dedizierter Account-Manager
+- Vor-Ort-Support nach Bedarf
+- Preis: 999 €/Jahr
+
+INTEGRATION-PARTNER
+
+Unterstützte Plattformen:
+- Microsoft Office 365
+- Google Workspace
+- Salesforce
+- Slack
+- Zoom
+- Dropbox
+- OneDrive
+- SharePoint
+- Confluence
+- Jira
+
+API-Unterstützung:
+- RESTful API
+- GraphQL-Unterstützung
+- Webhooks
+- SDK für Java, Python, .NET
+- Umfassende Dokumentation
+
+RABATTE UND SONDERANGEBOTE
+
+Bildungsrabatte:
+- 30% Rabatt für Universitäten
+- 20% Rabatt für Schulen
+- 25% Rabatt für Studenten
+- Nachweis der Berechtigung erforderlich
+
+Volumenrabatte:
+- 10% Rabatt ab 10 Lizenzen
+- 15% Rabatt ab 25 Lizenzen
+- 20% Rabatt ab 50 Lizenzen
+- 25% Rabatt ab 100 Lizenzen
+
+Non-Profit-Rabatte:
+- 40% Rabatt für gemeinnützige Organisationen
+- 501(c)(3)-Status erforderlich
+- Spezielle Supportoptionen verfügbar
+
+BESTELLUNG UND KONTAKT
+
+Bestellungen:
+- Online: shop.acmecorp.com
+- Telefon: +49 (0) 800 123 4567
+- E-Mail: sales@acmecorp.com
+- Fax: +49 (0) 800 123 4568
+
+Vertriebsteam:
+- Geschäftsführer Vertrieb: Michael Schmidt
+- Enterprise-Vertrieb: Anna Müller
+- Bildungsvertrieb: Thomas Weber
+- Partner-Vertrieb: Lisa Wagner
+
+Zahlungsmethoden:
+- Kreditkarte (Visa, MasterCard, American Express)
+- Banküberweisung
+- PayPal
+- Kauf auf Rechnung (für Unternehmen)
+- Leasing-Optionen verfügbar
+
+LIEFERUNG UND INSTALLATION
+
+Lieferzeiten:
+- Software: Sofortiger Download
+- Hardware: 2-5 Werktage
+- Expressversand: 1-2 Werktage
+- Internationale Lieferung: 5-10 Werktage
+
+Installationsdienste:
+- Remote-Installation: 149 €
+- Vor-Ort-Installation: 299 €
+- Vollständige Systemeinrichtung: 599 €
+- Schulung inklusive
+
+GEWÄHRLEISTUNG
+
+Software:
+- 30-Tage-Geld-zurück-Garantie
+- Kostenlose Updates für 1 Jahr
+- Erweiterte Gewährleistung verfügbar
+
+Hardware:
+- 3-Jahre-Herstellergarantie
+- 30-Tage-Rückgaberecht
+- Erweiterte Gewährleistung bis zu 5 Jahren
+
+Service:
+- Gewährleistung der Servicequalität
+- 99,9% Verfügbarkeitsgarantie
+- Service-Level-Agreements verfügbar
+
+Dieser Katalog ist gültig ab 1. März 2024. Preise können sich ohne Vorankündigung ändern.
+Für aktuelle Preise und Verfügbarkeit besuchen Sie: www.acmecorp.com
+
+© 2024 ACME Corporation. Alle Rechte vorbehalten.

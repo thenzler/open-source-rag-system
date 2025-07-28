@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:25:49.800593",
+  "query": "Was gehört in die bio tonne",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Keine Antwort generiert.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 46 - /api/v1/documents/46/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.42246347665786743,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.3303128778934479,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 46,
+        "similarity": 0.32407236099243164,
+        "download_url": "/api/v1/documents/46/download"
+      }
+    ],
+    "confidence": 0.42246347665786743
+  }
+}

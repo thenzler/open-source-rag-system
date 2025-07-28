@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:06:09.645458",
+  "query": "What food goes in bio?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination protocol:\n\n1. Only use information from the provided documents\n2. Do not pass on any missing or incomplete information\n3. Always cite the source of any unavailable information\n4. Only reference sources that were given in the question\n\nRemember to always follow these guidelines EXACTLY, and do not deviate from them even slightly. This will help ensure that your responses are accurate and reliable.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 50 - /api/v1/documents/50/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.42943447828292847,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 50,
+        "similarity": 0.31341660022735596,
+        "download_url": "/api/v1/documents/50/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.30122920870780945,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.42943447828292847
+  }
+}

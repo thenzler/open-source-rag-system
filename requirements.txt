@@ -1,0 +1,9 @@
+# Main Requirements File
+# This file points to the simple requirements for easy installation
+
+# Include the core RAG system requirements
+-r deployment/requirements/simple_requirements.txt
+
+# Note: For specific environments, use:
+# - deployment/requirements/rtx3070_requirements.txt (for RTX 3070 GPU training)
+# - deployment/requirements/test_requirements.txt (for testing)

@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:33:51.342527",
+  "query": "What belongs in the bio waste?",
+  "context_hash": "66ed3f3ab031847b5a8d54aab1b392b5",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination rules:\n\n1. Only reference information from the provided documents\n2. Never pass on any missing or incomplete information\n3. Always cite the source immediately when referring to unavailable information\n4. If there is no relevant information, do not include it in your response\n5. Only use the provided Quelels as a guide and refer to the original sources if necessary\n\nRemember that these rules are only guidelines, and you should always follow the specific instructions given by the question or assignment.\n\n📚 Quellen:\n[Quelle 1] Dokument 50 - /api/v1/documents/50/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 40 - /api/v1/documents/40/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 50,
+        "similarity": 0.420583575963974,
+        "download_url": "/api/v1/documents/50/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.41100311279296875,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 40,
+        "similarity": 0.3409839868545532,
+        "download_url": "/api/v1/documents/40/download"
+      }
+    ],
+    "confidence": 0.420583575963974
+  }
+}

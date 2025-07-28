@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:38:56.604873",
+  "query": "What can I put in organic waste bin?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional rules to follow when using the document analysis tool:\n\n1. Only review information from the provided documents\n2. Don't include any irrelevant or incomplete information\n3. Always reference the original source of the information\n4. If there is a questionable piece of information, refer to the original source for more information\n5. Only use the provided context when answering questions based on the given quelels\n6. Be sure to only use the provided quelels as a guide and not rely solely on them\n7. Always cite any sources used in your answer based on the\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 40 - /api/v1/documents/40/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.3775233030319214,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 40,
+        "similarity": 0.3642558753490448,
+        "download_url": "/api/v1/documents/40/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.3435596227645874,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.3775233030319214
+  }
+}

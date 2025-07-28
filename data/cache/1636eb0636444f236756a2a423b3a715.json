@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-07-28T17:09:17.900907",
+  "query": "What food bio debug now",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only reference information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always cite the source of any unavailable information\n4. Only use the original sources listed in the given Quelels\n5. If there is no available source, refer to the original source as \"no information\"\n6. Use only the provided Quelels as a reference for answering the question\n7. Always cite the original Quelels and provide a link to the original source if possible\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.376923143863678,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.3514094054698944,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.376923143863678
+  }
+}

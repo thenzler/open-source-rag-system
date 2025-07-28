@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:57:01.611023",
+  "query": "What food items bio waste?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only reference information from the provided documents\n2. Never paraphrase or summarize information in your response\n3. Always cite the source of any unavailable information\n4. Only use the original source when necessary\n5. If there is no available information, provide a reference to the original source\n\nRemember to always follow these guidelines EXACTLY as stated in the given material.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 51 - /api/v1/documents/51/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.44515812397003174,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 51,
+        "similarity": 0.395371675491333,
+        "download_url": "/api/v1/documents/51/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.38718241453170776,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.44515812397003174
+  }
+}

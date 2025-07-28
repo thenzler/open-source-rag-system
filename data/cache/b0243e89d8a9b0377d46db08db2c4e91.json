@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:06:28.058691",
+  "query": "What food bio",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only reference information from the provided documents\n2. Never paraphrase or summarize information in your response\n3. Do not include any unverified or incomplete information\n4. Always cite sources based on the given Quelels only\n5. If there is a questionable source, provide a link to the original source\n6. Only use the provided Quelels as references and do not rely solely on them\n7. Be sure to follow the Frage standard for answering questions based\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 50 - /api/v1/documents/50/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.4186977744102478,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 50,
+        "similarity": 0.3506944179534912,
+        "download_url": "/api/v1/documents/50/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.3367963433265686,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.4186977744102478
+  }
+}

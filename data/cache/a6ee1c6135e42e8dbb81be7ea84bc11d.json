@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:41:34.562754",
+  "query": "What food scraps go in organic waste?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination format:\n\n1. Only use information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always cite any unavailable information\n4. Answer only questions based on the given queleys\n5. Only reference sources that are available in the given context\n\nRemember to always keep the context in mind when answering questions, and to only use the provided queleys as a guide.\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 40 - /api/v1/documents/40/download\n[Quelle 3] Dokument 51 - /api/v1/documents/51/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.4199569523334503,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 40,
+        "similarity": 0.3693030774593353,
+        "download_url": "/api/v1/documents/40/download"
+      },
+      {
+        "id": 3,
+        "document_id": 51,
+        "similarity": 0.3518024682998657,
+        "download_url": "/api/v1/documents/51/download"
+      }
+    ],
+    "confidence": 0.4199569523334503
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:44:30.438923",
+  "query": "What fruits and vegetables go in bio waste?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only use information from provided documents\n2. Never pass on missing or incomplete information\n3. Always reference the original source when answering a question based solely on provided information\n4. Only answer questions that are based solely on the given Quelels (i.e., [Quele 1]: Abfallkalender 2025)\n5. Keep the context of the question in mind and only answer questions related to the given Quelels\n6. Use the English version of the\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 43 - /api/v1/documents/43/download\n[Quelle 3] Dokument 50 - /api/v1/documents/50/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.387411892414093,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 43,
+        "similarity": 0.3619580864906311,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 3,
+        "document_id": 50,
+        "similarity": 0.3566261827945709,
+        "download_url": "/api/v1/documents/50/download"
+      }
+    ],
+    "confidence": 0.387411892414093
+  }
+}

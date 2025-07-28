@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Management - RAG System Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .header .back-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        
+        .header .back-link:hover {
+            opacity: 1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card.good { border-left: 4px solid #28a745; }
+        .stat-card.warning { border-left: 4px solid #ffc107; }
+        .stat-card.danger { border-left: 4px solid #dc3545; }
+        
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .filter-config {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .filter-group {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        
+        .filter-group h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .keyword-tag {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .keyword-tag button {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .keyword-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .keyword-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .document-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .document-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .document-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        select.form-input {
+            cursor: pointer;
+        }
+        
+        .document-item:last-child {
+            border-bottom: none;
+        }
+        
+        .document-info {
+            flex: 1;
+        }
+        
+        .document-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .document-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .cleanup-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-buttons {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/admin" class="back-link">← Back to Admin Dashboard</a>
+        <h1>Document Management</h1>
+        <p>Analyze, filter, and clean your document collection</p>
+    </div>
+
+    <div class="container">
+        <div id="alerts"></div>
+        
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ analyses.total_documents }}</div>
+                <div class="stat-label">Total Documents</div>
+            </div>
+            <div class="stat-card good">
+                <div class="stat-value">{{ analyses.bio_waste_documents }}</div>
+                <div class="stat-label">Clean Documents</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="stat-value">{{ analyses.problematic_documents }}</div>
+                <div class="stat-label">Problematic Documents</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value">{{ analyses.unknown_documents }}</div>
+                <div class="stat-label">Unknown Documents</div>
+            </div>
+        </div>
+
+        <!-- Filter Configuration -->
+        <div class="section">
+            <h2 class="section-title">Filter Configuration</h2>
+            <div class="filter-config">
+                <div class="filter-group">
+                    <h4>Target Keywords (Documents to Keep)</h4>
+                    <div class="keyword-list" id="targetKeywords">
+                        {% for keyword in filter_config.bio_waste_keywords %}
+                        <span class="keyword-tag">
+                            {{ keyword }}
+                            <button onclick="removeKeyword('target', '{{ keyword }}')">&times;</button>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="keyword-input">
+                        <input type="text" id="targetKeywordInput" placeholder="Add keyword...">
+                        <button class="btn btn-primary" onclick="addKeyword('target')">Add</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Problematic Keywords (Training Instructions)</h4>
+                    <div class="keyword-list" id="problematicKeywords">
+                        {% for keyword in filter_config.problematic_keywords %}
+                        <span class="keyword-tag">
+                            {{ keyword }}
+                            <button onclick="removeKeyword('problematic', '{{ keyword }}')">&times;</button>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="keyword-input">
+                        <input type="text" id="problematicKeywordInput" placeholder="Add keyword...">
+                        <button class="btn btn-primary" onclick="addKeyword('problematic')">Add</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Exclude Keywords (Off-topic Content)</h4>
+                    <div class="keyword-list" id="excludeKeywords">
+                        {% for keyword in filter_config.exclude_keywords %}
+                        <span class="keyword-tag">
+                            {{ keyword }}
+                            <button onclick="removeKeyword('exclude', '{{ keyword }}')">&times;</button>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="keyword-input">
+                        <input type="text" id="excludeKeywordInput" placeholder="Add keyword...">
+                        <button class="btn btn-primary" onclick="addKeyword('exclude')">Add</button>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="saveFilterConfig()">Save Configuration</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Analysis -->
+        <div class="section">
+            <h2 class="section-title">Document Analysis</h2>
+            
+            <h3 style="margin-top: 20px; margin-bottom: 10px;">All Documents</h3>
+            <div class="document-list" id="allDocumentsList">
+                <!-- Will be populated dynamically -->
+            </div>
+            
+            <h3 style="margin-top: 20px; margin-bottom: 10px;">Problematic Documents</h3>
+            <div class="document-list">
+                {% if analyses.documents.problematic %}
+                    {% for doc in analyses.documents.problematic %}
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="document-title">{{ doc.filename }}</div>
+                            <div class="document-meta">
+                                ID: {{ doc.document_id }} | 
+                                Reasons: {{ ', '.join(doc.problematic_reasons) }} |
+                                Confidence: {{ (doc.confidence * 100)|round(1) }}%
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <button class="btn btn-sm" onclick="viewDocument({{ doc.document_id }})">View</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteDocument({{ doc.document_id }})">Delete</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No problematic documents found.</p>
+                {% endif %}
+            </div>
+
+            <div class="cleanup-controls">
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="removeTraining" checked>
+                        Remove Training Instructions
+                    </label>
+                    <label>
+                        <input type="checkbox" id="removeOfftopic" checked>
+                        Remove Off-topic Content
+                    </label>
+                    <label>
+                        <input type="checkbox" id="removeCorrupted" checked>
+                        Remove Corrupted Files
+                    </label>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-warning" onclick="performCleanup(true)">Dry Run</button>
+                    <button class="btn btn-danger" onclick="performCleanup(false)">Clean Documents</button>
+                    <button class="btn btn-primary" onclick="refreshAnalysis()">Refresh Analysis</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Configuration -->
+        <div class="section">
+            <h2 class="section-title">Database Configuration</h2>
+            <div class="filter-config">
+                <div class="filter-group">
+                    <h4>Database Settings</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label>Database Type:</label>
+                            <select id="dbType" class="form-input" onchange="updateDbFields()">
+                                <option value="sqlite">SQLite (Local)</option>
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mysql">MySQL</option>
+                            </select>
+                        </div>
+                        <div id="dbFileField">
+                            <label>Database File:</label>
+                            <input type="text" id="dbFile" class="form-input" value="data/rag_database.db">
+                        </div>
+                        <div id="dbHostField" style="display: none;">
+                            <label>Host:</label>
+                            <input type="text" id="dbHost" class="form-input" placeholder="localhost">
+                        </div>
+                        <div id="dbPortField" style="display: none;">
+                            <label>Port:</label>
+                            <input type="number" id="dbPort" class="form-input" placeholder="5432">
+                        </div>
+                        <div id="dbNameField" style="display: none;">
+                            <label>Database Name:</label>
+                            <input type="text" id="dbName" class="form-input" placeholder="rag_database">
+                        </div>
+                        <div id="dbUserField" style="display: none;">
+                            <label>Username:</label>
+                            <input type="text" id="dbUser" class="form-input">
+                        </div>
+                        <div id="dbPassField" style="display: none;">
+                            <label>Password:</label>
+                            <input type="password" id="dbPass" class="form-input">
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="testDbConnection()">Test Connection</button>
+                        <button class="btn btn-success" onclick="saveDbConfig()">Save Configuration</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Document Detail Modal -->
+    <div id="documentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; margin: 50px auto; max-width: 800px; max-height: 80vh; overflow-y: auto; border-radius: 8px; padding: 20px;">
+            <h2>Document Details</h2>
+            <div id="documentDetails"></div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="closeDocumentModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentConfig = {{ filter_config|tojson }};
+
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertDiv.appendChild(alert);
+            setTimeout(() => alert.remove(), 5000);
+        }
+
+        function addKeyword(type) {
+            const inputId = `${type}KeywordInput`;
+            const input = document.getElementById(inputId);
+            const keyword = input.value.trim();
+            
+            if (!keyword) return;
+            
+            const configKey = type === 'target' ? 'bio_waste_keywords' : 
+                            type === 'problematic' ? 'problematic_keywords' : 
+                            'exclude_keywords';
+            
+            if (!currentConfig[configKey].includes(keyword)) {
+                currentConfig[configKey].push(keyword);
+                refreshKeywordDisplay(type, currentConfig[configKey]);
+                input.value = '';
+            }
+        }
+
+        function removeKeyword(type, keyword) {
+            const configKey = type === 'target' ? 'bio_waste_keywords' : 
+                            type === 'problematic' ? 'problematic_keywords' : 
+                            'exclude_keywords';
+            
+            currentConfig[configKey] = currentConfig[configKey].filter(k => k !== keyword);
+            refreshKeywordDisplay(type, currentConfig[configKey]);
+        }
+
+        function refreshKeywordDisplay(type, keywords) {
+            const containerId = `${type}Keywords`;
+            const container = document.getElementById(containerId);
+            
+            container.innerHTML = keywords.map(keyword => `
+                <span class="keyword-tag">
+                    ${keyword}
+                    <button onclick="removeKeyword('${type}', '${keyword}')">&times;</button>
+                </span>
+            `).join('');
+        }
+
+        async function saveFilterConfig() {
+            try {
+                const response = await fetch('/admin/documents/filter-config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentConfig)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showAlert('Filter configuration saved successfully!', 'success');
+                } else {
+                    showAlert('Failed to save configuration', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error saving configuration: ' + error.message, 'danger');
+            }
+        }
+
+        async function performCleanup(dryRun) {
+            const loading = document.getElementById('loading');
+            loading.classList.add('active');
+            
+            try {
+                const response = await fetch('/admin/documents/cleanup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        remove_training: document.getElementById('removeTraining').checked,
+                        remove_offtopic: document.getElementById('removeOfftopic').checked,
+                        remove_corrupted: document.getElementById('removeCorrupted').checked,
+                        dry_run: dryRun
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    const message = dryRun ? 
+                        `Dry run complete. Would remove ${result.report.removed_documents.length} documents.` :
+                        `Cleanup complete. Removed ${result.report.removed_documents.length} documents.`;
+                    showAlert(message, 'success');
+                    
+                    if (!dryRun) {
+                        setTimeout(() => location.reload(), 2000);
+                    }
+                } else {
+                    showAlert('Cleanup failed', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error during cleanup: ' + error.message, 'danger');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        async function refreshAnalysis() {
+            location.reload();
+        }
+
+        // Single document management
+        async function viewDocument(docId) {
+            try {
+                const response = await fetch(`/admin/documents/${docId}`);
+                const doc = await response.json();
+                
+                const modal = document.getElementById('documentModal');
+                const details = document.getElementById('documentDetails');
+                
+                details.innerHTML = `
+                    <p><strong>ID:</strong> ${doc.id}</p>
+                    <p><strong>Filename:</strong> ${doc.filename}</p>
+                    <p><strong>Size:</strong> ${(doc.size / 1024).toFixed(2)} KB</p>
+                    <p><strong>Type:</strong> ${doc.content_type}</p>
+                    <p><strong>Upload Date:</strong> ${doc.upload_date || 'Unknown'}</p>
+                    <p><strong>Status:</strong> ${doc.status}</p>
+                    <p><strong>File Path:</strong> ${doc.file_path || 'N/A'}</p>
+                    <h4>Content Preview:</h4>
+                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${doc.content_preview}</pre>
+                `;
+                
+                modal.style.display = 'block';
+            } catch (error) {
+                showAlert('Error loading document details: ' + error.message, 'danger');
+            }
+        }
+
+        function closeDocumentModal() {
+            document.getElementById('documentModal').style.display = 'none';
+        }
+
+        async function deleteDocument(docId) {
+            if (!confirm(`Are you sure you want to delete document ${docId}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/admin/documents/${docId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showAlert(`Document ${docId} deleted successfully`, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showAlert('Failed to delete document', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error deleting document: ' + error.message, 'danger');
+            }
+        }
+
+        // Database configuration
+        function updateDbFields() {
+            const dbType = document.getElementById('dbType').value;
+            const sqliteFields = ['dbFileField'];
+            const remoteFields = ['dbHostField', 'dbPortField', 'dbNameField', 'dbUserField', 'dbPassField'];
+            
+            if (dbType === 'sqlite') {
+                sqliteFields.forEach(id => document.getElementById(id).style.display = 'block');
+                remoteFields.forEach(id => document.getElementById(id).style.display = 'none');
+            } else {
+                sqliteFields.forEach(id => document.getElementById(id).style.display = 'none');
+                remoteFields.forEach(id => document.getElementById(id).style.display = 'block');
+                
+                // Set default ports
+                if (dbType === 'postgresql') {
+                    document.getElementById('dbPort').value = '5432';
+                } else if (dbType === 'mysql') {
+                    document.getElementById('dbPort').value = '3306';
+                }
+            }
+        }
+
+        async function testDbConnection() {
+            const config = getDbConfig();
+            
+            try {
+                const response = await fetch('/admin/database/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                } else {
+                    showAlert(result.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('Connection test failed: ' + error.message, 'danger');
+            }
+        }
+
+        async function saveDbConfig() {
+            const config = getDbConfig();
+            
+            try {
+                const response = await fetch('/admin/database/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                } else {
+                    showAlert('Failed to save database configuration', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error saving configuration: ' + error.message, 'danger');
+            }
+        }
+
+        function getDbConfig() {
+            const dbType = document.getElementById('dbType').value;
+            
+            if (dbType === 'sqlite') {
+                return {
+                    db_type: 'sqlite',
+                    database: document.getElementById('dbFile').value
+                };
+            } else {
+                return {
+                    db_type: dbType,
+                    host: document.getElementById('dbHost').value,
+                    port: parseInt(document.getElementById('dbPort').value),
+                    database: document.getElementById('dbName').value,
+                    username: document.getElementById('dbUser').value,
+                    password: document.getElementById('dbPass').value
+                };
+            }
+        }
+
+        // Load all documents on page load
+        async function loadAllDocuments() {
+            try {
+                const response = await fetch('/api/v1/documents');
+                const data = await response.json();
+                
+                const container = document.getElementById('allDocumentsList');
+                if (data.documents && data.documents.length > 0) {
+                    container.innerHTML = data.documents.map(doc => `
+                        <div class="document-item">
+                            <div class="document-info">
+                                <div class="document-title">${doc.filename}</div>
+                                <div class="document-meta">
+                                    ID: ${doc.id} | Size: ${(doc.size / 1024).toFixed(2)} KB | 
+                                    Status: ${doc.status}
+                                </div>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn btn-sm" onclick="viewDocument(${doc.id})">View</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteDocument(${doc.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p>No documents found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading documents:', error);
+            }
+        }
+
+        // Load database config on page load
+        async function loadDbConfig() {
+            try {
+                const response = await fetch('/admin/database/config');
+                const config = await response.json();
+                
+                document.getElementById('dbType').value = config.db_type || 'sqlite';
+                updateDbFields();
+                
+                if (config.db_type === 'sqlite') {
+                    document.getElementById('dbFile').value = config.database || 'data/rag_database.db';
+                } else {
+                    document.getElementById('dbHost').value = config.host || '';
+                    document.getElementById('dbPort').value = config.port || '';
+                    document.getElementById('dbName').value = config.database || '';
+                    document.getElementById('dbUser').value = config.username || '';
+                    document.getElementById('dbPass').value = config.password || '';
+                }
+            } catch (error) {
+                console.error('Error loading database config:', error);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllDocuments();
+            loadDbConfig();
+        });
+    </script>
+</body>
+</html>

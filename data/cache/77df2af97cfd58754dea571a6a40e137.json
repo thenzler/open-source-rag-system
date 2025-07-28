@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-28T16:12:34.024064",
+  "query": "What can I put in the bio waste bin?",
+  "context_hash": "050de5e775ee14965e5e4323d996cdba",
+  "response": {
+    "text": "Keine ausreichenden Informationen in den verfügbaren Dokumenten [Quelle 1]\n\n📚 Quellen:\n[Quelle 1] Dokument test_doc_1 - /api/v1/documents/test_doc_1/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": "test_doc_1",
+        "similarity": 0.85,
+        "download_url": "/api/v1/documents/test_doc_1/download"
+      }
+    ],
+    "confidence": 0.85
+  }
+}

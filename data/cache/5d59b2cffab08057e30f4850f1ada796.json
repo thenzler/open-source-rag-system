@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-28T15:47:19.861703",
+  "query": "Was ist das Rathaus?",
+  "context_hash": "10cbe973c452807e1117cc7011db22df",
+  "response": {
+    "text": "Keine ausreichenden Informationen in den verfügbaren Dokumenten [Quelle 1]\n\n📚 Quellen:\n[Quelle 1] Dokument 60 - /api/v1/documents/60/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 60,
+        "similarity": 0.30584919452667236,
+        "download_url": "/api/v1/documents/60/download"
+      }
+    ],
+    "confidence": 0.30584919452667236
+  }
+}

@@ -1,0 +1,548 @@
+ISO 9001:2015 COMPLIANCE CHECKLISTE
+Selbstbewertung Qualitätsmanagementsystem
+
+ALLGEMEINE INFORMATIONEN
+
+Bewertungsdatum: 15. März 2024
+Bewerter: Dr. Sarah Weber, Qualitätsmanagerin
+Bereich: Gesamtunternehmen
+Standort: Hauptwerk München
+Bewertungszeitraum: Januar - März 2024
+
+BEWERTUNGSLEGENDE
+
+✓ = Vollständig erfüllt
+◐ = Teilweise erfüllt
+✗ = Nicht erfüllt
+N/A = Nicht anwendbar
+
+KAPITEL 4: KONTEXT DER ORGANISATION
+
+4.1 VERSTEHEN DER ORGANISATION UND IHRES KONTEXTES
+
+4.1.1 Interne und externe Themen identifiziert? ✓
+- SWOT-Analyse durchgeführt (aktualisiert: Jan 2024)
+- Stakeholder-Analyse vorhanden
+- Marktanalyse dokumentiert
+- Risikoregister gepflegt
+Evidenz: Dokument "Kontextanalyse 2024"
+
+4.1.2 Überwachung und Überprüfung der Informationen? ✓
+- Quartalsweise Überprüfung etabliert
+- Änderungsbenachrichtigungen implementiert
+- Auswirkungsanalyse bei Änderungen
+Evidenz: Management-Review-Protokolle
+
+4.2 VERSTEHEN DER ERFORDERNISSE UND ERWARTUNGEN INTERESSIERTER PARTEIEN
+
+4.2.1 Interessierte Parteien identifiziert? ✓
+- Stakeholder-Register vorhanden
+- Erwartungen dokumentiert
+- Einfluss und Bedeutung bewertet
+Evidenz: Stakeholder-Matrix
+
+4.2.2 Anforderungen überwacht und überprüft? ✓
+- Regelmäßige Kundenbefragungen
+- Lieferantenbewertungen
+- Mitarbeiterfeedback
+- Regulatorische Überwachung
+Evidenz: Stakeholder-Kommunikationsplan
+
+4.3 BESTIMMEN DES ANWENDUNGSBEREICHS
+
+4.3.1 Anwendungsbereich des QM-Systems bestimmt? ✓
+- Schriftlicher Anwendungsbereich vorhanden
+- Grenzen und Anwendbarkeit definiert
+- Ausschlüsse begründet
+Evidenz: QM-Handbuch Kapitel 1
+
+4.3.2 Anwendungsbereich als dokumentierte Information verfügbar? ✓
+- Im QM-Handbuch dokumentiert
+- Allen Mitarbeitern zugänglich
+- Externe Parteien informiert
+Evidenz: QM-Handbuch v3.2
+
+4.4 QUALITÄTSMANAGEMENTSYSTEM UND SEINE PROZESSE
+
+4.4.1 Prozesse des QM-Systems bestimmt? ✓
+- Prozesslandkarte erstellt
+- Kernprozesse und Unterstützungsprozesse identifiziert
+- Prozessverantwortliche benannt
+Evidenz: Prozesslandkarte v2.1
+
+4.4.2 Prozesswechselwirkungen bestimmt? ✓
+- Prozessflussdiagramme vorhanden
+- Schnittstellen definiert
+- Eingaben und Ausgaben dokumentiert
+Evidenz: Prozessdiagramme
+
+4.4.3 Kriterien und Methoden zur Prozesssteuerung? ✓
+- Prozesssteckbriefe erstellt
+- Kennzahlen definiert
+- Steuerungsmethoden festgelegt
+Evidenz: Prozesssteckbriefe
+
+4.4.4 Ressourcen für Prozesse verfügbar? ✓
+- Ressourcenplanung durchgeführt
+- Verfügbarkeit sichergestellt
+- Budgetplanung abgeschlossen
+Evidenz: Ressourcenplan 2024
+
+4.4.5 Verantwortlichkeiten und Befugnisse zugeordnet? ✓
+- Organisationsdiagramm vorhanden
+- Rollen und Verantwortlichkeiten definiert
+- Vertretungsregelungen etabliert
+Evidenz: Organisationshandbuch
+
+4.4.6 Risiken und Chancen bewertet? ✓
+- Risikoanalyse durchgeführt
+- Chancenbewertung implementiert
+- Maßnahmenplanung erstellt
+Evidenz: Risikomanagement-Bericht
+
+4.4.7 Prozessverbesserung sichergestellt? ✓
+- Kontinuierlicher Verbesserungsprozess etabliert
+- Verbesserungsvorschläge systematisch bearbeitet
+- Erfolgsmessung implementiert
+Evidenz: KVP-Protokolle
+
+KAPITEL 5: FÜHRUNG
+
+5.1 FÜHRUNG UND VERPFLICHTUNG
+
+5.1.1 Führungsverantwortung für QM-System? ✓
+- Geschäftsführung verpflichtet sich schriftlich
+- Regelmäßige Kommunikation
+- Ressourcenbereitstellung
+Evidenz: Verpflichtungserklärung GF
+
+5.1.2 Kundenorientierung gefördert? ✓
+- Kundenfokus in Unternehmensstrategie
+- Kundenanforderungen systematisch erfasst
+- Kundenzufriedenheit gemessen
+Evidenz: Kundenzufriedenheitsumfrage
+
+5.2 POLITIK
+
+5.2.1 Qualitätspolitik entwickelt und kommuniziert? ✓
+- Qualitätspolitik dokumentiert
+- Allen Mitarbeitern bekannt
+- Regelmäßige Überprüfung
+Evidenz: QM-Handbuch Kapitel 2
+
+5.2.2 Qualitätspolitik angemessen für Zweck und Kontext? ✓
+- Bezug zur Unternehmensstrategie
+- Angemessen für Größe und Komplexität
+- Stakeholder-Erwartungen berücksichtigt
+Evidenz: Politik-Review-Protokoll
+
+5.3 ROLLEN, VERANTWORTLICHKEITEN UND BEFUGNISSE
+
+5.3.1 Verantwortlichkeiten und Befugnisse zugeordnet? ✓
+- Organisationsdiagramm aktuell
+- Stellenbeschreibungen vorhanden
+- Vertretungsregelungen definiert
+Evidenz: Stellenbeschreibungen
+
+5.3.2 QM-System konform zu Norm-Anforderungen? ✓
+- Norm-Anforderungen systematisch abgedeckt
+- Compliance-Matrix erstellt
+- Regelmäßige Überprüfung
+Evidenz: ISO-Compliance-Matrix
+
+5.3.3 Berichterstattung über QM-System-Leistung? ✓
+- Monatliche Qualitätsberichte
+- Quartalsweise Management-Reviews
+- Jährliche Qualitätskennzahlen
+Evidenz: Management-Review-Protokolle
+
+KAPITEL 6: PLANUNG
+
+6.1 MASSNAHMEN ZUM UMGANG MIT RISIKEN UND CHANCEN
+
+6.1.1 Risiken und Chancen bestimmt? ✓
+- Systematische Risikoidentifikation
+- Chancenbewertung implementiert
+- Aktualisierung regelmäßig
+Evidenz: Risiko-Chancen-Register
+
+6.1.2 Maßnahmen geplant und umgesetzt? ✓
+- Maßnahmenkatalog erstellt
+- Umsetzungsplan vorhanden
+- Überwachung etabliert
+Evidenz: Maßnahmenplan 2024
+
+6.2 QUALITÄTSZIELE UND PLANUNG ZU DEREN ERREICHUNG
+
+6.2.1 Qualitätsziele auf relevanten Ebenen? ✓
+- Unternehmensziele definiert
+- Bereichsziele abgeleitet
+- Individuelle Ziele vereinbart
+Evidenz: Zielvereinbarungen
+
+6.2.2 Qualitätsziele messbar und überwacht? ✓
+- SMART-Kriterien angewandt
+- Kennzahlen definiert
+- Monatliche Überwachung
+Evidenz: Kennzahlen-Dashboard
+
+6.3 PLANUNG VON ÄNDERUNGEN
+
+6.3.1 Änderungen systematisch geplant? ✓
+- Change-Management-Prozess etabliert
+- Auswirkungsanalyse durchgeführt
+- Ressourcenplanung berücksichtigt
+Evidenz: Change-Management-Verfahren
+
+6.3.2 Integrität des QM-Systems während Änderungen? ✓
+- Kontinuierliche Überwachung
+- Risikobewertung bei Änderungen
+- Rückfallpläne vorhanden
+Evidenz: Change-Control-Protokolle
+
+KAPITEL 7: UNTERSTÜTZUNG
+
+7.1 RESSOURCEN
+
+7.1.1 Ressourcen für QM-System bestimmt? ✓
+- Ressourcenbedarfsanalyse durchgeführt
+- Budget genehmigt
+- Verfügbarkeit sichergestellt
+Evidenz: Ressourcenplan 2024
+
+7.1.2 Personen mit erforderlicher Kompetenz? ✓
+- Kompetenzprofile definiert
+- Schulungsbedarfsanalyse
+- Qualifikationsmatrix gepflegt
+Evidenz: Kompetenzmatrix
+
+7.1.3 Infrastruktur für Prozesse geeignet? ✓
+- Infrastruktur-Inventory vorhanden
+- Wartungsplane erstellt
+- Kapazitätsplanung durchgeführt
+Evidenz: Infrastruktur-Register
+
+7.1.4 Prozessumgebung geeignet? ✓
+- Arbeitsplatzgestaltung optimiert
+- Umgebungsbedingungen überwacht
+- Sicherheitsaspekte berücksichtigt
+Evidenz: Arbeitsplatz-Assessments
+
+7.1.5 Mess- und Überwachungsressourcen? ✓
+- Kalibrierungsprogramm etabliert
+- Prüfmittelüberwachung implementiert
+- Messungenauigkeiten berücksichtigt
+Evidenz: Kalibrierungsregister
+
+7.1.6 Organisationswissen identifiziert? ✓
+- Wissensmanagement-System etabliert
+- Kritisches Wissen dokumentiert
+- Wissenstransfer organisiert
+Evidenz: Wissensmanagement-Konzept
+
+7.2 KOMPETENZ
+
+7.2.1 Erforderliche Kompetenz bestimmt? ✓
+- Kompetenzprofile erstellt
+- Anforderungen definiert
+- Lückenanalyse durchgeführt
+Evidenz: Kompetenzanforderungen
+
+7.2.2 Kompetenz durch Ausbildung/Schulung? ✓
+- Schulungsplan erstellt
+- Interne und externe Schulungen
+- Wirksamkeitsprüfung etabliert
+Evidenz: Schulungsmatrix
+
+7.2.3 Kompetenz-Nachweise aufbewahrt? ✓
+- Personaldossiers geführt
+- Zertifikate archiviert
+- Zugriffsberechtigung definiert
+Evidenz: Personalakten
+
+7.3 BEWUSSTSEIN
+
+7.3.1 Bewusstsein für Qualitätspolitik? ✓
+- Kommunikationsprogramm etabliert
+- Regelmäßige Schulungen
+- Verständnis überprüft
+Evidenz: Bewusstseinsbewertung
+
+7.3.2 Bewusstsein für relevante Qualitätsziele? ✓
+- Zielkommunikation systematisch
+- Individuelle Beiträge erklärt
+- Fortschritt kommuniziert
+Evidenz: Zielkommunikationsplan
+
+7.4 KOMMUNIKATION
+
+7.4.1 Interne Kommunikation bestimmt? ✓
+- Kommunikationsmatrix erstellt
+- Kommunikationswege definiert
+- Häufigkeit festgelegt
+Evidenz: Kommunikationsplan
+
+7.4.2 Externe Kommunikation bestimmt? ◐
+- Grundlagen vorhanden
+- Verbesserung bei Lieferantenkommunikation erforderlich
+- Kundenkommunikation gut etabliert
+Evidenz: Externe Kommunikationsstrategie
+
+7.5 DOKUMENTIERTE INFORMATION
+
+7.5.1 Von Norm geforderte dokumentierte Information? ✓
+- Norm-Anforderungen systematisch abgedeckt
+- Dokumentenmatrix erstellt
+- Vollständigkeit überprüft
+Evidenz: Dokumentenmatrix
+
+7.5.2 Zusätzlich erforderliche dokumentierte Information? ✓
+- Unternehmensspezifische Anforderungen berücksichtigt
+- Kundenanforderungen erfüllt
+- Rechtliche Anforderungen beachtet
+Evidenz: Dokumentenregister
+
+7.5.3 Dokumentierte Information erstellt und aktualisiert? ✓
+- Standardisierte Vorlagen
+- Versionskontrolle etabliert
+- Überprüfungszyklen definiert
+Evidenz: Dokumentenlenkungsverfahren
+
+KAPITEL 8: BETRIEB
+
+8.1 BETRIEBSPLANUNG UND -STEUERUNG
+
+8.1.1 Prozesse geplant, umgesetzt und gesteuert? ✓
+- Prozessbeschreibungen vorhanden
+- Steuerungsparameter definiert
+- Überwachung etabliert
+Evidenz: Prozesssteckbriefe
+
+8.2 ANFORDERUNGEN AN PRODUKTE UND DIENSTLEISTUNGEN
+
+8.2.1 Kundenkommunikation etabliert? ✓
+- Kommunikationskanäle definiert
+- Kundenanfragen systematisch bearbeitet
+- Feedback-Mechanismen implementiert
+Evidenz: Kundenkommunikationsverfahren
+
+8.2.2 Anforderungen an Produkte bestimmt? ✓
+- Kundenanforderungen systematisch erfasst
+- Rechtliche Anforderungen berücksichtigt
+- Eigene Anforderungen definiert
+Evidenz: Lastenheft-Vorlagen
+
+8.2.3 Anforderungen überprüft? ✓
+- Überprüfungsverfahren etabliert
+- Checklisten vorhanden
+- Freigabeprozess definiert
+Evidenz: Anforderungsüberprüfung
+
+8.3 DESIGN UND ENTWICKLUNG
+
+8.3.1 Design- und Entwicklungsprozess? ✓
+- Phasenmodell definiert
+- Meilensteine festgelegt
+- Reviews geplant
+Evidenz: Entwicklungsverfahren
+
+8.3.2 Eingaben für Design und Entwicklung? ✓
+- Eingaben systematisch erfasst
+- Vollständigkeit überprüft
+- Verfügbarkeit sichergestellt
+Evidenz: Eingabencheckliste
+
+8.4 STEUERUNG EXTERN BEREITGESTELLTER PROZESSE
+
+8.4.1 Lieferanten bewertet und ausgewählt? ✓
+- Bewertungskriterien definiert
+- Auswahlprozess dokumentiert
+- Genehmigungsliste gepflegt
+Evidenz: Lieferantenbewertung
+
+8.4.2 Extern bereitgestellte Prozesse gesteuert? ✓
+- Steuerungsmechanismen etabliert
+- Überwachung implementiert
+- Leistung bewertet
+Evidenz: Lieferantensteuerung
+
+8.5 PRODUKTION UND DIENSTLEISTUNGSERBRINGUNG
+
+8.5.1 Produktion unter beherrschten Bedingungen? ✓
+- Arbeitsanweisungen vorhanden
+- Qualifiziertes Personal
+- Geeignete Ausrüstung
+Evidenz: Produktionsverfahren
+
+8.5.2 Kennzeichnung und Rückverfolgbarkeit? ✓
+- Kennzeichnungssystem etabliert
+- Rückverfolgbarkeit sichergestellt
+- Identifikation eindeutig
+Evidenz: Kennzeichnungsverfahren
+
+8.6 FREIGABE VON PRODUKTEN UND DIENSTLEISTUNGEN
+
+8.6.1 Geplante Tätigkeiten umgesetzt? ✓
+- Prüfpläne vorhanden
+- Prüfungen durchgeführt
+- Dokumentation vollständig
+Evidenz: Prüfprotokolle
+
+8.6.2 Freigabe erst nach Erfüllung der Kriterien? ✓
+- Freigabekriterien definiert
+- Freigabeprozess etabliert
+- Zurückhaltung bei Nichterfüllung
+Evidenz: Freigabeverfahren
+
+8.7 STEUERUNG NICHTKONFORMER ERGEBNISSE
+
+8.7.1 Nichtkonformitäten identifiziert? ✓
+- Erkennungsmechanismen etabliert
+- Klassifizierung implementiert
+- Bewertung systematisch
+Evidenz: Nichtkonformitätsverfahren
+
+8.7.2 Maßnahmen für Nichtkonformitäten? ✓
+- Korrekturmaßnahmen definiert
+- Freigabekriterien festgelegt
+- Nacharbeit geregelt
+Evidenz: CAPA-Verfahren
+
+KAPITEL 9: BEWERTUNG DER LEISTUNG
+
+9.1 ÜBERWACHUNG, MESSUNG, ANALYSE UND BEWERTUNG
+
+9.1.1 Überwachung und Messung bestimmt? ✓
+- Überwachungsplan erstellt
+- Messparameter definiert
+- Häufigkeit festgelegt
+Evidenz: Überwachungsplan
+
+9.1.2 Methoden zur Überwachung und Messung? ✓
+- Methoden standardisiert
+- Validierung durchgeführt
+- Zuverlässigkeit sichergestellt
+Evidenz: Messmethodenvalidierung
+
+9.1.3 Kundenzufriedenheit überwacht? ✓
+- Kundenzufriedenheitsmessung etabliert
+- Regelmäßige Befragungen
+- Beschwerdemanagement implementiert
+Evidenz: Kundenzufriedenheitsbericht
+
+9.2 INTERNES AUDIT
+
+9.2.1 Interne Audits in geplanten Abständen? ✓
+- Jahresauditplan erstellt
+- Auditzyklen definiert
+- Terminplanung abgeschlossen
+Evidenz: Auditplan 2024
+
+9.2.2 Auditprogramm verwaltet? ✓
+- Auditprogramm dokumentiert
+- Verantwortlichkeiten definiert
+- Umsetzung überwacht
+Evidenz: Auditprogramm
+
+9.2.3 Auditergebnisse an relevante Führungskräfte? ✓
+- Berichtsverteilung definiert
+- Kommunikation systematisch
+- Nachverfolgung etabliert
+Evidenz: Auditberichte
+
+9.3 MANAGEMENTBEWERTUNG
+
+9.3.1 Managementbewertung in geplanten Abständen? ✓
+- Quartalsweise Reviews
+- Terminplanung jährlich
+- Vorbereitung systematisch
+Evidenz: Review-Terminplan
+
+9.3.2 Eingaben für Managementbewertung? ✓
+- Eingaben definiert
+- Datensammlung organisiert
+- Vollständigkeit überprüft
+Evidenz: Review-Vorlagen
+
+9.3.3 Ergebnisse der Managementbewertung? ✓
+- Entscheidungen dokumentiert
+- Maßnahmen definiert
+- Ressourcen zugeordnet
+Evidenz: Review-Protokolle
+
+KAPITEL 10: VERBESSERUNG
+
+10.1 ALLGEMEINES
+
+10.1.1 Verbesserungsmöglichkeiten bestimmt? ✓
+- Systematische Identifikation
+- Bewertung der Möglichkeiten
+- Priorisierung durchgeführt
+Evidenz: Verbesserungsregister
+
+10.2 NICHTKONFORMITÄT UND KORREKTURMASSNAHMEN
+
+10.2.1 Nichtkonformität reagiert? ✓
+- Sofortmaßnahmen definiert
+- Auswirkungen bewertet
+- Steuerungsmaßnahmen getroffen
+Evidenz: Nichtkonformitätsbehandlung
+
+10.2.2 Ursachen der Nichtkonformität bewertet? ✓
+- Ursachenanalyse durchgeführt
+- Analysemethoden angewandt
+- Grundursachen identifiziert
+Evidenz: Ursachenanalyse-Protokolle
+
+10.3 FORTLAUFENDE VERBESSERUNG
+
+10.3.1 Eignung und Angemessenheit verbessert? ✓
+- Verbesserungsaktivitäten geplant
+- Umsetzung systematisch
+- Wirksamkeit überprüft
+Evidenz: Verbesserungsplan
+
+10.3.2 Analyseergebnisse genutzt? ✓
+- Datenanalyse systematisch
+- Erkenntnisse abgeleitet
+- Maßnahmen umgesetzt
+Evidenz: Datenanalyse-Berichte
+
+ZUSAMMENFASSUNG
+
+ERFÜLLUNG NACH KAPITELN:
+- Kapitel 4: 100% (8/8)
+- Kapitel 5: 100% (6/6)
+- Kapitel 6: 100% (4/4)
+- Kapitel 7: 95% (11/12)
+- Kapitel 8: 100% (14/14)
+- Kapitel 9: 100% (9/9)
+- Kapitel 10: 100% (6/6)
+
+GESAMTERFÜLLUNG: 98% (58/59)
+
+VERBESSERUNGSBEDARF:
+- Externe Kommunikation optimieren (7.4.2)
+- Lieferantenkommunikation verbessern
+- Dokumentation der Kommunikationsstrategie
+
+EMPFEHLUNGEN:
+1. Entwicklung einer umfassenden Kommunikationsstrategie
+2. Schulung der Einkaufsabteilung zu Lieferantenkommunikation
+3. Implementierung eines Kommunikations-Dashboards
+4. Regelmäßige Überprüfung der Kommunikationseffektivität
+
+NÄCHSTE SCHRITTE:
+- Maßnahmenplan für Verbesserungsbereiche erstellen
+- Verantwortlichkeiten zuweisen
+- Zeitplan für Umsetzung definieren
+- Fortschrittskontrolle etablieren
+
+BEWERTUNG ABGESCHLOSSEN AM: 15. März 2024
+NÄCHSTE BEWERTUNG: 15. Juni 2024
+
+Bewerter: Dr. Sarah Weber
+Funktion: Qualitätsmanagerin
+Unterschrift: [Elektronisch signiert]
+
+© 2024 ProQuality Solutions GmbH - Vertraulich

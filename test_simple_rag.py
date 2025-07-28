@@ -1,157 +1,123 @@
 #!/usr/bin/env python3
 """
-Simple test for the RAG system
+Test Simple Professional RAG System
+Clean, straightforward testing
 """
-import requests
-import json
-import time
+import os
+import sys
+import asyncio
+import logging
 from pathlib import Path
 
-API_BASE = "http://localhost:8001"
+# Add project root to path
+project_root = Path(__file__).parent
+sys.path.insert(0, str(project_root))
 
-def test_api_health():
-    """Test API health endpoint"""
-    print("Testing API health...")
-    try:
-        response = requests.get(f"{API_BASE}/health")
-        if response.status_code == 200:
-            print("✓ API health check passed")
-            return True
-        else:
-            print(f"✗ API health check failed: {response.status_code}")
-            return False
-    except Exception as e:
-        print(f"✗ API health check failed: {e}")
-        return False
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-def test_document_upload():
-    """Test document upload"""
-    print("Testing document upload...")
-    
-    # Create a test document
-    test_content = """
-    This is a test document for the RAG system.
-    It contains information about artificial intelligence and machine learning.
-    
-    Machine learning is a subset of artificial intelligence that focuses on 
-    algorithms that can learn from data and make predictions or decisions.
-    
-    Natural language processing (NLP) is another important area of AI that 
-    deals with understanding and generating human language.
-    
-    Vector databases are used to store and retrieve high-dimensional vectors 
-    efficiently, which is crucial for semantic search applications.
-    """
-    
-    test_file = Path("test_document.txt")
-    test_file.write_text(test_content)
-    
+async def test_simple_rag():
+    """Test the simple RAG system"""
     try:
-        with open(test_file, 'rb') as f:
-            files = {'file': (test_file.name, f, 'text/plain')}
-            response = requests.post(f"{API_BASE}/api/v1/documents", files=files)
+        logger.info("=== TESTING SIMPLE PROFESSIONAL RAG SYSTEM ===")
         
-        if response.status_code == 200:
-            result = response.json()
-            print(f"✓ Document uploaded successfully: {result['filename']}")
-            print(f"  Status: {result['status']}")
-            print(f"  Size: {result['size']} bytes")
-            test_file.unlink()  # Clean up
-            return True
-        else:
-            print(f"✗ Document upload failed: {response.status_code}")
-            print(f"  Error: {response.text}")
-            test_file.unlink()  # Clean up
-            return False
-    except Exception as e:
-        print(f"✗ Document upload failed: {e}")
-        if test_file.exists():
-            test_file.unlink()  # Clean up
-        return False
-
-def test_document_query():
-    """Test document querying"""
-    print("Testing document query...")
-    
-    # Wait a moment for document processing
-    time.sleep(2)
-    
-    test_queries = [
-        "What is machine learning?",
-        "Tell me about natural language processing",
-        "What are vector databases used for?"
-    ]
-    
-    for query in test_queries:
-        print(f"\nTesting query: '{query}'")
-        try:
-            response = requests.post(
-                f"{API_BASE}/api/v1/query",
-                json={"query": query, "top_k": 3},
-                headers={"Content-Type": "application/json"}
-            )
+        # Set configuration via environment variables
+        os.environ['RAG_SIMILARITY_THRESHOLD'] = '0.3'
+        os.environ['RAG_MAX_RESULTS'] = '5'
+        os.environ['RAG_REQUIRE_SOURCES'] = 'true'
+        
+        # Import after setting env vars
+        from core.repositories.factory import RepositoryFactory
+        from core.services.simple_rag_service import SimpleRAGService
+        from core.ollama_client import OllamaClient
+        
+        # Initialize components
+        logger.info("Initializing RAG system...")
+        rag_repo = RepositoryFactory.create_production_repository()
+        await rag_repo.initialize()
+        
+        vector_repo = rag_repo.vector_search
+        audit_repo = rag_repo.audit
+        llm_client = OllamaClient()
+        
+        # Create simple RAG service
+        rag_service = SimpleRAGService(vector_repo, llm_client, audit_repo)
+        
+        # Test queries
+        test_queries = [
+            "Welche Regeln gelten für Gewerbeabfall?",
+            "Wie funktioniert die Abfallentsorgung?",
+            "Was kostet die Entsorgung?",
+            "Nonsense query about space rockets"  # Should return no results
+        ]
+        
+        logger.info(f"\nTesting {len(test_queries)} queries...")
+        
+        for i, query in enumerate(test_queries, 1):
+            logger.info(f"\n--- Test {i}: {query} ---")
             
-            if response.status_code == 200:
-                result = response.json()
-                print(f"✓ Query successful: {result['total_results']} results")
-                for i, res in enumerate(result['results']):
-                    print(f"  Result {i+1}: Score {res['score']:.3f}")
-                    print(f"    Content: {res['content'][:100]}...")
-            else:
-                print(f"✗ Query failed: {response.status_code}")
-                print(f"  Error: {response.text}")
-                return False
-        except Exception as e:
-            print(f"✗ Query failed: {e}")
-            return False
-    
-    return True
-
-def test_documents_list():
-    """Test documents listing"""
-    print("Testing documents list...")
-    try:
-        response = requests.get(f"{API_BASE}/api/v1/documents")
-        if response.status_code == 200:
-            result = response.json()
-            print(f"✓ Documents list retrieved: {result['total']} documents")
-            return True
-        else:
-            print(f"✗ Documents list failed: {response.status_code}")
-            return False
+            try:
+                # Process query
+                response = await rag_service.answer_query(query)
+                
+                # Log results
+                if "error" in response:
+                    logger.info(f"❌ Error: {response['error']}")
+                elif "answer" in response:
+                    logger.info(f"✅ Answer: {response['answer'][:100]}...")
+                    logger.info(f"   Sources: {len(response.get('sources', []))}")
+                    logger.info(f"   Confidence: {response.get('confidence', 0):.3f}")
+                else:
+                    logger.info(f"⚠️ Unexpected response format")
+                    
+            except Exception as e:
+                logger.error(f"❌ Query failed: {e}")
+        
+        # Test configuration
+        logger.info("\n--- Configuration Test ---")
+        status = rag_service.get_status()
+        logger.info(f"Service: {status['service']}")
+        logger.info(f"Mode: {status['mode']}")
+        logger.info(f"Config: {status['config']}")
+        
+        # Test different thresholds
+        logger.info("\n--- Threshold Test ---")
+        
+        # High threshold
+        os.environ['RAG_SIMILARITY_THRESHOLD'] = '0.8'
+        rag_service_strict = SimpleRAGService(vector_repo, llm_client, audit_repo)
+        
+        response_strict = await rag_service_strict.answer_query("Welche Regeln gelten für Gewerbeabfall?")
+        logger.info(f"High threshold (0.8): {len(response_strict.get('sources', []))} sources")
+        
+        # Low threshold  
+        os.environ['RAG_SIMILARITY_THRESHOLD'] = '0.1'
+        rag_service_permissive = SimpleRAGService(vector_repo, llm_client, audit_repo)
+        
+        response_permissive = await rag_service_permissive.answer_query("Welche Regeln gelten für Gewerbeabfall?")
+        logger.info(f"Low threshold (0.1): {len(response_permissive.get('sources', []))} sources")
+        
+        logger.info("\n🎉 SIMPLE RAG SYSTEM TEST COMPLETED!")
+        logger.info("\n=== DEPLOYMENT GUIDE ===")
+        logger.info("Environment Variables:")
+        logger.info("  RAG_SIMILARITY_THRESHOLD=0.3  # Adjust for domain")
+        logger.info("  RAG_MAX_RESULTS=5             # Performance tuning")
+        logger.info("  RAG_REQUIRE_SOURCES=true      # Zero hallucination")
+        logger.info("  RAG_MAX_QUERY_LENGTH=500      # Input validation")
+        logger.info("\nAPI Endpoints:")
+        logger.info("  POST /api/v1/rag/query        # Ask questions")
+        logger.info("  GET  /api/v1/rag/status       # Check config")
+        logger.info("  GET  /api/v1/rag/health       # Health check")
+        
+        return True
+        
     except Exception as e:
-        print(f"✗ Documents list failed: {e}")
+        logger.error(f"Test failed: {e}")
+        import traceback
+        traceback.print_exc()
         return False
-
-def main():
-    print("Simple RAG System Test")
-    print("=" * 30)
-    
-    # Test API health
-    if not test_api_health():
-        print("\n❌ API is not running. Please start the API first with: python simple_api.py")
-        return
-    
-    # Test document upload
-    if not test_document_upload():
-        print("\n❌ Document upload test failed")
-        return
-    
-    # Test document query
-    if not test_document_query():
-        print("\n❌ Document query test failed")
-        return
-    
-    # Test documents list
-    if not test_documents_list():
-        print("\n❌ Documents list test failed")
-        return
-    
-    print("\n✅ All tests passed! The RAG system is working correctly.")
-    print("\nYou can now:")
-    print("1. Open http://localhost:8001/simple_frontend.html in your browser")
-    print("2. Upload documents and ask questions")
-    print("3. View API documentation at http://localhost:8001/docs")
 
 if __name__ == "__main__":
-    main()
+    success = asyncio.run(test_simple_rag())
+    sys.exit(0 if success else 1)

@@ -1,0 +1,196 @@
+default_model: tinyllama
+models:
+  arlesheim-german:
+    context_length: 32768
+    description: Fine-tuned model for Arlesheim municipality - German language
+    max_tokens: 2048
+    name: arlesheim-german:latest
+    prompt_template: default
+    temperature: 0.2
+  command-r:
+    context_length: 128000
+    description: 'Best for RAG - Optimized for retrieval tasks (Install with: ollama
+      pull command-r)'
+    max_tokens: 2048
+    name: command-r:latest
+    prompt_template: command-r
+    temperature: 0.3
+  command-r-plus:
+    context_length: 128000
+    description: Ultimate RAG model - Needs 60GB+ RAM
+    max_tokens: 2048
+    name: command-r-plus:latest
+    prompt_template: command-r
+    temperature: 0.3
+  command-r7b:
+    context_length: 8192
+    description: 🎯 Best for German RAG - Multilingual, fast, high quality (10-20s)
+    max_tokens: 2048
+    name: command-r7b:latest
+    prompt_template: default
+    temperature: 0.3
+  deepseek-r1:
+    context_length: 4096
+    description: 🧠 Advanced reasoning - Great for complex questions (30-50s)
+    max_tokens: 1024
+    name: deepseek-r1:8b-llama-distill
+    prompt_template: ultra_fast
+    temperature: 0.2
+  gemma2:
+    context_length: 8192
+    description: 🌟 Google's fast model - Good balance (15-25s)
+    max_tokens: 1024
+    name: gemma2:latest
+    prompt_template: default
+    temperature: 0.3
+  llama3.2:
+    context_length: 8192
+    description: Balanced model - Good for general use
+    max_tokens: 2048
+    name: llama3.2:3b
+    prompt_template: default
+    temperature: 0.4
+  mistral:
+    context_length: 2048
+    description: ⚡ Ultra-fast for local machines - Excellent instruction following
+    max_tokens: 512
+    name: mistral:latest
+    prompt_template: ultra_fast
+    temperature: 0.1
+  mistral-small:
+    context_length: 4096
+    description: ⚡ Ultra-fast - Excellent prompt following for RAG (15-30s)
+    max_tokens: 1024
+    name: mistral-small:22b
+    prompt_template: ultra_fast
+    temperature: 0.2
+  mixtral:
+    context_length: 32768
+    description: High quality - Needs 26GB+ RAM
+    max_tokens: 2048
+    name: mixtral:8x7b
+    prompt_template: default
+    temperature: 0.3
+  orca-mini:
+    context_length: 2048
+    description: ⚡ Fast & smart - 3B params (20-40 seconds)
+    max_tokens: 1024
+    name: orca-mini:latest
+    prompt_template: default
+    temperature: 0.3
+  phi3:
+    context_length: 4096
+    description: Lightweight and fast
+    max_tokens: 1024
+    name: phi3:latest
+    prompt_template: default
+    temperature: 0.4
+  phi3-mini:
+    context_length: 4096
+    description: Small and fast model - 3.8B parameters
+    max_tokens: 1024
+    name: mannix/phi3-mini-4k:latest
+    prompt_template: default
+    temperature: 0.4
+  phi3-mini-fast:
+    context_length: 4096
+    description: ⚡ Ultra-fast for laptops - 30-60 seconds
+    max_tokens: 1024
+    name: phi3:mini
+    prompt_template: default
+    temperature: 0.3
+  phi4:
+    context_length: 4096
+    description: 💻 Microsoft's efficient model - Great for laptops (20-30s)
+    max_tokens: 1024
+    name: phi4:latest
+    prompt_template: default
+    temperature: 0.3
+  qwen2.5:
+    context_length: 2048
+    description: 🚀 Optimal for RAG - Excellent German support, fast inference (20-40s)
+    max_tokens: 512
+    name: qwen2.5:7b
+    prompt_template: ultra_fast
+    temperature: 0.1
+  solar:
+    context_length: 4096
+    description: Excellent context understanding
+    max_tokens: 2048
+    name: solar:10.7b
+    prompt_template: solar
+    temperature: 0.3
+  tinyllama:
+    context_length: 1024
+    description: 🦙⚡ Emergency fallback - Very fast but limited quality (10-30s)
+    max_tokens: 512
+    name: tinyllama:latest
+    prompt_template: ultra_fast
+    temperature: 0.1
+prompt_templates:
+  command-r: '<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>Du bist ein hilfreicher Assistent,
+    der Fragen NUR basierend auf bereitgestellten Dokumenten beantwortet.<|END_OF_TURN_TOKEN|>
+
+    <|START_OF_TURN_TOKEN|><|USER_TOKEN|>
+
+    Dokumente:
+
+    {context}
+
+
+    Frage: {query}<|END_OF_TURN_TOKEN|>
+
+    <|START_OF_TURN_TOKEN|><|ASSISTANT_TOKEN|>Basierend auf den bereitgestellten Dokumenten:
+
+    '
+  default: 'Beantworte die Frage basierend AUSSCHLIESSLICH auf den bereitgestellten
+    Dokumenten.
+
+
+    ANWEISUNGEN:
+
+    1. Lies die Dokumente sorgfältig
+
+    2. Extrahiere NUR die relevanten Informationen für die Frage
+
+    3. Formuliere eine klare, strukturierte Antwort
+
+    4. Verwende KEINE Informationen außerhalb der Dokumente
+
+
+    FRAGE: {query}
+
+
+    DOKUMENTE:
+
+    {context}
+
+
+    ANTWORT (nur basierend auf den Dokumenten):'
+  solar: '### System:
+
+    Du bist ein Experte im Analysieren von Dokumenten. Beantworte Fragen NUR mit Informationen
+    aus den gegebenen Dokumenten.
+
+
+    ### Dokumente:
+
+    {context}
+
+
+    ### Benutzer:
+
+    {query}
+
+
+    ### Assistent:
+
+    Nach Analyse der Dokumente:
+
+    '
+  ultra_fast: 'Context: {context}
+
+
+    Q: {query}
+
+    A:'
