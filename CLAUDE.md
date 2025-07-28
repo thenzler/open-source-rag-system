@@ -2,9 +2,9 @@
 
 ## 🎯 Project Overview
 
-**Open Source RAG System** - A complete locally-hosted Retrieval-Augmented Generation system with Ollama LLM integration. This is an MVP-focused project prioritizing reliability, ease of use, and production readiness over advanced features.
+**Open Source RAG System** - A complete locally-hosted Retrieval-Augmented Generation system with Ollama LLM integration. This is a production-ready project prioritizing reliability, ease of use, and comprehensive document management capabilities.
 
-**Core Mission**: Create a bulletproof RAG system that works perfectly for the core use case: "Upload documents → Ask questions → Get intelligent answers" with zero crashes and maximum reliability.
+**Core Mission**: Create a bulletproof RAG system that works perfectly for the core use case: "Upload documents → Ask questions → Get intelligent answers" with zero crashes, maximum reliability, and comprehensive admin capabilities for any domain.
 
 ## 🏗️ Project Structure
 
@@ -112,10 +112,13 @@ C:\Users\THE\open-source-rag-system\
 - ✅ **Single AI-Only Endpoint**: `/api/v1/query` with zero-hallucination protection
 - ✅ **Zero-Hallucination System**: Professional RAG with source citations and confidence scoring
 - ✅ **SimpleRAGService**: Clean, maintainable RAG engine with 4 environment variables
-- ✅ **Fine-tuned arlesheim-german model** for municipality-specific responses
+- ✅ **Admin Interface**: Comprehensive admin dashboard with document management
+- ✅ **Document Management**: Content analysis, filtering, and cleanup tools with configurable keywords
+- ✅ **Model Management**: Easy switching between Ollama models via admin interface
+- ✅ **Database Configuration**: Support for SQLite, PostgreSQL, and MySQL via admin interface
 - ✅ **Document download links** with secure `/api/v1/documents/{id}/download` endpoint
 - ✅ **Production Frontend**: Single-mode interface with AI answers only
-- ✅ **SQLite Storage**: Persistent databases with FAISS vector search
+- ✅ **SQLite Storage**: Persistent databases with sentence transformer vector search
 - ✅ **Repository Organization**: Clean codebase with legacy files safely archived
 - ✅ **Comprehensive Testing**: Test suite with production validation
 - ✅ **Error Handling**: Graceful failure handling with proper cleanup
@@ -247,41 +250,39 @@ except Exception as e:
 - **Testing**: Validate edge cases and error conditions
 - **Performance**: Ensure system scales to 100+ documents
 
-## 🏛️ Fine-tuned Arlesheim Model
+## 🔧 Admin Interface Features
 
-### **Model Overview**
-The system now uses a **fine-tuned arlesheim-german model** optimized for municipality-specific responses in German.
+### **Document Management**
+The system includes comprehensive document management capabilities:
 
-### **Model Features**
-- **Professional German responses** (no fake Swiss German)
-- **Document download links** instead of full text dumps
-- **Municipality-specific knowledge** for Arlesheim
-- **Consistent formatting** with download references
+### **Content Analysis**
+- **Automatic Categorization**: Classify documents by content type using configurable keywords
+- **Quality Assessment**: Identify problematic documents (training instructions, corrupted files, off-topic content)
+- **Confidence Scoring**: Rate document relevance and quality
 
-### **Model Management**
-```bash
-# Rebuild the model after changes
-cd training_data/arlesheim_german
-ollama create arlesheim-german:latest -f Modelfile_final
-
-# Test the model directly
-ollama run arlesheim-german:latest "Frage über Dokumente"
-
-# Check if model is available
-ollama list | grep arlesheim
+### **Configurable Filtering**
+```yaml
+# Document filters are configurable via admin interface:
+target_keywords:      # Documents to keep (domain-specific)
+  - "relevant", "important", "official"
+problematic_keywords: # Training instructions to remove
+  - "zero-hallucination", "guidelines", "training"
+exclude_keywords:     # Off-topic content to filter
+  - "programming", "software", "unrelated"
 ```
 
-### **Model Configuration**
-- **Base Model**: mistral:latest
-- **Temperature**: 0.2 (consistent responses)
-- **Context Length**: 32768 tokens
-- **System Prompt**: Located in `Modelfile_final`
+### **Management Tools**
+- **Individual Document Operations**: View, edit, delete specific documents
+- **Bulk Operations**: Cleanup multiple documents with filtering criteria
+- **Dry Run Capability**: Preview changes before applying them
+- **Content Preview**: View document content and metadata
 
-### **Response Format**
-The model now returns:
-1. **Brief content summary** (200 chars max)
-2. **Download URL**: `/api/v1/documents/{document_id}/download`
-3. **Professional German** without fake dialect
+### **Model and Database Management**
+The admin interface provides:
+1. **Model Switching**: Easy switching between Ollama models
+2. **Database Configuration**: SQLite, PostgreSQL, MySQL support
+3. **System Monitoring**: Health checks and performance metrics
+4. **Configuration Backup**: Download and restore system settings
 
 ## 📞 Quick Reference
 
@@ -313,20 +314,21 @@ The model now returns:
 - **Error Handling**: Comprehensive error handling throughout all services
 
 ### **Common Issues & Solutions**
-- **System won't start**: Check `python run_core.py` - verify all dependencies installed
+- **System won't start**: Check `python simple_api.py` - verify all dependencies installed
 - **Ollama not available**: Check if Ollama service running, model downloaded
-- **arlesheim-german model not found**: Rebuild with `ollama create arlesheim-german:latest -f data/training_data/arlesheim_german/Modelfile_final`
+- **No models available**: Install models via admin interface or manually with `ollama pull <model>`
 - **File upload fails**: Check file size limits, storage permissions, database connectivity
-- **No search results**: Ensure documents uploaded, processed, and indexed in FAISS
-- **Slow AI responses**: Performance optimization needed - consider model quantization or caching
+- **No search results**: Ensure documents uploaded, processed, and indexed
+- **Slow AI responses**: Performance optimization needed - consider faster models or caching
 - **Download links not working**: Verify document exists in database and `/api/v1/documents/{id}/download` endpoint
-- **Database errors**: Check SQLite database files in `data/` directory are accessible
-- **Legacy code confusion**: Old code is safely archived in `.archive/` - use production code in `core/`
+- **Database errors**: Check SQLite database files are accessible, or configure PostgreSQL/MySQL via admin
+- **Admin interface issues**: Access admin at `/admin` - check for proper authentication and permissions
+- **Document management problems**: Use admin interface to analyze, filter, and clean documents
 
 ---
 
-**Remember**: This is now a production-ready system with modular architecture. The core mission remains: reliable RAG system with zero-hallucination protection and professional AI answers.
+**Remember**: This is now a production-ready system with comprehensive admin capabilities. The core mission remains: reliable RAG system with zero-hallucination protection, professional AI answers, and domain-agnostic document management.
 
 **Last Updated**: January 2025 
 **Version**: 2.0-Production
-**Focus**: Production-ready modular architecture with single AI-only endpoint and organized codebase
+**Focus**: Production-ready system with comprehensive admin interface, document management, and domain-agnostic capabilities

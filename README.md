@@ -3,7 +3,7 @@
 A production-ready Retrieval-Augmented Generation (RAG) system with local LLM integration using Ollama. This system allows you to upload documents, ask questions, and get intelligent answers based on your document collection.
 
 ![RAG System Demo](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.3.0-blue)
+![Version](https://img.shields.io/badge/Version-2.0.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
@@ -11,9 +11,9 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 
 - [Features](#features)
 - [Quick Start](#quick-start)
-- [Municipal AI Features](#municipal-ai-features)
+- [Admin Interface](#admin-interface)
 - [Documentation](#documentation)
-- [Business Strategy](#business-strategy)
+- [Architecture](#architecture)
 - [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
@@ -23,10 +23,19 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 ### Core Functionality
 - **Document Upload and Processing**: Support for PDF, DOCX, TXT, and CSV files
 - **Intelligent Question Answering**: Uses Ollama LLM for context-aware responses
-- **Vector Search**: Fast similarity search using FAISS
+- **Vector Search**: Fast similarity search using sentence transformers
 - **Hybrid Search**: Combines vector similarity with keyword matching
 - **Real-time Processing**: Asynchronous document processing for better performance
 - **Smart Answer Engine**: Advanced context extraction and answer generation
+- **Zero-Hallucination Design**: Only provides answers based on uploaded documents
+
+### Admin Interface & Management
+- **Comprehensive Admin Dashboard**: Model switching, system monitoring, and configuration
+- **Document Management**: Content analysis, filtering, and cleanup tools
+- **Configurable Filtering**: Domain-agnostic keyword-based document filtering
+- **Database Configuration**: Support for SQLite, PostgreSQL, and MySQL
+- **Single Document Management**: View, edit, and delete individual documents
+- **System Health Monitoring**: Real-time status and performance metrics
 
 ### Technical Features
 - **RESTful API**: Built with FastAPI for high performance
@@ -35,17 +44,9 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 - **Rate Limiting**: Prevents abuse and ensures fair usage
 - **Input Validation**: Security-focused validation of all inputs
 - **Document Management**: Full CRUD operations for documents
-- **Persistent Storage**: SQLite database for document metadata
-- **Embeddable Widget**: Easy integration into any website
+- **Persistent Storage**: SQLite database with optional PostgreSQL/MySQL support
+- **Multi-Model Support**: Easy switching between different Ollama models
 - **Performance Optimizations**: Caching, optimized search, and streaming responses
-
-### Municipal AI Features 🏛️
-- **Municipal-Specific Training**: Specialized for Swiss government services
-- **150+ Use Cases**: Comprehensive coverage of citizen inquiries
-- **Multilingual Support**: German, French, and Italian
-- **Automated Web Scraping**: Extract municipal data automatically
-- **Importance Scoring**: Prioritize official documents and services
-- **Custom Model Training**: Train LLMs on municipal-specific data
 
 ## System Requirements
 
@@ -72,7 +73,7 @@ A production-ready Retrieval-Augmented Generation (RAG) system with local LLM in
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/open-source-rag-system.git
+git clone https://github.com/thenzler/open-source-rag-system.git
 cd open-source-rag-system
 
 # Install dependencies
@@ -81,6 +82,7 @@ pip install -r simple_requirements.txt
 # Install Ollama models (optional but recommended)
 ollama pull phi3-mini    # Fast, lightweight model
 ollama pull llama3.2:1b  # Ultra-fast model
+ollama pull mistral      # High-quality general model
 ```
 
 ### 2. Start the System
@@ -90,75 +92,82 @@ ollama pull llama3.2:1b  # Ultra-fast model
 python simple_api.py
 # Server runs on http://localhost:8001
 
-# Open frontend
-# Double-click simple_frontend.html
-# Or visit: http://localhost:8001 (if served by API)
+# Open web interface
+# Visit: http://localhost:8001
 ```
 
 ### 3. Upload Documents
 
-1. Open the frontend in your browser
+1. Open http://localhost:8001 in your browser
 2. Click "Choose Files" and select PDF/DOCX/TXT files
 3. Wait for processing to complete
 4. Start asking questions!
 
-### 4. Test the System
+### 4. Access Admin Interface
 
 ```bash
-# Test API directly
-python test_widget_endpoint.py
+# Visit the admin interface at:
+# http://localhost:8001/admin
 
-# Test widget integration
-python test_widget_server.py
-# Then visit: http://localhost:3000/widget/
+# Features available:
+# - Model switching and configuration
+# - Document management and analysis  
+# - System monitoring and health checks
+# - Database configuration
 ```
 
-## 🏛️ Municipal AI Features
+## Admin Interface
 
-This system includes specialized features for Swiss municipalities and government services:
+The system includes a comprehensive admin interface for managing your RAG system:
 
-### Quick Municipal Setup
+### Document Management
+- **Content Analysis**: Automatically categorize and analyze document quality
+- **Configurable Filtering**: Set up domain-specific keywords for document classification
+- **Cleanup Tools**: Remove problematic or off-topic documents
+- **Individual Management**: View, edit, and delete specific documents
+
+### Model Management
 ```bash
-# Set up municipal RAG for Arlesheim
-python municipal_setup.py arlesheim --scrape --max-pages 50
+# Access admin interface at: http://localhost:8001/admin
 
-# Test municipal queries
-python municipal_setup.py arlesheim --query "Was sind die Öffnungszeiten der Gemeindeverwaltung?"
-
-# Train custom municipal model
-python train_arlesheim_model.py
+# Available features:
+# - Switch between different Ollama models
+# - Monitor model availability and status
+# - Download configuration backups
+# - View system health and performance metrics
 ```
 
-### Supported Municipalities
-- **Arlesheim** (BL) - Complete implementation with trained model
-- **Basel, Bern, Zürich, Geneva, Lausanne** - Configuration ready
-- **Custom municipalities** - Easy to add with municipal_setup.py
+### Database Configuration
+- **Multiple Database Support**: SQLite (default), PostgreSQL, MySQL
+- **Connection Testing**: Verify database connectivity before saving
+- **Migration Tools**: Easy switching between database types
+- **Backup and Restore**: Configuration download and restore capabilities
 
-### Use Cases Covered
-Our system handles **150+ municipal use cases** including:
-- Citizen services and document requests
-- Building permits and property services  
-- Business licensing and commercial permits
-- Transportation and parking information
-- Parks, recreation, and environmental services
-- Emergency preparedness and safety
-
-See [strategy/MUNICIPAL_USE_CASES.md](strategy/MUNICIPAL_USE_CASES.md) for the complete list.
+### Use Cases
+This RAG system is perfect for:
+- **Knowledge Management**: Company documentation and policies
+- **Customer Support**: FAQ and help documentation
+- **Research**: Academic papers and research materials
+- **Legal**: Contract and document analysis
+- **Healthcare**: Medical documentation and guidelines
+- **Education**: Course materials and educational content
 
 ## 📚 Documentation
 
 ### Quick Navigation
-- **[Get Started](docs/QUICKSTART.md)** - Quick setup guide
+- **[Setup Guide](SIMPLE_RAG_README.md)** - Quick setup and usage guide
 - **[API Reference](docs/API_DOCUMENTATION.md)** - Complete API documentation
-- **[Municipal Guide](docs/MUNICIPAL_RAG_GUIDE.md)** - Municipal-specific features
+- **[Domain Configuration](docs/DOMAIN_CONFIGURATION_GUIDE.md)** - Configure for specific domains
 - **[Testing Guide](TESTING.md)** - Testing framework and guidelines
+- **[CLAUDE.md](CLAUDE.md)** - AI assistant project guidelines
 
 ### Documentation Structure
 ```
 📁 docs/           - Technical documentation
-📁 strategy/       - Business strategy and planning
-📁 tests/         - Test suite and examples
-📁 tools/         - Municipal tools and utilities
+📁 core/           - Main application code
+📁 tests/          - Test suite and examples
+📁 config/         - Configuration files
+📁 static/         - Web interface assets
 ```
 
 ### Key Documents
@@ -167,132 +176,74 @@ See [strategy/MUNICIPAL_USE_CASES.md](strategy/MUNICIPAL_USE_CASES.md) for the c
 - **[Security Guidelines](docs/SECURITY.md)** - Security best practices
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
-## 💼 Business Strategy
-
-### Market Opportunity
-**Target**: Swiss municipalities seeking AI-powered citizen services
-- **Market Size**: 300+ municipalities with digital transformation budgets
-- **Revenue Potential**: CHF 660,000 ARR by Year 3
-- **Business Model**: SaaS subscription (CHF 500-2,000/month)
-
-### Key Strategic Documents
-- **[Business Strategy](strategy/BUSINESS_STRATEGY.md)** - Complete business plan and market analysis
-- **[Technical Roadmap](strategy/TECHNICAL_ROADMAP.md)** - Development roadmap and architecture evolution
-- **[Municipal Use Cases](strategy/MUNICIPAL_USE_CASES.md)** - 150 comprehensive use cases
-
-### Go-to-Market Strategy
-1. **Perfect Arlesheim demo** (proven working system)
-2. **Add 3-5 municipalities** (demonstrate scalability)
-3. **Direct municipal outreach** (target IT departments)
-4. **Build partner network** (municipal software vendors)
-
-### Core Principles
+## Core Principles
 
 1. **Source Verifiability**: All responses must be traceable to source documents
-2. **Data Privacy**: Complete local processing - no external API calls
-3. **Accuracy**: Only return information that exists in the knowledge base
+2. **Data Privacy**: Complete local processing - no external API calls required
+3. **Zero Hallucination**: Only return information that exists in the knowledge base
 4. **Performance**: Sub-second response times for most queries
-5. **Scalability**: Support for millions of documents and concurrent users
+5. **Scalability**: Support for thousands of documents and concurrent users
+6. **Reliability**: Graceful degradation when services are unavailable
+7. **Security**: Input validation and rate limiting built-in
 
-## 🚀 Quick Start
+## API Usage
 
-### **Option 1: One-Click Setup (Recommended)**
-```bash
-# Clone the repository
-git clone https://github.com/thenzler/open-source-rag-system.git
-cd open-source-rag-system
-
-# One-click setup and launch
-python setup_rag_system.py
-
-# Or use the quick start
-python quick_start.py
-```
-
-### **Option 2: Windows Users**
-```cmd
-# Double-click one of these batch files:
-start_server.bat
-# or
-start_rag.bat
-```
-
-### **Option 3: Manual Setup**
-```bash
-# Install dependencies
-pip install -r simple_requirements.txt
-
-# Start Ollama (for LLM support)
-ollama serve
-ollama pull mistral
-
-# Start the system
-python simple_api.py
-```
-
-### **Test the System**
+### **Test the System via API**
 ```bash
 # Upload a document
 curl -X POST "http://localhost:8001/api/v1/documents" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@example.pdf"
 
-# Query with streaming response
-curl -X POST "http://localhost:8001/api/v1/query-stream" \
+# Query documents
+curl -X POST "http://localhost:8001/api/v1/query" \
   -H "Content-Type: application/json" \
-  -d '{"query": "What is the main topic?", "use_llm": true}'
+  -d '{"query": "What is the main topic?"}'
 
-# Regular query
-curl -X POST "http://localhost:8001/api/v1/query-enhanced" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What is the main topic?", "use_llm": true}'
+# Get system health
+curl "http://localhost:8001/health"
+
+# List all documents
+curl "http://localhost:8001/api/v1/documents"
 ```
 
-## 🎯 Performance Optimizations
+## 🎯 Performance Features
 
-Version 1.3.0 introduces major performance improvements:
+Version 2.0.0 includes major performance and usability improvements:
 
-- **⚡ Smart Caching**: 2-10x faster repeated queries
-- **🔍 Optimized Search**: 3-5x faster vector similarity search  
-- **📡 Streaming Responses**: Immediate user feedback
-- **🚀 Batch Processing**: Efficient memory usage
-- **🎯 Early Termination**: Stop at high-similarity matches
+- **⚡ Smart Caching**: Faster repeated queries
+- **🔍 Optimized Search**: Improved vector similarity search  
+- **📊 Admin Dashboard**: Complete system management interface
+- **🗂️ Document Management**: Content analysis and cleanup tools
+- **🔄 Model Switching**: Easy switching between Ollama models
+- **🗃️ Database Options**: SQLite, PostgreSQL, and MySQL support
 
 ## Architecture
 
-The system consists of several microservices:
+The system uses a modern, modular architecture:
 
+- **FastAPI Backend**: High-performance API with comprehensive admin interface
 - **Document Processor**: Extracts text and metadata from various file formats
-- **Vector Engine**: Handles embedding generation and similarity search
-- **API Gateway**: Provides RESTful endpoints and authentication
-- **Database Layer**: PostgreSQL for metadata, Qdrant for vectors
-- **Web Interface**: Optional React-based admin panel
-
-## Documentation
-
-- [📋 Architecture Details](./docs/ARCHITECTURE.md)
-- [🔧 Technology Stack](./docs/TECHNOLOGY_STACK.md)
-- [🚀 Deployment Guide](./docs/DEPLOYMENT.md)
-- [📡 API Documentation](./docs/API.md)
-- [🧪 Testing Strategy](./docs/TESTING.md)
-- [🔒 Security Guide](./docs/SECURITY.md)
+- **Vector Engine**: Handles embedding generation and similarity search using sentence transformers
+- **Admin Interface**: Complete management dashboard for models, documents, and system configuration
+- **Database Layer**: Flexible storage with SQLite default and PostgreSQL/MySQL support
+- **Web Interface**: Modern, responsive UI for document upload and querying
 
 ## Project Structure
 
 ```
 open-source-rag-system/
-├── services/
-│   ├── api-gateway/          # FastAPI main service
-│   ├── document-processor/   # Document parsing and processing
-│   ├── vector-engine/        # Embedding and search service
-│   └── web-interface/        # React admin panel
-├── infrastructure/
-│   ├── docker/              # Docker configurations
-│   ├── kubernetes/          # K8s deployment files
-│   └── monitoring/          # Observability setup
-├── docs/                    # Comprehensive documentation
-├── tests/                   # Test suites
-└── scripts/                 # Utility scripts
+├── core/                    # Main application code
+│   ├── routers/            # FastAPI route handlers
+│   ├── services/           # Business logic services
+│   ├── repositories/       # Data access layer
+│   └── templates/          # HTML templates for admin interface
+├── static/                 # Web interface assets
+├── config/                 # Configuration files
+├── storage/               # Document storage
+├── docs/                  # Technical documentation
+├── tests/                 # Test suites
+└── simple_api.py          # Main application entry point
 ```
 
 ## Contributing
