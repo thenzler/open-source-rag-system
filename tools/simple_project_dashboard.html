@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss RAG Project Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        .sprint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .sprint-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-top: 4px solid #667eea;
+        }
+        
+        .sprint-header {
+            background: #667eea;
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .team-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .team-section:last-child { border-bottom: none; }
+        
+        .team-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .team-icon { font-size: 1.2rem; }
+        
+        .task-list { list-style: none; }
+        
+        .task-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .task-item:hover {
+            background: #e9ecef;
+            transform: translateX(2px);
+        }
+        
+        .task-item.critical { border-left-color: #dc3545; }
+        .task-item.high { border-left-color: #fd7e14; }
+        .task-item.medium { border-left-color: #20c997; }
+        .task-item.low { border-left-color: #6c757d; }
+        
+        .task-id {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .task-title {
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .task-meta {
+            font-size: 0.8rem;
+            color: #6c757d;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .priority-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .priority-critical { background: #dc3545; color: white; }
+        .priority-high { background: #fd7e14; color: white; }
+        .priority-medium { background: #20c997; color: white; }
+        .priority-low { background: #6c757d; color: white; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🇨🇭 Swiss RAG System Launch</h1>
+        <p>6-Wochen Sprint Dashboard • 22. Juli - 1. September 2025</p>
+    </div>
+    
+    <div class="container">
+        <div class="sprint-grid" id="sprintGrid">
+            <!-- Sprint Cards werden hier generiert -->
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTasks">54</div>
+                <div class="stat-label">Gesamt Arbeitspakete</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedTasks">0</div>
+                <div class="stat-label">Abgeschlossen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="inProgressTasks">3</div>
+                <div class="stat-label">In Bearbeitung</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="teamMembers">3</div>
+                <div class="stat-label">Team Mitglieder</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 5%;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sprint Daten (vereinfacht)
+        const sprintData = {
+            "Sprint 1": {
+                "Tech Lead": [
+                    {id: "TL-S1-001", title: "Multi-Tenancy Grundlagen", duration: "2 Tage", priority: "critical"},
+                    {id: "TL-S1-002", title: "Schweizer Compliance-Infrastruktur", duration: "2 Tage", priority: "critical"},
+                    {id: "TL-S1-003", title: "Produktions-Deployment-Pipeline", duration: "1 Tag", priority: "high"}
+                ],
+                "Frontend Developer": [
+                    {id: "FE-S1-001", title: "Deutsche Lokalisierung", duration: "2 Tage", priority: "critical"},
+                    {id: "FE-S1-002", title: "Schweizer Design System", duration: "1.5 Tage", priority: "high"},
+                    {id: "FE-S1-003", title: "Datenschutz & Einverständnis-UI", duration: "1.5 Tage", priority: "critical"}
+                ],
+                "Product Manager": [
+                    {id: "PM-S1-001", title: "Schweizer Marktforschung", duration: "2 Tage", priority: "critical"},
+                    {id: "PM-S1-002", title: "Go-to-Market Strategie", duration: "2 Tage", priority: "high"},
+                    {id: "PM-S1-003", title: "Rechtsdokumente", duration: "1 Tag", priority: "critical"}
+                ]
+            },
+            "Sprint 2": {
+                "Tech Lead": [
+                    {id: "TL-S2-001", title: "Erweitertes Caching & Performance", duration: "2 Tage", priority: "high"},
+                    {id: "TL-S2-002", title: "API-Versionierung & Enterprise-Integration", duration: "2 Tage", priority: "high"},
+                    {id: "TL-S2-003", title: "Sicherheitshärtung & Audit-Vorbereitung", duration: "1 Tag", priority: "critical"}
+                ],
+                "Frontend Developer": [
+                    {id: "FE-S2-001", title: "Kunden-Dashboard-Entwicklung", duration: "2.5 Tage", priority: "high"},
+                    {id: "FE-S2-002", title: "Französische Lokalisierung & Barrierefreiheit", duration: "1.5 Tage", priority: "medium"}
+                ],
+                "Product Manager": [
+                    {id: "PM-S2-001", title: "Beta-Kundenprogramm-Launch", duration: "2 Tage", priority: "critical"},
+                    {id: "PM-S2-002", title: "Schweizer Partnerschaftsentwicklung", duration: "2 Tage", priority: "high"},
+                    {id: "PM-S2-003", title: "Preis- & Geschäftsmodell-Optimierung", duration: "1 Tag", priority: "medium"}
+                ]
+            },
+            "Sprint 3": {
+                "Tech Lead": [
+                    {id: "TL-S3-001", title: "Demo-Umgebung & Sales-Engineering-Tools", duration: "2 Tage", priority: "high"},
+                    {id: "TL-S3-002", title: "Integrationsplattform & Partner-APIs", duration: "2 Tage", priority: "high"},
+                    {id: "TL-S3-003", title: "Performance-Optimierung & Skalierungsvorbereitung", duration: "1 Tag", priority: "medium"}
+                ],
+                "Frontend Developer": [
+                    {id: "FE-S3-001", title: "Sales-Demo-Interface & Branchenanpassung", duration: "2 Tage", priority: "high"},
+                    {id: "FE-S3-002", title: "Mobile Responsiveness & Progressive Web App", duration: "2 Tage", priority: "medium"},
+                    {id: "FE-S3-003", title: "Analytics & Reporting Dashboard", duration: "1 Tag", priority: "medium"}
+                ],
+                "Product Manager": [
+                    {id: "PM-S3-001", title: "Sales-Enablement & Channel-Entwicklung", duration: "2 Tage", priority: "critical"},
+                    {id: "PM-S3-002", title: "Marktdurchdringung & Kundenakquisition", duration: "2 Tage", priority: "critical"},
+                    {id: "PM-S3-003", title: "Produkt-Roadmap & Feature-Priorisierung", duration: "1 Tag", priority: "medium"}
+                ]
+            }
+        };
+        
+        const teamIcons = {
+            "Tech Lead": "⚙️",
+            "Frontend Developer": "🎨", 
+            "Product Manager": "📊"
+        };
+        
+        function renderSprints() {
+            const grid = document.getElementById('sprintGrid');
+            
+            Object.entries(sprintData).forEach(([sprintName, teams]) => {
+                const sprintCard = document.createElement('div');
+                sprintCard.className = 'sprint-card';
+                
+                let teamsHtml = '';
+                Object.entries(teams).forEach(([teamName, tasks]) => {
+                    let tasksHtml = tasks.map(task => `
+                        <li class="task-item ${task.priority}" onclick="toggleTask(this)">
+                            <div class="task-id">${task.id}</div>
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-meta">
+                                <span>⏱️ ${task.duration}</span>
+                                <span class="priority-badge priority-${task.priority}">
+                                    ${task.priority === 'critical' ? 'Kritisch' : 
+                                      task.priority === 'high' ? 'Hoch' : 
+                                      task.priority === 'medium' ? 'Mittel' : 'Niedrig'}
+                                </span>
+                            </div>
+                        </li>
+                    `).join('');
+                    
+                    teamsHtml += `
+                        <div class="team-section">
+                            <div class="team-title">
+                                <span class="team-icon">${teamIcons[teamName]}</span>
+                                ${teamName}
+                            </div>
+                            <ul class="task-list">
+                                ${tasksHtml}
+                            </ul>
+                        </div>
+                    `;
+                });
+                
+                sprintCard.innerHTML = `
+                    <div class="sprint-header">${sprintName}</div>
+                    ${teamsHtml}
+                `;
+                
+                grid.appendChild(sprintCard);
+            });
+        }
+        
+        function toggleTask(element) {
+            element.style.opacity = element.style.opacity === '0.5' ? '1' : '0.5';
+            element.style.textDecoration = element.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+        }
+        
+        // Initialize
+        renderSprints();
+    </script>
+</body>
+</html>

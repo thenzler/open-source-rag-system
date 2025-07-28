@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:43:40.904212",
+  "query": "Was gehoert in den Bioabfall?",
+  "context_hash": "7a27d4692fad387e06e213ae87cc200c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the exact rules when reviewing and citing information from documents:\n\n1. Only cite information from the provided documents\n2. Never passively or inadvertently include any unavailable information\n3. Always provide a reference to the original source of the information\n4. If there is no available information, do not provide an answer based on the given quelels\n5. Only use the given quelels as a reference point and not as a substitute for the original source\n\nHere are some examples:\n\n[Quele 1]: Why\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 50 - /api/v1/documents/50/download\n[Quelle 3] Dokument 43 - /api/v1/documents/43/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.4281020760536194,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 50,
+        "similarity": 0.3882399797439575,
+        "download_url": "/api/v1/documents/50/download"
+      },
+      {
+        "id": 3,
+        "document_id": 43,
+        "similarity": 0.3848183751106262,
+        "download_url": "/api/v1/documents/43/download"
+      }
+    ],
+    "confidence": 0.4281020760536194
+  }
+}

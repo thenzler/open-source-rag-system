@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:23:14.892937",
+  "query": "What food can I put in the bio waste bin?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only reference information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always cite the source of any unavailable information\n4. Only use the original source if it is available\n\nRemember to always refer to the Queleles as [Quele 1], and only use them in the text. If you encounter a question that requires more information, refer back to the original source for answers.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 51 - /api/v1/documents/51/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.36582881212234497,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.31581199169158936,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 51,
+        "similarity": 0.303510844707489,
+        "download_url": "/api/v1/documents/51/download"
+      }
+    ],
+    "confidence": 0.36582881212234497
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "total_examples": 48,
+  "categories": {
+    "contact": 8,
+    "building": 6,
+    "civil_registry": 6,
+    "taxes": 6,
+    "waste": 6,
+    "schools": 6,
+    "events": 6,
+    "general": 4
+  },
+  "dialects": {
+    "hochdeutsch": 21,
+    "schweizerdeutsch": 27
+  }
+}

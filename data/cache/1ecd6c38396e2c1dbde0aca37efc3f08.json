@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:56:32.891029",
+  "query": "What food goes in bio waste container?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only use information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always cite the source of any unavailable information\n4. Only reference sources that were given in the question\n\nRemember to always refer to the original source when answering a question based only on the given material.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 51 - /api/v1/documents/51/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.42826512455940247,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.36846864223480225,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 51,
+        "similarity": 0.3349330425262451,
+        "download_url": "/api/v1/documents/51/download"
+      }
+    ],
+    "confidence": 0.42826512455940247
+  }
+}

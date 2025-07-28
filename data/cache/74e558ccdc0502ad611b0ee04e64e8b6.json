@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T15:27:56.193698",
+  "query": "test question",
+  "context_hash": "9f4f5e4112a3f61c7b52efd00e1a7651",
+  "response": {
+    "text": "Keine ausreichenden Informationen in den verfügbaren Dokumenten [Quelle 1]\n\n📚 Quellen:\n[Quelle 1] Dokument 60 - /api/v1/documents/60/download\n[Quelle 2] Dokument 60 - /api/v1/documents/60/download\n[Quelle 3] Dokument 60 - /api/v1/documents/60/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 60,
+        "similarity": 0.3559356927871704,
+        "download_url": "/api/v1/documents/60/download"
+      },
+      {
+        "id": 2,
+        "document_id": 60,
+        "similarity": 0.3314797282218933,
+        "download_url": "/api/v1/documents/60/download"
+      },
+      {
+        "id": 3,
+        "document_id": 60,
+        "similarity": 0.3294522762298584,
+        "download_url": "/api/v1/documents/60/download"
+      }
+    ],
+    "confidence": 0.3559356927871704
+  }
+}

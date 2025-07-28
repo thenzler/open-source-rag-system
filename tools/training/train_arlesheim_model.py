@@ -38,7 +38,7 @@ def train_arlesheim_model():
     
     # Step 3: Prepare training data
     print("\n3. Preparing training data...")
-    training_examples = trainer.prepare_training_data("municipal_data")
+    training_examples = trainer.prepare_training_data("data/municipal_data")
     print(f"   Generated {len(training_examples)} training examples")
     
     # Step 4: Create training datasets

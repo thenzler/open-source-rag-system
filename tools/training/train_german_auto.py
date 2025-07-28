@@ -13,6 +13,14 @@ import sys
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+# Try to import configuration
+try:
+    from config.config import config
+    CONFIG_AVAILABLE = True
+except ImportError:
+    config = None
+    CONFIG_AVAILABLE = False
+
 def check_setup():
     """Check if setup is ready for training"""
     print("=== ARLESHEIM GERMAN FINE-TUNING ===")
@@ -242,8 +250,15 @@ PARAMETER stop "Assistant:"
         
         # Create Ollama model
         import subprocess
+        
+        # Get Ollama executable path
+        if CONFIG_AVAILABLE and config:
+            ollama_exe = config.OLLAMA_EXECUTABLE
+        else:
+            ollama_exe = "C:/Users/THE/AppData/Local/Programs/Ollama/ollama.exe"
+            
         ollama_cmd = [
-            "C:/Users/THE/AppData/Local/Programs/Ollama/ollama.exe",
+            ollama_exe,
             "create",
             "arlesheim-german:latest",
             "-f",

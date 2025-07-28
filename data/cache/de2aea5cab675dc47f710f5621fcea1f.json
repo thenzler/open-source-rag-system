@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:02:17.896639",
+  "query": "What food goes in bio waste?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only refer to information from the provided documents\n2. Never passively receive or read information from unavailable sources\n3. Always cite the source of any missing information\n4. Only use the original source if it is available\n5. If there are questions about the context, refer to the original source for more information\n6. Use only the provided Queleles as a reference and not rely on them entirely\n7. Be consistent in your use of Queleles throughout the document\n8. Only\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 50 - /api/v1/documents/50/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.3957623839378357,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.3926645815372467,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 50,
+        "similarity": 0.36447852849960327,
+        "download_url": "/api/v1/documents/50/download"
+      }
+    ],
+    "confidence": 0.3957623839378357
+  }
+}

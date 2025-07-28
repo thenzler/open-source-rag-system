@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:08:05.339417",
+  "query": "What food bio debug test",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination protocol:\n\n1. Only use information from the provided documents\n2. Never passively read or interpret the text\n3. Do not cite any irrelevant information\n4. Always refer to the original source when there is a question about missing information\n5. If you encounter unanswerable questions, refer to the original source for further information\n6. Only use the provided context as a reference and do not rely on it entirely\n7. Keep the context in mind while answering the question\n8. Be consistent with your answers and\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 60 - /api/v1/documents/60/download\n[Quelle 3] Dokument 60 - /api/v1/documents/60/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.364848256111145,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 60,
+        "similarity": 0.3301258087158203,
+        "download_url": "/api/v1/documents/60/download"
+      },
+      {
+        "id": 3,
+        "document_id": 60,
+        "similarity": 0.301673948764801,
+        "download_url": "/api/v1/documents/60/download"
+      }
+    ],
+    "confidence": 0.364848256111145
+  }
+}

@@ -1,0 +1,71 @@
+### RAG System API Tests
+### Use with REST Client extension in VS Code
+
+### Health Check
+GET http://localhost:8000/health
+
+### Root Endpoint  
+GET http://localhost:8000/
+
+### API Documentation
+GET http://localhost:8000/docs
+
+### Simple UI
+GET http://localhost:8000/ui
+
+### System Status
+GET http://localhost:8000/api/v1/status
+
+### List Documents
+GET http://localhost:8000/api/v1/documents
+
+### Upload Document (replace with actual file)
+POST http://localhost:8000/api/v1/documents
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+This is a test document for the RAG system.
+It contains some sample text to test the upload functionality.
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Basic Query
+POST http://localhost:8000/api/v1/query
+Content-Type: application/json
+
+{
+    "query": "What is machine learning?",
+    "limit": 5
+}
+
+### Enhanced Query with LLM
+POST http://localhost:8000/api/v1/query/enhanced  
+Content-Type: application/json
+
+{
+    "query": "Explain artificial intelligence",
+    "limit": 3
+}
+
+### Smart Query
+POST http://localhost:8000/api/v1/query/smart
+Content-Type: application/json
+
+{
+    "query": "How does neural networks work?",
+    "limit": 5
+}
+
+### Search Documents
+GET http://localhost:8000/api/v1/search?q=machine learning&limit=5&threshold=0.7
+
+### Get Query Suggestions
+GET http://localhost:8000/api/v1/suggestions?partial=machine&limit=5
+
+### LLM Status
+GET http://localhost:8000/api/v1/llm/status
+
+### LLM Models
+GET http://localhost:8000/api/v1/llm/models

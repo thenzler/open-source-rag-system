@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:29:19.724145",
+  "query": "What can I put in the bio waste bin?",
+  "context_hash": "66ed3f3ab031847b5a8d54aab1b392b5",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination rules:\n\n1. Only reference information from the provided documents\n2. Never pass on any missing or incomplete information\n3. Always answer \"No\" to any questions that do not require information\n4. If there is uncertainty about a question, refer to the original source\n\nRemember to always cite the relevant sources and avoid referring to unreliable sources.\n\n📚 Quellen:\n[Quelle 1] Dokument 50 - /api/v1/documents/50/download\n[Quelle 2] Dokument 40 - /api/v1/documents/40/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 50,
+        "similarity": 0.3197475075721741,
+        "download_url": "/api/v1/documents/50/download"
+      },
+      {
+        "id": 2,
+        "document_id": 40,
+        "similarity": 0.31965047121047974,
+        "download_url": "/api/v1/documents/40/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.31805604696273804,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.3197475075721741
+  }
+}

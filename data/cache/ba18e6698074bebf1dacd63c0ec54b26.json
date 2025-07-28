@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:54:53.140098",
+  "query": "What vegetables go in bio waste?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only use information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always reference the original source when answering a question based solely on the given quelels\n4. Only answer questions that are based solely on the given quelels\n5. Use only the given quelels as the basis for your response\n\nRemember to always keep the context in mind and refer to the original source if necessary.\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 43 - /api/v1/documents/43/download\n[Quelle 3] Dokument 50 - /api/v1/documents/50/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.44255176186561584,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 43,
+        "similarity": 0.36319872736930847,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 3,
+        "document_id": 50,
+        "similarity": 0.3590715527534485,
+        "download_url": "/api/v1/documents/50/download"
+      }
+    ],
+    "confidence": 0.44255176186561584
+  }
+}

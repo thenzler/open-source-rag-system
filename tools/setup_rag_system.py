@@ -161,10 +161,10 @@ class RagSystemSetup:
         self.print_status("Creating project directories...")
         
         required_dirs = [
-            "storage",
-            "storage/uploads",
-            "storage/processed",
-            "logs",
+            "data/storage",
+            "data/storage/uploads",
+            "data/storage/processed",
+            "data/logs",
         ]
         
         for dir_name in required_dirs:

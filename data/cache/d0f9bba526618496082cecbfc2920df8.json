@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:57:35.365323",
+  "query": "What foods go in organic waste bin?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only use information from the provided documents\n2. Never pass on missing or incomplete information\n3. Always reference the original source when answering a question based solely on the given queleys\n4. Only answer questions based on the given queleys, and never rely on the original source for context\n5. If there is no available information, refer to the original source as \"no information\" or \"no sources available\"\n6. Always use the English version of the queleys as a reference\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 43 - /api/v1/documents/43/download\n[Quelle 3] Dokument 51 - /api/v1/documents/51/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.3956381380558014,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 43,
+        "similarity": 0.3693143427371979,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 3,
+        "document_id": 51,
+        "similarity": 0.34023216366767883,
+        "download_url": "/api/v1/documents/51/download"
+      }
+    ],
+    "confidence": 0.3956381380558014
+  }
+}

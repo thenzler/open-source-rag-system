@@ -430,5 +430,5 @@ Sachliche Antwort basierend auf offiziellen Informationen der Gemeinde {municipa
 def create_arlesheim_rag(embedding_model, ollama_client):
     """Create RAG system for Arlesheim municipality"""
     municipal_rag = MunicipalRAG("Arlesheim", embedding_model, ollama_client)
-    municipal_rag.load_municipal_data("municipal_data")
+    municipal_rag.load_municipal_data("data/municipal_data")
     return municipal_rag

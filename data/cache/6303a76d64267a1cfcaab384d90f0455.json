@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-07-28T17:48:11.857430",
+  "query": "What goes in the bio waste container?",
+  "context_hash": "e1385871058baaa1d1d480a9e807271c",
+  "response": {
+    "text": "Das entsorgte Bioabfall wird komplett:\n• Obst, Früchte, Salat, Gemüses, Schnittblumen, Laub, Sträucher, Rasenschnitt, Wuhrs, Fleisch, Fisch, Knochen, Brot, Teigwaren, Kafe und Tee (mit Filter/Beutele)\n• Eier mit Eierscheinen und -karton\n• Getriebe- und Hülsenfrüchte\n\nEntsoergen werden:\n• Biotafälle richtig entsorgt und Gelder sparen. Separeierte gesamte Bioabfallentlastet die Haushaltskasse und ist günstiger als die Entsoergen im Gebührensaß. Organisches Material ist ein kostbarer Rohstoff.\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.3683812618255615,
+        "download_url": "/api/v1/documents/43/download"
+      }
+    ],
+    "confidence": 0.3683812618255615,
+    "debug_context": "[Quelle 1]: Was gehört in den Bioabfall-Container?\nDas wird gesammelt!\n• Obst, Früchte, Salat, Gemüse\n• Schnittblumen, Laub, Sträucher, Rasen -\nschnitt\n• Wurst, Fleisch, Fisch, Knochen\n• Brot\n• Kaffee- und Teesatz (mit Filter/Beutel)\n• Eier samt Eierschalen und -karton\n• Teigwaren\n• Getreide- und Hülsenfrüchte\n• Mehl, Zucker, Kleinmengen Salz, Gewürze\n• Kochfett/alle Arten von Saucen\n• Stallmist von Kaninchen, Hamster\n• Erde aus Blumenkisten\n• Kartoffelprodukte (Pommes Frites, Chips,  \nKartoffel...",
+    "debug_prompt": "Based on these documents about bio waste disposal, answer the question:\n\nDOCUMENTS:\n\nWas gehört in den Bioabfall-Container?\nDas wird gesammelt:\n• Obst, Früchte, Salat, Gemüse\n• Schnittblumen, Laub, Sträucher, Rasenschnitt  \n• Wurst, Fleisch, Fisch, Knochen\n• Brot, Teigwaren\n• Kaffee- und Teesatz (mit Filter/Beutel)\n• Eier samt Eierschalen und -karton\n• Getreide- und Hülsenfrüchte\n\nEntsorgung organischer Abfälle:\nBioabfälle richtig entsorgen und Geld sparen. Separat gesammelter Bioabfall \nentlast..."
+  }
+}

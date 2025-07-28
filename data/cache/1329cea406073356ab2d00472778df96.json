@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T16:55:22.185425",
+  "query": "What goes in organic bin?",
+  "context_hash": "31d57c07e1b6c5d69979ccc738dd966b",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only use information from provided documents\n2. Never passively read or interpret information in a document\n3. Do not include any information that is no longer available or has been removed from the original source\n4. Always reference the original source when answering questions based on the given material\n5. Only use the given material as a reference and do not rely solely on it for answers\n6. If there are uncertainties, refer to the original source for more information\n7. Always cite the\n\n📚 Quellen:\n[Quelle 1] Dokument 53 - /api/v1/documents/53/download\n[Quelle 2] Dokument 43 - /api/v1/documents/43/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 53,
+        "similarity": 0.37968909740448,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 2,
+        "document_id": 43,
+        "similarity": 0.326055645942688,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.32497072219848633,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.37968909740448
+  }
+}

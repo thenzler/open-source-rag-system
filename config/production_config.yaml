@@ -1,0 +1,32 @@
+# Production Server Configuration
+# Optimized for server deployment with better models
+
+# Server model selection (uncomment based on your server specs)
+# default_model: command-r      # 128GB RAM - Best for RAG
+# default_model: mixtral        # 48GB RAM - High quality  
+default_model: qwen2.5          # 32GB RAM - Good balance (recommended)
+# default_model: mistral        # 16GB RAM - Fast & efficient
+
+# Production settings
+production:
+  # Performance settings
+  max_workers: 4                # Number of worker processes
+  max_context_length: 8000      # Much larger than local (was 500)
+  max_results: 10               # More sources (was 3)
+  
+  # Model parameters for quality
+  temperature: 0.3              # Higher for better responses (was 0.1)
+  max_tokens: 2048              # Full responses (was 256)
+  top_k: 40                     # More choices (was 20)
+  
+  # Timeouts
+  ollama_timeout: 60            # Faster on server (was 180)
+  request_timeout: 90           # Total request timeout
+  
+  # Caching
+  enable_cache: true
+  cache_ttl: 86400              # 24 hours
+  
+  # Database
+  database_type: postgresql     # For production (not sqlite)
+  vector_db: qdrant            # Better than FAISS for scale

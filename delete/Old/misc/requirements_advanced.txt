@@ -1,8 +1,0 @@
-# Advanced Search Requirements
-rank-bm25==0.2.2  # For hybrid search
-faiss-cpu==1.7.4  # For fast vector search
-nltk==3.8.1       # For better text processing
-spacy==3.7.2      # For advanced NLP
-
-# LLM Management Requirements  
-PyYAML==6.0.1     # For YAML config files

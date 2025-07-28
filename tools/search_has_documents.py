@@ -1,7 +1,26 @@
 #!/usr/bin/env python3
 """Search for has_documents function in simple_api.py"""
+import sys
+from pathlib import Path
 
-with open("C:/Users/THE/open-source-rag-system/simple_api.py", "r", encoding="utf-8") as f:
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent))
+
+# Try to import configuration
+try:
+    from config.config import config
+    CONFIG_AVAILABLE = True
+except ImportError:
+    config = None
+    CONFIG_AVAILABLE = False
+
+# Read the simple_api.py file
+if CONFIG_AVAILABLE and config:
+    api_file = config.BASE_DIR / "core" / "simple_api.py"
+else:
+    api_file = Path("core/simple_api.py")
+
+with open(api_file, "r", encoding="utf-8") as f:
     lines = f.readlines()
 
 for i, line in enumerate(lines):

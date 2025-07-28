@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:24:16.629882",
+  "query": "What food can I put in bio waste?",
+  "context_hash": "7e3e9c68b990ebc5b3f482f8015acf2c",
+  "response": {
+    "text": "Sure, here are some additional guidelines for following the Zero-Hallucination standard:\n\n1. Only reference information from the provided documents\n2. Do not include any information that is not available in the given documents\n3. Always cite the source of any missing information\n4. If there is no available information, provide a reference to the original source\n\nHere are some examples of how to follow these guidelines:\n\n1. Question 1: What food can I put in bio waste?\nAnswer:\n\nDokumente mit Queellagen:\n\n- [Que\n\n📚 Quellen:\n[Quelle 1] Dokument 43 - /api/v1/documents/43/download\n[Quelle 2] Dokument 53 - /api/v1/documents/53/download\n[Quelle 3] Dokument 51 - /api/v1/documents/51/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 43,
+        "similarity": 0.36524176597595215,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 2,
+        "document_id": 53,
+        "similarity": 0.34767889976501465,
+        "download_url": "/api/v1/documents/53/download"
+      },
+      {
+        "id": 3,
+        "document_id": 51,
+        "similarity": 0.30889904499053955,
+        "download_url": "/api/v1/documents/51/download"
+      }
+    ],
+    "confidence": 0.36524176597595215
+  }
+}

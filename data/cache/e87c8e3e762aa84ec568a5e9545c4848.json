@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-28T17:12:38.330663",
+  "query": "What bio waste items test",
+  "context_hash": "d99ae17fa293306ff0c46729e3da4605",
+  "response": {
+    "text": "Verwende diese Regeln EXAKT, wenn du die Informationen aus den bereitgestellten Dokumenten beobachtest. Die Quelle im Text dienen dazu, Informationen zu identifizieren und zu prüfen, ob sie nach den vorgesehenen Standards funktionieren. Sie sollten nicht mit anderen Informationen verwechselt werden, da dies die Qualitätskontrolle verlangt.\n\n1. Verwende diese Regeln EXAKT:\n   - Vermeide alle Informationen aus den bereitgestellten Dokumenten, die nur im Format [Quelle\n\n📚 Quellen:\n[Quelle 1] Dokument 60 - /api/v1/documents/60/download\n[Quelle 2] Dokument 43 - /api/v1/documents/43/download\n[Quelle 3] Dokument 53 - /api/v1/documents/53/download",
+    "sources": [
+      {
+        "id": 1,
+        "document_id": 60,
+        "similarity": 0.35928240418434143,
+        "download_url": "/api/v1/documents/60/download"
+      },
+      {
+        "id": 2,
+        "document_id": 43,
+        "similarity": 0.3527718186378479,
+        "download_url": "/api/v1/documents/43/download"
+      },
+      {
+        "id": 3,
+        "document_id": 53,
+        "similarity": 0.3358954191207886,
+        "download_url": "/api/v1/documents/53/download"
+      }
+    ],
+    "confidence": 0.35928240418434143
+  }
+}
