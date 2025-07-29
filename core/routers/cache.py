@@ -8,7 +8,26 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse
 
-from ..services.redis_cache_service import get_cache_service, RedisCacheService, CacheKeyType
+try:
+    from ..services.redis_cache_service import get_cache_service, RedisCacheService, CacheKeyType
+    REDIS_CACHE_AVAILABLE = True
+except ImportError:
+    # Fallback when Redis is not available
+    REDIS_CACHE_AVAILABLE = False
+    def get_cache_service():
+        return None
+    
+    class CacheKeyType:
+        QUERY_RESULT = "query"
+        DOCUMENT_EMBEDDING = "doc_emb"
+        SEARCH_RESULT = "search"
+        LLM_RESPONSE = "llm"
+        USER_SESSION = "session"
+        SYSTEM_CONFIG = "config"
+        TENANT_DATA = "tenant"
+    
+    class RedisCacheService:
+        pass
 from ..middleware.tenant_middleware import get_current_tenant
 from ..utils.security import get_current_user
 

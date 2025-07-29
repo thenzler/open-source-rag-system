@@ -9,12 +9,32 @@ from typing import Optional, List
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse
 
-from ..services.progress_tracking_service import (
-    get_progress_tracker, 
-    ProgressTracker, 
-    ProgressStatus,
-    ProgressOperation
-)
+try:
+    from ..services.progress_tracking_service import (
+        get_progress_tracker, 
+        ProgressTracker, 
+        ProgressStatus,
+        ProgressOperation
+    )
+    PROGRESS_TRACKING_AVAILABLE = True
+except ImportError:
+    # Fallback when progress tracking is not available
+    PROGRESS_TRACKING_AVAILABLE = False
+    def get_progress_tracker():
+        return None
+    
+    class ProgressStatus:
+        PENDING = "pending"
+        RUNNING = "running"
+        COMPLETED = "completed"
+        FAILED = "failed"
+        CANCELLED = "cancelled"
+    
+    class ProgressTracker:
+        pass
+    
+    class ProgressOperation:
+        pass
 from ..middleware.tenant_middleware import get_current_tenant
 from ..utils.security import get_current_user
 

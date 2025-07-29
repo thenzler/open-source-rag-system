@@ -19,7 +19,20 @@ import hashlib
 import time
 
 # Import routers
-from .routers import documents, query, system, llm, admin, document_manager, metrics, async_processing, compliance, progress, cache
+from .routers import documents, query, system, llm, admin, document_manager, metrics, async_processing, compliance
+
+# Optional routers (may not be available in all environments)
+try:
+    from .routers import progress
+    PROGRESS_ROUTER_AVAILABLE = True
+except ImportError:
+    PROGRESS_ROUTER_AVAILABLE = False
+
+try:
+    from .routers import cache
+    CACHE_ROUTER_AVAILABLE = True
+except ImportError:
+    CACHE_ROUTER_AVAILABLE = False
 
 # Import DI system
 from .di.services import ServiceConfiguration, initialize_services, shutdown_services
@@ -44,10 +57,26 @@ from .processors import register_document_processors
 from .services.compliance_service import initialize_compliance_service
 
 # Import progress tracking
-from .services.progress_tracking_service import initialize_progress_tracker
+try:
+    from .services.progress_tracking_service import initialize_progress_tracker
+    PROGRESS_TRACKING_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Progress tracking not available: {e}")
+    PROGRESS_TRACKING_AVAILABLE = False
+    async def initialize_progress_tracker(*args, **kwargs):
+        return None
 
 # Import cache service
-from .services.redis_cache_service import initialize_cache_service, shutdown_cache_service
+try:
+    from .services.redis_cache_service import initialize_cache_service, shutdown_cache_service
+    CACHE_SERVICE_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Cache service not available: {e}")
+    CACHE_SERVICE_AVAILABLE = False
+    async def initialize_cache_service(*args, **kwargs):
+        return None
+    async def shutdown_cache_service():
+        pass
 
 # Import configuration
 try:
@@ -126,20 +155,26 @@ async def lifespan(app: FastAPI):
         logger.info("Compliance service initialized successfully")
         
         # Initialize progress tracking service
-        logger.info("Initializing progress tracking service...")
-        await initialize_progress_tracker(persistence_file="data/progress_operations.json")
-        logger.info("Progress tracking service initialized successfully")
+        if PROGRESS_TRACKING_AVAILABLE:
+            logger.info("Initializing progress tracking service...")
+            await initialize_progress_tracker(persistence_file="data/progress_operations.json")
+            logger.info("Progress tracking service initialized successfully")
+        else:
+            logger.info("Progress tracking service not available")
         
         # Initialize cache service (Redis)
-        logger.info("Initializing cache service...")
-        redis_url = config.REDIS_URL if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_URL') else "redis://localhost:6379"
-        redis_db = config.REDIS_DB if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_DB') else 0
-        await initialize_cache_service(
-            redis_url=redis_url,
-            redis_db=redis_db,
-            enable_compression=True
-        )
-        logger.info("Cache service initialization completed")
+        if CACHE_SERVICE_AVAILABLE:
+            logger.info("Initializing cache service...")
+            redis_url = config.REDIS_URL if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_URL') else "redis://localhost:6379"
+            redis_db = config.REDIS_DB if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_DB') else 0
+            await initialize_cache_service(
+                redis_url=redis_url,
+                redis_db=redis_db,
+                enable_compression=True
+            )
+            logger.info("Cache service initialization completed")
+        else:
+            logger.info("Cache service not available")
         
     except Exception as e:
         logger.error(f"Startup failed: {e}")
@@ -151,7 +186,8 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down modular RAG API server...")
     try:
         # Shutdown services in reverse order
-        await shutdown_cache_service()
+        if CACHE_SERVICE_AVAILABLE:
+            await shutdown_cache_service()
         await shutdown_async_processor()
         await shutdown_services()
     except Exception as e:
@@ -304,8 +340,10 @@ app.include_router(document_manager.router)
 app.include_router(metrics.router)
 app.include_router(async_processing.router)
 app.include_router(compliance.router)
-app.include_router(progress.router)
-app.include_router(cache.router)
+if PROGRESS_ROUTER_AVAILABLE:
+    app.include_router(progress.router)
+if CACHE_ROUTER_AVAILABLE:
+    app.include_router(cache.router)
 
 # Include tenant router
 from .routers import tenants
