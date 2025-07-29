@@ -3,21 +3,18 @@ Production SQLite Repository Implementation
 Enhanced version of the existing persistent storage with repository pattern
 """
 
-import gzip
 import json
 import logging
-import pickle
 import sqlite3
 import threading
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 
 from .base import QueryResult, SearchOptions
-from .interfaces import (IChunkRepository, IDocumentRepository,
-                         IEmbeddingRepository)
-from .models import Document, DocumentChunk, DocumentStatus, Embedding
+from .interfaces import IDocumentRepository
+from .models import Document, DocumentStatus
 
 logger = logging.getLogger(__name__)
 
@@ -215,7 +212,7 @@ class SQLiteRepository:
             # Full-text search for chunks
             conn.execute(
                 """
-                CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts 
+                CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts
                 USING fts5(text_content, content='chunks', content_rowid='id')
             """
             )
@@ -371,7 +368,7 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             # Data query
             cursor = conn.execute(
                 """
-                SELECT * FROM documents 
+                SELECT * FROM documents
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?
             """,
@@ -473,7 +470,7 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             with self.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    UPDATE documents 
+                    UPDATE documents
                     SET status = ?, processing_timestamp = CURRENT_TIMESTAMP
                     WHERE id = ?
                 """,
@@ -498,7 +495,7 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
         with self.get_connection() as conn:
             cursor = conn.execute(
                 """
-                SELECT 
+                SELECT
                     COUNT(*) as total_documents,
                     SUM(file_size) as total_size,
                     AVG(chunk_count) as avg_chunks_per_doc,
@@ -538,7 +535,7 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             # Data query
             cursor = conn.execute(
                 """
-                SELECT * FROM documents 
+                SELECT * FROM documents
                 WHERE uploader = ?
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?

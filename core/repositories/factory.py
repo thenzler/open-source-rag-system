@@ -17,6 +17,7 @@ try:
 
     POSTGRESQL_AVAILABLE = True
 except ImportError:
+    PostgreSQLRepository = None
     POSTGRESQL_AVAILABLE = False
 try:
     from config.config import config

@@ -281,7 +281,7 @@ class SwissAuditRepository:
         for data_class, event_type, retention_days, anon_days in default_policies:
             conn.execute(
                 """
-                INSERT OR IGNORE INTO retention_policies 
+                INSERT OR IGNORE INTO retention_policies
                 (data_classification, event_type, retention_days, anonymization_after_days)
                 VALUES (?, ?, ?, ?)
             """,
@@ -366,7 +366,7 @@ class SwissAuditRepository:
             with self.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    SELECT * FROM audit_log 
+                    SELECT * FROM audit_log
                     WHERE user_id = ? AND timestamp >= ?
                     ORDER BY timestamp DESC
                 """,
@@ -387,7 +387,7 @@ class SwissAuditRepository:
             with self.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    SELECT * FROM audit_log 
+                    SELECT * FROM audit_log
                     WHERE document_id = ?
                     ORDER BY timestamp DESC
                 """,
@@ -410,7 +410,7 @@ class SwissAuditRepository:
                 cursor = conn.execute(
                     """
                     SELECT data_classification, event_type, anonymization_after_days
-                    FROM retention_policies 
+                    FROM retention_policies
                     WHERE anonymization_after_days IS NOT NULL
                 """
                 )
@@ -424,16 +424,16 @@ class SwissAuditRepository:
                     # Anonymize qualifying entries
                     cursor = conn.execute(
                         """
-                        UPDATE audit_log 
-                        SET 
+                        UPDATE audit_log
+                        SET
                             user_id = 'ANONYMIZED',
                             user_ip = 'ANONYMIZED',
                             data_subject_id = 'ANONYMIZED',
                             query_text = '[ANONYMIZED]',
                             user_agent = 'ANONYMIZED',
                             anonymization_applied = 1
-                        WHERE 
-                            data_classification = ? 
+                        WHERE
+                            data_classification = ?
                             AND event_type = ?
                             AND timestamp < ?
                             AND anonymization_applied = 0
@@ -473,9 +473,9 @@ class SwissAuditRepository:
                     # Delete expired entries
                     cursor = conn.execute(
                         """
-                        DELETE FROM audit_log 
-                        WHERE 
-                            data_classification = ? 
+                        DELETE FROM audit_log
+                        WHERE
+                            data_classification = ?
                             AND event_type = ?
                             AND timestamp < ?
                     """,
@@ -501,7 +501,7 @@ class SwissAuditRepository:
                 cursor = conn.execute(
                     """
                     SELECT event_type, data_classification, COUNT(*) as count
-                    FROM audit_log 
+                    FROM audit_log
                     WHERE timestamp >= ?
                     GROUP BY event_type, data_classification
                 """,
@@ -515,7 +515,7 @@ class SwissAuditRepository:
                     """
                     SELECT COUNT(DISTINCT data_subject_id) as unique_subjects,
                            COUNT(*) as total_personal_data_events
-                    FROM audit_log 
+                    FROM audit_log
                     WHERE data_classification IN ('personal_data', 'sensitive_personal_data')
                       AND timestamp >= ?
                       AND data_subject_id IS NOT NULL

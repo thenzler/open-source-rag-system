@@ -18,27 +18,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
-# Logger setup
-logger = logging.getLogger(__name__)
-
 # Import routers
 from .routers import (admin, async_processing, compliance, document_manager,
                       documents, llm, metrics, query, system, tenants)
-
-# Optional routers (may not be available in all environments)
-try:
-    from .routers import progress
-
-    PROGRESS_ROUTER_AVAILABLE = True
-except ImportError:
-    PROGRESS_ROUTER_AVAILABLE = False
-
-try:
-    from .routers import cache
-
-    CACHE_ROUTER_AVAILABLE = True
-except ImportError:
-    CACHE_ROUTER_AVAILABLE = False
 
 # Import DI system
 from .di.services import (ServiceConfiguration, initialize_services,
@@ -58,6 +40,24 @@ from .services.metrics_service import init_metrics_service
 from .utils.encryption import setup_encryption_from_config
 # Import security
 from .utils.security import initialize_id_obfuscator
+
+# Logger setup
+logger = logging.getLogger(__name__)
+
+# Optional routers (may not be available in all environments)
+try:
+    from .routers import progress
+
+    PROGRESS_ROUTER_AVAILABLE = True
+except ImportError:
+    PROGRESS_ROUTER_AVAILABLE = False
+
+try:
+    from .routers import cache
+
+    CACHE_ROUTER_AVAILABLE = True
+except ImportError:
+    CACHE_ROUTER_AVAILABLE = False
 
 # Import progress tracking
 try:
@@ -100,7 +100,6 @@ except ImportError:
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager

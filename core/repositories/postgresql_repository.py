@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 import asyncpg
 
 from .base import RepositoryResult
-from .interfaces import IDocumentRepository, IVectorSearchRepository
+from .interfaces import IDocumentRepository
 from .models import Document, User
 
 logger = logging.getLogger(__name__)
@@ -266,9 +266,9 @@ class PostgreSQLRepository(IDocumentRepository):
                 # Get documents
                 rows = await conn.fetch(
                     """
-                    SELECT * FROM documents 
+                    SELECT * FROM documents
                     WHERE tenant_id = $1
-                    ORDER BY upload_timestamp DESC 
+                    ORDER BY upload_timestamp DESC
                     LIMIT $2 OFFSET $3
                 """,
                     tenant_id,
@@ -282,8 +282,8 @@ class PostgreSQLRepository(IDocumentRepository):
                 # Get documents
                 rows = await conn.fetch(
                     """
-                    SELECT * FROM documents 
-                    ORDER BY upload_timestamp DESC 
+                    SELECT * FROM documents
+                    ORDER BY upload_timestamp DESC
                     LIMIT $1 OFFSET $2
                 """,
                     limit,
@@ -344,7 +344,7 @@ class PostgreSQLRepository(IDocumentRepository):
 
         async with self.pool.acquire() as conn:
             query = f"""
-                UPDATE documents 
+                UPDATE documents
                 SET {', '.join(set_clauses)}
                 WHERE id = ${param_count}
                 RETURNING *
@@ -371,7 +371,7 @@ class PostgreSQLRepository(IDocumentRepository):
         async with self.pool.acquire() as conn:
             row = await conn.fetchrow(
                 """
-                SELECT * FROM documents 
+                SELECT * FROM documents
                 WHERE metadata->>'file_hash' = $1
             """,
                 file_hash,
@@ -387,7 +387,7 @@ class PostgreSQLRepository(IDocumentRepository):
         async with self.pool.acquire() as conn:
             result = await conn.execute(
                 """
-                UPDATE documents 
+                UPDATE documents
                 SET status = $1,
                     processing_timestamp = CASE WHEN $1 = 'processing' THEN CURRENT_TIMESTAMP ELSE processing_timestamp END,
                     completion_timestamp = CASE WHEN $1 = 'completed' THEN CURRENT_TIMESTAMP ELSE completion_timestamp END
@@ -457,7 +457,7 @@ class PostgreSQLUserRepository:
             row = await conn.fetchrow(
                 """
                 INSERT INTO users (
-                    tenant_id, username, email, password_hash, role, 
+                    tenant_id, username, email, password_hash, role,
                     is_active, created_at, metadata
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING *
@@ -511,9 +511,9 @@ class PostgreSQLUserRepository:
             if tenant_id:
                 rows = await conn.fetch(
                     """
-                    SELECT * FROM users 
-                    WHERE tenant_id = $1 
-                    ORDER BY created_at DESC 
+                    SELECT * FROM users
+                    WHERE tenant_id = $1
+                    ORDER BY created_at DESC
                     LIMIT $2 OFFSET $3
                 """,
                     tenant_id,
@@ -523,8 +523,8 @@ class PostgreSQLUserRepository:
             else:
                 rows = await conn.fetch(
                     """
-                    SELECT * FROM users 
-                    ORDER BY created_at DESC 
+                    SELECT * FROM users
+                    ORDER BY created_at DESC
                     LIMIT $1 OFFSET $2
                 """,
                     limit,
