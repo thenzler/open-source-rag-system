@@ -240,10 +240,38 @@ open-source-rag-system/
 │   └── templates/          # HTML templates for admin interface
 ├── static/                 # Web interface assets
 ├── config/                 # Configuration files
-├── storage/               # Document storage
-├── docs/                  # Technical documentation
-├── tests/                 # Test suites
-└── simple_api.py          # Main application entry point
+├── scripts/                # Organized scripts
+│   ├── setup/             # Setup and installation scripts
+│   ├── maintenance/       # Maintenance and cleanup scripts
+│   ├── debug/             # Debug utilities
+│   ├── deployment/        # Deployment scripts
+│   └── utilities/         # General utilities
+├── tests/                  # Organized test suites
+│   ├── unit/              # Unit tests
+│   ├── integration/       # Integration tests
+│   ├── performance/       # Performance tests
+│   └── fixtures/          # Test data and fixtures
+├── docs/                   # Organized documentation
+│   ├── guides/            # User guides and tutorials
+│   ├── admin/             # Admin interface documentation
+│   ├── architecture/      # System architecture docs
+│   ├── development/       # Development documentation
+│   └── legacy/            # Legacy/historical documentation
+├── tools/                  # Development tools
+│   ├── training/          # Model training tools
+│   ├── utilities/         # General utilities
+│   └── legacy_municipal/  # Legacy municipal-specific tools
+├── deployment/             # Deployment configurations
+│   ├── requirements/      # Environment-specific requirements
+│   └── configs/           # Deployment configurations
+├── examples/               # Example code and demos
+│   ├── demos/             # Demo scripts
+│   └── website/           # Example website integration
+├── data/                   # Application data (gitignored)
+│   ├── storage/           # Document storage
+│   ├── cache/             # Response cache
+│   └── databases/         # SQLite databases
+└── simple_api.py           # Main application entry point
 ```
 
 ## Contributing

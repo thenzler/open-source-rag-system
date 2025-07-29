@@ -160,3 +160,43 @@ rag_database.db*
 test_download_endpoint.py
 cleanup_script.py
 CLEANUP_PLAN.md
+# Organized structure ignores
+data/storage/
+data/cache/
+data/logs/
+data/databases/
+*.db
+*.db-shm
+*.db-wal
+
+# Test artifacts
+tests/fixtures/temp/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Excel temp files
+~$*.xlsx
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
