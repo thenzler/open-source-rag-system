@@ -9,10 +9,8 @@ import time
 from pathlib import Path
 from typing import Any, Callable, Dict
 
-from ..di.services import get_document_service
 from ..middleware.metrics_middleware import get_doc_metrics, get_llm_metrics
 from ..services.async_processing_service import ProcessingTask
-from ..services.document_service import DocumentProcessingService
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +29,6 @@ class DocumentProcessors:
         try:
             await update_progress(10.0)
 
-            # Get document service
-            doc_service = get_document_service()
             file_path = Path(task.file_path)
 
             logger.info(f"Processing upload: {file_path}")

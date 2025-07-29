@@ -3,18 +3,16 @@ PostgreSQL Repository Implementation
 Handles database operations with PostgreSQL backend
 """
 
-import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import asyncpg
 
 from .base import RepositoryResult
 from .interfaces import IDocumentRepository, IVectorSearchRepository
-from .models import (Document, DocumentChunk, Embedding, QueryLog,
-                     SearchResult, Tenant, User)
+from .models import Document, User
 
 logger = logging.getLogger(__name__)
 

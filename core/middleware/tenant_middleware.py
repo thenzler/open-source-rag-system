@@ -204,7 +204,6 @@ _tenant_resolver: Optional[TenantResolver] = None
 
 def get_tenant_resolver() -> TenantResolver:
     """Get global tenant resolver"""
-    global _tenant_resolver
     if _tenant_resolver is None:
         raise RuntimeError("Tenant resolver not initialized")
     return _tenant_resolver

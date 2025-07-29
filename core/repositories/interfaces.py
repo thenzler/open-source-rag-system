@@ -5,8 +5,6 @@ Repository interfaces for all data entities
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-
 from .base import BaseRepository, QueryResult, SearchOptions
 from .models import Document, DocumentChunk, Embedding, QueryLog, User
 

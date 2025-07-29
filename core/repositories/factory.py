@@ -4,8 +4,7 @@ Creates and manages all repository instances
 """
 
 import logging
-from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 from .audit_repository import SwissAuditRepository
 from .interfaces import (IDocumentRepository, IRAGRepository,

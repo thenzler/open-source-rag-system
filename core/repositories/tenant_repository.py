@@ -15,11 +15,11 @@ from .models import Tenant
 logger = logging.getLogger(__name__)
 
 
-class TenantRepository(BaseRepository):
+class TenantRepository(BaseRepository[Tenant, int]):
     """Repository for tenant management"""
 
     def __init__(self, db_path: str):
-        super().__init__(db_path)
+        self.db_path = db_path
         self._ensure_tenant_tables()
 
     def _ensure_tenant_tables(self):
@@ -239,7 +239,7 @@ class TenantRepository(BaseRepository):
             logger.error(f"Failed to get tenant by domain {domain}: {e}")
             return None
 
-    async def list_all(self) -> List[Tenant]:
+    async def _list_all_tenants(self) -> List[Tenant]:
         """List all active tenants"""
         try:
             import json
@@ -389,3 +389,32 @@ class TenantRepository(BaseRepository):
         except Exception as e:
             logger.error(f"Failed to get tenant stats for {tenant_id}: {e}")
             return {}
+
+    # Abstract method implementations
+    async def create(self, entity: Tenant) -> Tenant:
+        """Create a new tenant (implements BaseRepository.create)"""
+        return await self.create_tenant(entity)
+
+    async def update(self, entity_id: int, updates: Dict[str, Any]) -> Optional[Tenant]:
+        """Update tenant (implements BaseRepository.update)"""
+        return await self.update_tenant(entity_id, updates)
+
+    async def delete(self, entity_id: int) -> bool:
+        """Delete tenant (implements BaseRepository.delete)"""
+        return await self.delete_tenant(entity_id)
+
+    async def list_all(self, options: Optional[Any] = None) -> Any:
+        """List all tenants (implements BaseRepository.list_all)"""
+        from .base import QueryResult
+        tenants = await self._list_all_tenants()
+        return QueryResult(items=tenants, total_count=len(tenants))
+
+    async def exists(self, entity_id: int) -> bool:
+        """Check if tenant exists"""
+        tenant = await self.get_by_id(entity_id)
+        return tenant is not None
+
+    async def count(self, filters: Optional[Dict[str, Any]] = None) -> int:
+        """Count tenants"""
+        tenants = await self._list_all_tenants()
+        return len(tenants)

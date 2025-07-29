@@ -4,7 +4,6 @@ Base repository interfaces and abstract classes
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 # Generic type for entity IDs

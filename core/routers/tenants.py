@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from ..middleware import TenantContext, require_tenant_access
 from ..repositories.models import Tenant
@@ -28,7 +28,8 @@ class TenantCreate(BaseModel):
     settings: Dict[str, Any] = {}
     limits: Dict[str, Any] = {}
 
-    @validator("slug")
+    @field_validator("slug")
+    @classmethod
     def validate_slug(cls, v):
         """Validate tenant slug"""
         if not re.match(r"^[a-z0-9-]+$", v):
@@ -41,7 +42,8 @@ class TenantCreate(BaseModel):
             raise ValueError("Slug is reserved")
         return v
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def validate_name(cls, v):
         """Validate tenant name"""
         if len(v.strip()) < 2:

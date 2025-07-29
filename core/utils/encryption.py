@@ -254,7 +254,6 @@ _encryption_manager: Optional[EncryptionManager] = None
 
 def get_encryption_manager() -> EncryptionManager:
     """Get global encryption manager"""
-    global _encryption_manager
     if _encryption_manager is None:
         raise RuntimeError("Encryption manager not initialized")
     return _encryption_manager

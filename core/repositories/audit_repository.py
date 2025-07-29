@@ -167,31 +167,31 @@ class SwissAuditRepository:
                     user_id TEXT,
                     user_ip TEXT,
                     session_id TEXT,
-                    
+
                     -- Data being processed
                     document_id INTEGER,
                     data_classification TEXT NOT NULL DEFAULT 'internal',
                     legal_basis TEXT NOT NULL DEFAULT 'legitimate_interests',
-                    
+
                     -- Event details
                     action_description TEXT NOT NULL,
                     resource_accessed TEXT,
                     query_text TEXT,  -- May be anonymized
-                    
+
                     -- Technical details
                     user_agent TEXT,
                     request_method TEXT,
                     response_status INTEGER,
                     processing_time_ms REAL,
-                    
+
                     -- Swiss compliance
                     data_subject_id TEXT,
                     retention_period_days INTEGER,
                     anonymization_applied BOOLEAN DEFAULT 0,
-                    
+
                     -- Metadata
                     metadata TEXT,  -- JSON
-                    
+
                     -- Immutability protection
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     checksum TEXT  -- For integrity verification

@@ -10,7 +10,7 @@ from ..repositories.audit_repository import SwissAuditRepository
 from ..repositories.factory import RepositoryFactory, get_rag_repository
 from ..repositories.interfaces import (IDocumentRepository,
                                        IVectorSearchRepository)
-from .container import DIContainer, Lifetime, get_container
+from .container import DIContainer, get_container
 
 try:
     from ..config.config import config
@@ -64,7 +64,7 @@ class ServiceConfiguration:
             from ..ollama_client import OllamaClient
 
             # Test if Ollama is accessible
-            client = OllamaClient()
+            OllamaClient()
 
             container.register_singleton(OllamaClient, lambda: OllamaClient())
             logger.info("✅ Configured Ollama client service successfully")
