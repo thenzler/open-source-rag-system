@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, validator
 
 from ..middleware import TenantContext, require_tenant_access
-from ..models import Tenant
+from ..repositories.models import Tenant
 from ..repositories.tenant_repository import TenantRepository
 
 router = APIRouter(prefix="/api/v1/tenants", tags=["tenants"])

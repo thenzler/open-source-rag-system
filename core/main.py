@@ -18,9 +18,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
+# Logger setup
+logger = logging.getLogger(__name__)
+
 # Import routers
 from .routers import (admin, async_processing, compliance, document_manager,
-                      documents, llm, metrics, query, system)
+                      documents, llm, metrics, query, system, tenants)
 
 # Optional routers (may not be available in all environments)
 try:
@@ -334,7 +337,7 @@ async def csrf_middleware(request: Request, call_next):
             try:
                 form = await request.form()
                 csrf_token = form.get("csrf_token")
-            except:
+            except Exception:
                 pass
 
     if not csrf_token or not validate_csrf_token(csrf_token):
@@ -382,9 +385,6 @@ if PROGRESS_ROUTER_AVAILABLE:
     app.include_router(progress.router)
 if CACHE_ROUTER_AVAILABLE:
     app.include_router(cache.router)
-
-# Include tenant router
-from .routers import tenants
 
 app.include_router(tenants.router)
 

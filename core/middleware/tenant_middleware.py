@@ -8,7 +8,7 @@ from typing import Optional
 
 from fastapi import HTTPException, Request
 
-from ..models import Tenant
+from ..repositories.models import Tenant
 from ..repositories.tenant_repository import TenantRepository
 
 logger = logging.getLogger(__name__)
