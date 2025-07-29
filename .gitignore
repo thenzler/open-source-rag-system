@@ -69,8 +69,8 @@ logs/
 # Claude AI
 .claude/
 
-# Model files
-models/
+# Model files (AI/ML model files, not API models)
+/models/
 *.bin
 *.pt
 *.pth
