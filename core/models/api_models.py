@@ -2,13 +2,16 @@
 API Models for RAG System
 Contains all Pydantic models used in the API
 """
-from typing import List, Optional, Dict, Any
+
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel
 
 
 # Document Models
 class DocumentResponse(BaseModel):
     """Response model for document information"""
+
     id: int
     filename: str
     size: int
@@ -18,6 +21,7 @@ class DocumentResponse(BaseModel):
 
 class DocumentUpdate(BaseModel):
     """Model for updating document metadata"""
+
     description: Optional[str] = None
     tags: Optional[List[str]] = None
     status: Optional[str] = None
@@ -25,6 +29,7 @@ class DocumentUpdate(BaseModel):
 
 class DocumentSearchResponse(BaseModel):
     """Response model for document search results"""
+
     query: str
     search_content: bool
     results: List[Dict[str, Any]]
@@ -32,6 +37,7 @@ class DocumentSearchResponse(BaseModel):
 
 class DocumentChunk(BaseModel):
     """Model for document chunk information"""
+
     document_id: int
     content: str
     similarity_score: float
@@ -43,6 +49,7 @@ class DocumentChunk(BaseModel):
 # Query Models
 class QueryRequest(BaseModel):
     """Request model for basic queries"""
+
     query: str
     top_k: Optional[int] = 5
     use_llm: Optional[bool] = None  # None = use default, True/False = override
@@ -50,6 +57,7 @@ class QueryRequest(BaseModel):
 
 class QueryResponse(BaseModel):
     """Response model for basic query results"""
+
     query: str
     results: List[dict]
     total_results: int
@@ -58,6 +66,7 @@ class QueryResponse(BaseModel):
 
 class LLMQueryResponse(BaseModel):
     """Response model for LLM-enhanced queries"""
+
     query: str
     answer: str
     method: str  # "llm_generated" or "vector_search"
@@ -68,6 +77,7 @@ class LLMQueryResponse(BaseModel):
 
 class SmartQueryRequest(BaseModel):
     """Request model for smart queries with advanced options"""
+
     query: str
     top_k: int = 5
     use_llm_fallback: bool = True
@@ -76,6 +86,7 @@ class SmartQueryRequest(BaseModel):
 
 class SmartQueryResponse(BaseModel):
     """Response model for smart query results with detailed metadata"""
+
     query: str
     answer: str
     answer_type: str
@@ -92,6 +103,7 @@ class SmartQueryResponse(BaseModel):
 # Chat Models
 class ChatRequest(BaseModel):
     """Request model for chat interactions"""
+
     query: str
     chat_history: Optional[List[dict]] = []
     max_tokens: Optional[int] = 2048
@@ -101,6 +113,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     """Response model for chat interactions"""
+
     response: str
     query: Optional[str] = None
     context: Optional[List[dict]] = []
@@ -111,12 +124,14 @@ class ChatResponse(BaseModel):
 # Authentication Models
 class LoginRequest(BaseModel):
     """Request model for user login"""
+
     username: str
     password: str
 
 
 class LoginResponse(BaseModel):
     """Response model for successful login"""
+
     access_token: str
     refresh_token: str
     token_type: str
@@ -126,6 +141,7 @@ class LoginResponse(BaseModel):
 
 class UserCreate(BaseModel):
     """Model for creating new users"""
+
     username: str
     email: str
     password: str
@@ -134,6 +150,7 @@ class UserCreate(BaseModel):
 
 class UserResponse(BaseModel):
     """Response model for user information"""
+
     user_id: str
     username: str
     email: str

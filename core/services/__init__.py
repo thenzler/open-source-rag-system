@@ -7,8 +7,4 @@ from .document_service import DocumentProcessingService
 from .query_service import QueryProcessingService
 from .validation_service import ValidationService
 
-__all__ = [
-    'DocumentProcessingService',
-    'QueryProcessingService', 
-    'ValidationService'
-]
+__all__ = ["DocumentProcessingService", "QueryProcessingService", "ValidationService"]
