@@ -9,6 +9,14 @@ on:
   schedule:
     - cron: '0 2 * * 1'  # Weekly security scans
 
+# Organization-friendly permissions
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  security-events: write
+  pull-requests: read
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -16,6 +24,10 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      checks: write
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
@@ -118,6 +130,8 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v4

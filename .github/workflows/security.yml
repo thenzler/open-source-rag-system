@@ -11,6 +11,13 @@ on:
       - 'core/**'
       - 'Dockerfile'
 
+# Organization-friendly permissions
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+  pull-requests: read
+
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
@@ -28,6 +35,7 @@ jobs:
       actions: read
       contents: read
       security-events: write
+      pull-requests: read
     
     strategy:
       fail-fast: false
@@ -54,6 +62,9 @@ jobs:
 
   secret-scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     steps:
     - uses: actions/checkout@v4
       with:
@@ -93,6 +104,9 @@ jobs:
 
   snyk-security:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     if: github.event_name != 'pull_request' && vars.SNYK_TOKEN != ''
     steps:
     - uses: actions/checkout@v4
@@ -121,6 +135,9 @@ jobs:
 
   security-summary:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     needs: [codeql, secret-scan, snyk-security]
     if: always()
     
