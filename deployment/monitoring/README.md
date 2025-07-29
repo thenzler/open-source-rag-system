@@ -11,8 +11,12 @@ This directory contains the complete monitoring stack for the RAG System using P
 - Available at: http://localhost:9090
 
 ### 2. Grafana (`grafana/`)
-- Visualizes metrics through dashboards
-- Pre-configured with RAG System Overview dashboard
+- Visualizes metrics through comprehensive dashboards
+- **4 Pre-configured dashboards:**
+  - **RAG System Overview** - High-level system health and performance
+  - **RAG System Detailed** - In-depth performance analysis and troubleshooting
+  - **RAG System Compliance** - GDPR/DSG compliance monitoring and reporting
+  - **RAG System Async Processing** - Document processing queue monitoring
 - Default credentials: admin/admin123
 - Available at: http://localhost:3000
 

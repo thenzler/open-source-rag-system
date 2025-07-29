@@ -19,7 +19,7 @@ import hashlib
 import time
 
 # Import routers
-from .routers import documents, query, system, llm, admin, document_manager, metrics
+from .routers import documents, query, system, llm, admin, document_manager, metrics, async_processing, compliance, progress, cache
 
 # Import DI system
 from .di.services import ServiceConfiguration, initialize_services, shutdown_services
@@ -35,6 +35,19 @@ from .utils.encryption import setup_encryption_from_config
 # Import metrics
 from .services.metrics_service import init_metrics_service
 from .middleware.metrics_middleware import MetricsMiddleware
+
+# Import async processing
+from .services.async_processing_service import initialize_async_processor, shutdown_async_processor
+from .processors import register_document_processors
+
+# Import compliance service
+from .services.compliance_service import initialize_compliance_service
+
+# Import progress tracking
+from .services.progress_tracking_service import initialize_progress_tracker
+
+# Import cache service
+from .services.redis_cache_service import initialize_cache_service, shutdown_cache_service
 
 # Import configuration
 try:
@@ -97,6 +110,37 @@ async def lifespan(app: FastAPI):
         init_metrics_service()
         logger.info("Metrics service initialized successfully")
         
+        # Initialize async processing service
+        logger.info("Initializing async document processing...")
+        await initialize_async_processor(max_workers=4)
+        await register_document_processors()
+        logger.info("Async document processing initialized successfully")
+        
+        # Initialize compliance service
+        logger.info("Initializing compliance service...")
+        initialize_compliance_service(
+            storage_path="data/compliance",
+            enable_audit_logging=True,
+            data_residency_region="CH"
+        )
+        logger.info("Compliance service initialized successfully")
+        
+        # Initialize progress tracking service
+        logger.info("Initializing progress tracking service...")
+        await initialize_progress_tracker(persistence_file="data/progress_operations.json")
+        logger.info("Progress tracking service initialized successfully")
+        
+        # Initialize cache service (Redis)
+        logger.info("Initializing cache service...")
+        redis_url = config.REDIS_URL if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_URL') else "redis://localhost:6379"
+        redis_db = config.REDIS_DB if CONFIG_AVAILABLE and config and hasattr(config, 'REDIS_DB') else 0
+        await initialize_cache_service(
+            redis_url=redis_url,
+            redis_db=redis_db,
+            enable_compression=True
+        )
+        logger.info("Cache service initialization completed")
+        
     except Exception as e:
         logger.error(f"Startup failed: {e}")
         raise
@@ -106,6 +150,9 @@ async def lifespan(app: FastAPI):
     # Shutdown
     logger.info("Shutting down modular RAG API server...")
     try:
+        # Shutdown services in reverse order
+        await shutdown_cache_service()
+        await shutdown_async_processor()
         await shutdown_services()
     except Exception as e:
         logger.error(f"Shutdown error: {e}")
@@ -255,6 +302,10 @@ app.include_router(llm.router)
 app.include_router(admin.router)
 app.include_router(document_manager.router)
 app.include_router(metrics.router)
+app.include_router(async_processing.router)
+app.include_router(compliance.router)
+app.include_router(progress.router)
+app.include_router(cache.router)
 
 # Include tenant router
 from .routers import tenants

@@ -2,9 +2,36 @@
 apiVersion: 1
 
 providers:
-  - name: 'RAG System Dashboards'
+  - name: 'RAG System Overview'
     orgId: 1
     folder: 'RAG System'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      
+  - name: 'RAG System Detailed'
+    orgId: 1
+    folder: 'RAG System'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      
+  - name: 'RAG System Compliance'
+    orgId: 1
+    folder: 'Compliance'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      
+  - name: 'RAG System Processing'
+    orgId: 1
+    folder: 'Processing'
     type: file
     disableDeletion: false
     editable: true

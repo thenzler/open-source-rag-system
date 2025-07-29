@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly security scans
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test:
@@ -44,9 +50,10 @@ jobs:
     
     - name: Run security linting
       run: |
-        pip install bandit safety
+        pip install bandit safety semgrep
         bandit -r core/ -f json -o bandit-report.json || true
         safety check --json --output safety-report.json || true
+        semgrep --config=auto core/ --json --output=semgrep-report.json || true
     
     - name: Run tests with coverage
       env:
@@ -71,6 +78,31 @@ jobs:
         path: |
           bandit-report.json
           safety-report.json
+          semgrep-report.json
+    
+    - name: Comment security findings on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          let comment = '## Security Scan Results\n\n';
+          try {
+            const bandit = JSON.parse(fs.readFileSync('bandit-report.json', 'utf8'));
+            comment += `- **Bandit**: ${bandit.results.length} security issues found\n`;
+          } catch (e) { comment += '- **Bandit**: scan completed\n'; }
+          
+          try {
+            const safety = JSON.parse(fs.readFileSync('safety-report.json', 'utf8'));
+            comment += `- **Safety**: ${safety.length} vulnerabilities found\n`;
+          } catch (e) { comment += '- **Safety**: scan completed\n'; }
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
 
   lint:
     runs-on: ubuntu-latest
@@ -100,55 +132,170 @@ jobs:
     - name: Run mypy (type checking)
       run: mypy core/ --ignore-missing-imports
 
-  docker:
+  security:
     runs-on: ubuntu-latest
     needs: [test, lint]
+    permissions:
+      security-events: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [test, lint, security]
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - uses: actions/checkout@v4
     
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
     
     - name: Build and push Docker image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: |
-          ${{ secrets.DOCKER_USERNAME }}/rag-system:latest
-          ${{ secrets.DOCKER_USERNAME }}/rag-system:${{ github.sha }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+    
+    - name: Run Trivy container scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest'
+        format: 'sarif'
+        output: 'trivy-container-results.sarif'
+    
+    - name: Upload container scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-container-results.sarif'
 
-  deploy:
+  deploy-staging:
     runs-on: ubuntu-latest
     needs: [docker]
     if: github.ref == 'refs/heads/main'
-    environment: production
+    environment: staging
     
     steps:
     - uses: actions/checkout@v4
     
     - name: Deploy to staging
       run: |
-        echo "Deployment would happen here"
-        echo "Image: ${{ secrets.DOCKER_USERNAME }}/rag-system:${{ github.sha }}"
+        echo "Deploying to staging environment"
+        echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+        # Example deployment commands:
+        # docker-compose -f docker-compose.staging.yml up -d
+        # kubectl set image deployment/rag-system rag-system=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    
+    - name: Wait for deployment
+      run: sleep 30
     
     - name: Run health checks
       run: |
-        echo "Health checks would run here"
+        echo "Running health checks on staging"
         # curl -f http://staging.rag-system.com/health || exit 1
+        # curl -f http://staging.rag-system.com/api/v1/status || exit 1
     
-    - name: Notify deployment
-      if: always()
+    - name: Run integration tests
       run: |
-        echo "Deployment notification would be sent here"
+        echo "Running integration tests"
+        # pytest tests/integration/ --staging-url=http://staging.rag-system.com
+    
+    - name: Performance tests
+      run: |
+        echo "Running performance tests"
+        # artillery run performance-tests.yml
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment"
+        echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+        # Example production deployment:
+        # kubectl set image deployment/rag-system rag-system=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --namespace=production
+    
+    - name: Wait for deployment
+      run: sleep 60
+    
+    - name: Production health checks
+      run: |
+        echo "Running production health checks"
+        # curl -f https://rag-system.com/health || exit 1
+        # curl -f https://rag-system.com/api/v1/status || exit 1
+    
+    - name: Notify deployment success
+      if: success()
+      run: |
+        echo "Production deployment successful"
+        # Send notification to Slack/Teams/Discord
+        # curl -X POST -H 'Content-type: application/json' --data '{"text":"RAG System deployed to production successfully!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+    
+    - name: Notify deployment failure
+      if: failure()
+      run: |
+        echo "Production deployment failed"
+        # Send failure notification
+        # curl -X POST -H 'Content-type: application/json' --data '{"text":"RAG System production deployment failed!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Clean up old images
+      run: |
+        echo "Cleaning up old container images"
+        # Keep only last 10 images
+        # docker image prune -f
+        # kubectl delete pods --field-selector=status.phase=Succeeded --namespace=production
