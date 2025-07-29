@@ -59,12 +59,31 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Run TruffleHog OSS
+    - name: Check if we can scan diff or need filesystem scan
+      id: scan-mode
+      run: |
+        if [ "${{ github.event_name }}" = "push" ] && [ "$(git rev-list --count HEAD^..HEAD)" -gt 0 ]; then
+          echo "mode=diff" >> $GITHUB_OUTPUT
+          echo "base=HEAD^" >> $GITHUB_OUTPUT
+          echo "head=HEAD" >> $GITHUB_OUTPUT
+        else
+          echo "mode=filesystem" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Run TruffleHog OSS (Diff Mode)
+      if: steps.scan-mode.outputs.mode == 'diff'
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
-        base: main
-        head: HEAD
+        base: ${{ steps.scan-mode.outputs.base }}
+        head: ${{ steps.scan-mode.outputs.head }}
+        extra_args: --debug --only-verified
+    
+    - name: Run TruffleHog OSS (Filesystem Mode)
+      if: steps.scan-mode.outputs.mode == 'filesystem'
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
         extra_args: --debug --only-verified
 
   container-security:
