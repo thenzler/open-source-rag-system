@@ -1,39 +1,39 @@
 # Simple RAG System Requirements
 # Core web framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
-jinja2==3.1.2
+fastapi>=0.104.0,<1.0.0
+uvicorn[standard]>=0.24.0,<1.0.0
+python-multipart>=0.0.6
+jinja2>=3.1.0,<4.0.0
 
 # Document processing
-PyPDF2==3.0.1
-python-docx==1.1.0
-pandas==2.1.4
+PyPDF2>=3.0.0,<4.0.0
+python-docx>=1.1.0,<2.0.0
+pandas>=2.1.0,<3.0.0
 
 # AI/ML for embeddings and similarity
-sentence-transformers==2.2.2
-numpy==1.24.3
-scikit-learn==1.3.2
+sentence-transformers>=2.2.0,<3.0.0
+numpy>=1.24.0,<2.0.0
+scikit-learn>=1.3.0,<2.0.0
 
 # HTTP requests for Ollama
-requests==2.31.0
+requests>=2.31.0,<3.0.0
 
 # File handling
-python-dotenv==1.0.0
+python-dotenv>=1.0.0,<2.0.0
 
 # Database support
 # PostgreSQL (optional - for production/enterprise deployments)
-asyncpg==0.29.0
+asyncpg>=0.29.0,<1.0.0
 # SQLAlchemy for advanced database operations (optional)
-sqlalchemy==2.0.23
+sqlalchemy>=2.0.0,<3.0.0
 
 # Security & Encryption
-cryptography==41.0.8
-bcrypt==4.1.2
+cryptography>=42.0.0
+bcrypt>=4.0.0
 
 # Connection pooling
-aioredis==2.0.1
+aioredis>=2.0.0,<3.0.0
 
 # Monitoring & Metrics
-prometheus-client==0.19.0
-psutil==5.9.6
+prometheus-client>=0.19.0,<1.0.0
+psutil>=5.9.0,<6.0.0

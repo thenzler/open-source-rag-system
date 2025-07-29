@@ -23,9 +23,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r deployment/requirements/simple_requirements.txt
     
+    - name: Install optional dependencies
+      continue-on-error: true
+      run: |
+        pip install redis
+        pip install psycopg2-binary
+    
     - name: Check Python syntax
       run: |
         python -m py_compile core/main.py
         python -m py_compile core/ollama_client.py
         python -m py_compile simple_api.py
         echo "Python syntax check passed"
+    
+    - name: Basic import test
+      run: |
+        python -c "import core.main; print('Core imports successful')"
+        python -c "import core.ollama_client; print('Ollama client imports successful')"
