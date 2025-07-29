@@ -12,8 +12,14 @@ import pytest
 
 try:
     from core.services.progress_tracking_service import (
-        ProgressContext, ProgressOperation, ProgressStatus, ProgressStep,
-        ProgressTracker, get_progress_tracker, initialize_progress_tracker)
+        ProgressContext,
+        ProgressOperation,
+        ProgressStatus,
+        ProgressStep,
+        ProgressTracker,
+        get_progress_tracker,
+        initialize_progress_tracker,
+    )
 
     PROGRESS_TRACKING_AVAILABLE = True
 except ImportError:

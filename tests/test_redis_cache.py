@@ -9,12 +9,15 @@ import numpy as np
 import pytest
 
 try:
-    from core.services.redis_cache_service import (CacheKeyType, CacheMetrics,
-                                                   RedisCacheService,
-                                                   cache_embedding,
-                                                   cache_query_result,
-                                                   get_cache_service,
-                                                   initialize_cache_service)
+    from core.services.redis_cache_service import (
+        CacheKeyType,
+        CacheMetrics,
+        RedisCacheService,
+        cache_embedding,
+        cache_query_result,
+        get_cache_service,
+        initialize_cache_service,
+    )
 
     REDIS_CACHE_AVAILABLE = True
 except ImportError:

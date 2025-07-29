@@ -7,14 +7,22 @@ import json
 import logging
 from typing import List, Optional
 
-from fastapi import (APIRouter, Depends, HTTPException, Query, WebSocket,
-                     WebSocketDisconnect)
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Query,
+    WebSocket,
+    WebSocketDisconnect,
+)
 
 try:
-    from ..services.progress_tracking_service import (ProgressOperation,
-                                                      ProgressStatus,
-                                                      ProgressTracker,
-                                                      get_progress_tracker)
+    from ..services.progress_tracking_service import (
+        ProgressOperation,
+        ProgressStatus,
+        ProgressTracker,
+        get_progress_tracker,
+    )
 
     PROGRESS_TRACKING_AVAILABLE = True
 except ImportError:

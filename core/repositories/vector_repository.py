@@ -321,7 +321,7 @@ class ProductionVectorRepository(IVectorSearchRepository):
         """Create a hash for query vector caching"""
         import hashlib
 
-        return hashlib.md5(query_vector_bytes).hexdigest()
+        return hashlib.md5(query_vector_bytes, usedforsecurity=False).hexdigest()
 
     async def build_index(self, embeddings: List[Embedding]) -> bool:
         """Build or rebuild the search index"""
@@ -597,16 +597,15 @@ class ProductionVectorRepository(IVectorSearchRepository):
             # Create placeholders for IN clause
             placeholders = ",".join("?" * len(embedding_ids))
 
-            cursor = conn.execute(
-                f"""
+            # Safe SQL construction: placeholders is just repeated '?' characters
+            query = f"""
                 SELECT e.id as embedding_id, c.id as chunk_id, c.document_id,
                        c.text, c.chunk_index
                 FROM embeddings e
                 JOIN chunks c ON e.chunk_id = c.id
                 WHERE e.id IN ({placeholders})
-            """,
-                embedding_ids,
-            )
+            """  # nosec B608
+            cursor = conn.execute(query, embedding_ids)
 
             chunk_data = {}
             for row in cursor.fetchall():

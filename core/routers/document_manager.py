@@ -38,9 +38,11 @@ router = APIRouter(prefix="/api/v1/document-manager", tags=["document-manager"])
 def get_repositories():
     """Get repository instances"""
     try:
-        from ..repositories.factory import (get_document_repository,
-                                            get_rag_repository,
-                                            get_vector_search_repository)
+        from ..repositories.factory import (
+            get_document_repository,
+            get_rag_repository,
+            get_vector_search_repository,
+        )
 
         return {
             "rag_repo": get_rag_repository(),

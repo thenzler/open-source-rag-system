@@ -15,8 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from ..middleware import TenantContext
 from ..models.api_models import DocumentResponse, DocumentUpdate
 from ..repositories.audit_repository import SwissAuditRepository
-from ..repositories.interfaces import (IDocumentRepository,
-                                       IVectorSearchRepository)
+from ..repositories.interfaces import IDocumentRepository, IVectorSearchRepository
 from ..utils.encryption import get_encryption_manager, is_encryption_enabled
 
 try:
@@ -495,9 +494,7 @@ class DocumentProcessingService:
 
             if not (is_in_upload or is_in_processed):
                 logger.error(f"Path traversal attempt detected: {file_path}")
-                raise ValueError(
-                    "Access denied: File path outside allowed directories"
-                )
+                raise ValueError("Access denied: File path outside allowed directories")
 
             if not file_path.exists():
                 raise ValueError(f"File not found: {file_path}")
@@ -688,10 +685,12 @@ class DocumentProcessingService:
 
         except ImportError:
             logger.error("sentence-transformers not installed")
-            # Return dummy embeddings
-            import random
+            # Return dummy embeddings (not for security purposes)
+            import secrets
 
-            return [[random.random() for _ in range(384)] for _ in chunks]
+            return [
+                [secrets.SystemRandom().random() for _ in range(384)] for _ in chunks
+            ]
 
     async def _store_embeddings(
         self, document_id: int, chunk_ids: List[int], embeddings: List[List[float]]

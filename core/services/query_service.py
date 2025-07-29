@@ -8,8 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..models.api_models import DocumentChunk, QueryRequest, SmartQueryResponse
 from ..repositories.audit_repository import SwissAuditRepository
-from ..repositories.interfaces import (IDocumentRepository,
-                                       IVectorSearchRepository)
+from ..repositories.interfaces import IDocumentRepository, IVectorSearchRepository
 
 try:
     from config.config import config
@@ -703,8 +702,7 @@ WICHTIGE ANWEISUNGEN:
     async def _audit_external_knowledge_blocked(self, query: str, external_reason: str):
         """Log external knowledge blocking event"""
         try:
-            from ..repositories.audit_repository import \
-                log_external_knowledge_blocked
+            from ..repositories.audit_repository import log_external_knowledge_blocked
 
             await log_external_knowledge_blocked(
                 audit_repo=self.audit_repo,
@@ -721,8 +719,7 @@ WICHTIGE ANWEISUNGEN:
     ):
         """Log low confidence refusal event"""
         try:
-            from ..repositories.audit_repository import \
-                log_low_confidence_refused
+            from ..repositories.audit_repository import log_low_confidence_refused
 
             await log_low_confidence_refused(
                 audit_repo=self.audit_repo,
@@ -741,8 +738,7 @@ WICHTIGE ANWEISUNGEN:
     ):
         """Log response validation failure event"""
         try:
-            from ..repositories.audit_repository import \
-                log_response_validation_failed
+            from ..repositories.audit_repository import log_response_validation_failed
 
             await log_response_validation_failed(
                 audit_repo=self.audit_repo,
@@ -765,8 +761,7 @@ WICHTIGE ANWEISUNGEN:
     ):
         """Log successful LLM response generation"""
         try:
-            from ..repositories.audit_repository import \
-                log_llm_response_generated
+            from ..repositories.audit_repository import log_llm_response_generated
 
             await log_llm_response_generated(
                 audit_repo=self.audit_repo,

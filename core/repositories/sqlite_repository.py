@@ -308,12 +308,9 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             set_clause = ", ".join(f"{k} = ?" for k in update_fields.keys())
             values = list(update_fields.values()) + [document_id]
 
-            conn.execute(
-                f"""
-                UPDATE documents SET {set_clause} WHERE id = ?
-            """,
-                values,
-            )
+            # Safe SQL construction: set_clause built from validated allowed_fields only
+            query = f"UPDATE documents SET {set_clause} WHERE id = ?"  # nosec B608
+            conn.execute(query, values)
 
             conn.commit()
             return await self.get_by_id(document_id)

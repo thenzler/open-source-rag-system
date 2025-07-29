@@ -9,9 +9,11 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 try:
-    from ..services.redis_cache_service import (CacheKeyType,
-                                                RedisCacheService,
-                                                get_cache_service)
+    from ..services.redis_cache_service import (
+        CacheKeyType,
+        RedisCacheService,
+        get_cache_service,
+    )
 
     REDIS_CACHE_AVAILABLE = True
 except ImportError:

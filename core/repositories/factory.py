@@ -7,8 +7,7 @@ import logging
 from typing import Dict, Optional
 
 from .audit_repository import SwissAuditRepository
-from .interfaces import (IDocumentRepository, IRAGRepository,
-                         IVectorSearchRepository)
+from .interfaces import IDocumentRepository, IRAGRepository, IVectorSearchRepository
 from .sqlite_repository import SQLiteDocumentRepository
 from .vector_repository import ProductionVectorRepository
 

@@ -343,12 +343,13 @@ class PostgreSQLRepository(IDocumentRepository):
         params.append(document_id)
 
         async with self.pool.acquire() as conn:
+            # Safe SQL construction: set_clauses built from validated fields only
             query = f"""
                 UPDATE documents
                 SET {', '.join(set_clauses)}
                 WHERE id = ${param_count}
                 RETURNING *
-            """
+            """  # nosec B608
 
             row = await conn.fetchrow(query, *params)
 

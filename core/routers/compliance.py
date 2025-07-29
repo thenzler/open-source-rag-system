@@ -10,9 +10,12 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field
 
-from ..services.compliance_service import (DataCategory, DataSubjectRight,
-                                           ProcessingPurpose,
-                                           get_compliance_service)
+from ..services.compliance_service import (
+    DataCategory,
+    DataSubjectRight,
+    ProcessingPurpose,
+    get_compliance_service,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -25,7 +25,7 @@ class ResponseCache:
         """Generate cache key from query and context"""
         # Create a deterministic hash from query + context
         combined = f"{query}|{context[:1000]}"  # Limit context for performance
-        return hashlib.md5(combined.encode()).hexdigest()
+        return hashlib.md5(combined.encode(), usedforsecurity=False).hexdigest()
 
     def _get_cache_file(self, cache_key: str) -> Path:
         """Get cache file path"""
@@ -65,7 +65,9 @@ class ResponseCache:
             cached_data = {
                 "timestamp": datetime.now().isoformat(),
                 "query": query,
-                "context_hash": hashlib.md5(context.encode()).hexdigest(),
+                "context_hash": hashlib.md5(
+                    context.encode(), usedforsecurity=False
+                ).hexdigest(),
                 "response": response,
             }
 

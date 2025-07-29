@@ -31,23 +31,32 @@ class TestAsyncProcessingService:
 
     def test_async_processing_import(self):
         """Test that async processing can be imported."""
-        from core.services.async_processing_service import \
-            AsyncDocumentProcessor
+        from core.services.async_processing_service import AsyncDocumentProcessor
 
         assert AsyncDocumentProcessor is not None
 
     @pytest.mark.asyncio
     async def test_async_processor_creation(self):
         """Test creating an async processor."""
-        from core.services.async_processing_service import \
-            AsyncDocumentProcessor
+        from core.services.async_processing_service import AsyncDocumentProcessor
 
-        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
-            processor = AsyncDocumentProcessor(queue_persistence_file=tmp.name)
+        import time
+
+        temp_file = None
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+                temp_file = tmp.name
+            processor = AsyncDocumentProcessor(queue_persistence_file=temp_file)
             assert processor is not None
-
-            # Cleanup
-            Path(tmp.name).unlink(missing_ok=True)
+        finally:
+            # Cleanup with retry for Windows file locking
+            if temp_file:
+                for _ in range(3):
+                    try:
+                        Path(temp_file).unlink(missing_ok=True)
+                        break
+                    except PermissionError:
+                        time.sleep(0.1)
 
 
 class TestComplianceService:
@@ -118,8 +127,7 @@ class TestMiddleware:
 
     def test_tenant_middleware_import(self):
         """Test tenant middleware can be imported."""
-        from core.middleware import (initialize_tenant_resolver,
-                                     tenant_middleware)
+        from core.middleware import initialize_tenant_resolver, tenant_middleware
 
         assert tenant_middleware is not None
         assert initialize_tenant_resolver is not None
@@ -144,12 +152,23 @@ class TestRepositories:
         """Test creating a tenant repository."""
         from core.repositories.tenant_repository import TenantRepository
 
-        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
-            repo = TenantRepository(tmp.name)
-            assert repo is not None
+        import time
 
-            # Cleanup
-            Path(tmp.name).unlink(missing_ok=True)
+        temp_file = None
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
+                temp_file = tmp.name
+            repo = TenantRepository(temp_file)
+            assert repo is not None
+        finally:
+            # Cleanup with retry for Windows file locking
+            if temp_file:
+                for _ in range(3):
+                    try:
+                        Path(temp_file).unlink(missing_ok=True)
+                        break
+                    except PermissionError:
+                        time.sleep(0.1)
 
 
 class TestProcessors:
@@ -173,8 +192,11 @@ class TestDependencyInjection:
 
     def test_di_services_import(self):
         """Test DI services can be imported."""
-        from core.di.services import (ServiceConfiguration,
-                                      initialize_services, shutdown_services)
+        from core.di.services import (
+            ServiceConfiguration,
+            initialize_services,
+            shutdown_services,
+        )
 
         assert ServiceConfiguration is not None
         assert initialize_services is not None

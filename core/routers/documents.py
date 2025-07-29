@@ -9,8 +9,11 @@ from typing import Optional
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
-from ..di.services import (get_document_repository,
-                           get_document_service, get_validation_service)
+from ..di.services import (
+    get_document_repository,
+    get_document_service,
+    get_validation_service,
+)
 from ..models.api_models import DocumentResponse, DocumentUpdate
 from ..repositories.interfaces import IDocumentRepository
 from ..services import DocumentProcessingService, ValidationService

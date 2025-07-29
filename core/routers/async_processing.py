@@ -10,9 +10,12 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from ..middleware.metrics_middleware import get_doc_metrics
-from ..services.async_processing_service import (ProcessingTask, TaskPriority,
-                                                 TaskStatus,
-                                                 get_async_processor)
+from ..services.async_processing_service import (
+    ProcessingTask,
+    TaskPriority,
+    TaskStatus,
+    get_async_processor,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -8,9 +8,12 @@ import logging
 from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import PlainTextResponse
 
-from ..middleware.metrics_middleware import (get_db_metrics, get_doc_metrics,
-                                             get_llm_metrics,
-                                             get_query_metrics)
+from ..middleware.metrics_middleware import (
+    get_db_metrics,
+    get_doc_metrics,
+    get_llm_metrics,
+    get_query_metrics,
+)
 from ..services.metrics_service import get_metrics_service
 
 logger = logging.getLogger(__name__)

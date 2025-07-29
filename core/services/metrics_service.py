@@ -14,9 +14,16 @@ logger = logging.getLogger(__name__)
 
 # Try to import Prometheus dependencies
 try:
-    from prometheus_client import (CONTENT_TYPE_LATEST, CollectorRegistry,
-                                   Counter, Gauge, Histogram, Info,
-                                   generate_latest, start_http_server)
+    from prometheus_client import (
+        CONTENT_TYPE_LATEST,
+        CollectorRegistry,
+        Counter,
+        Gauge,
+        Histogram,
+        Info,
+        generate_latest,
+        start_http_server,
+    )
 
     PROMETHEUS_AVAILABLE = True
 except ImportError:
@@ -425,7 +432,7 @@ class MetricsService:
         """Get Prometheus content type"""
         return CONTENT_TYPE_LATEST
 
-    def start_metrics_server(self, port: int = 8001, addr: str = "0.0.0.0"):
+    def start_metrics_server(self, port: int = 8001, addr: str = "127.0.0.1"):
         """Start standalone metrics server"""
         if not self.enabled:
             logger.warning("Cannot start metrics server - Prometheus not available")

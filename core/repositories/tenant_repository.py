@@ -297,14 +297,13 @@ class TenantRepository(BaseRepository[Tenant, int]):
             params.append(tenant_id)
 
             with sqlite3.connect(self.db_path) as conn:
-                conn.execute(
-                    f"""
+                # Safe SQL construction: set_clauses built from validated fields only
+                query = f"""
                     UPDATE tenants
                     SET {', '.join(set_clauses)}
                     WHERE id = ?
-                """,
-                    params,
-                )
+                """  # nosec B608
+                conn.execute(query, params)
 
                 if conn.total_changes == 0:
                     return None
@@ -405,6 +404,7 @@ class TenantRepository(BaseRepository[Tenant, int]):
     async def list_all(self, options: Optional[Any] = None) -> Any:
         """List all tenants (implements BaseRepository.list_all)"""
         from .base import QueryResult
+
         tenants = await self._list_all_tenants()
         return QueryResult(items=tenants, total_count=len(tenants))
 

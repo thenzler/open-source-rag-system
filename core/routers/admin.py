@@ -13,8 +13,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from ..ollama_client import OllamaClient
-from .document_manager import (analyze_all_documents,
-                               cleanup_problematic_documents)
+from .document_manager import analyze_all_documents, cleanup_problematic_documents
 
 logger = logging.getLogger(__name__)
 

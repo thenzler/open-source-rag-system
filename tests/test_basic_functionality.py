@@ -64,10 +64,12 @@ def test_basic_api_endpoints():
 def test_cors_middleware():
     """Test CORS middleware configuration"""
     from core.main import app
+    from fastapi.testclient import TestClient
 
-    # Check that CORS middleware is configured
-    middleware_types = [type(middleware).__name__ for middleware in app.user_middleware]
-    assert "CORSMiddleware" in middleware_types
+    # Test CORS headers are present in response
+    with TestClient(app) as client:
+        response = client.options("/", headers={"Origin": "http://localhost:3000"})
+        assert "access-control-allow-origin" in response.headers
 
 
 def test_security_headers_middleware():

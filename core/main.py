@@ -19,25 +19,41 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 # Import routers
-from .routers import (admin, async_processing, compliance, document_manager,
-                      documents, llm, metrics, query, system, tenants)
+from .routers import (
+    admin,
+    async_processing,
+    compliance,
+    document_manager,
+    documents,
+    llm,
+    metrics,
+    query,
+    system,
+    tenants,
+)
 
 # Import DI system
-from .di.services import (ServiceConfiguration, initialize_services,
-                          shutdown_services)
+from .di.services import ServiceConfiguration, initialize_services, shutdown_services
+
 # Import multi-tenancy
 from .middleware import initialize_tenant_resolver, tenant_middleware
 from .middleware.metrics_middleware import MetricsMiddleware
 from .processors import register_document_processors
 from .repositories.tenant_repository import TenantRepository
+
 # Import async processing
-from .services.async_processing_service import (initialize_async_processor,
-                                                shutdown_async_processor)
+from .services.async_processing_service import (
+    initialize_async_processor,
+    shutdown_async_processor,
+)
+
 # Import compliance service
 from .services.compliance_service import initialize_compliance_service
+
 # Import metrics
 from .services.metrics_service import init_metrics_service
 from .utils.encryption import setup_encryption_from_config
+
 # Import security
 from .utils.security import initialize_id_obfuscator
 
@@ -74,8 +90,10 @@ except ImportError as e:
 
 # Import cache service
 try:
-    from .services.redis_cache_service import (initialize_cache_service,
-                                               shutdown_cache_service)
+    from .services.redis_cache_service import (
+        initialize_cache_service,
+        shutdown_cache_service,
+    )
 
     CACHE_SERVICE_AVAILABLE = True
 except ImportError as e:
@@ -337,8 +355,9 @@ async def csrf_middleware(request: Request, call_next):
             try:
                 form = await request.form()
                 csrf_token = form.get("csrf_token")
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to parse form data for CSRF token: {e}")
+                csrf_token = None
 
     if not csrf_token or not validate_csrf_token(csrf_token):
         raise HTTPException(status_code=403, detail="CSRF token missing or invalid")
@@ -467,7 +486,7 @@ if __name__ == "__main__":
     import uvicorn
 
     # Get configuration
-    host = config.API_HOST if CONFIG_AVAILABLE and config else "0.0.0.0"
+    host = config.API_HOST if CONFIG_AVAILABLE and config else "127.0.0.1"
     port = config.API_PORT if CONFIG_AVAILABLE and config else 8002
 
     # Run the application

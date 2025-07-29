@@ -8,16 +8,18 @@ from typing import Optional
 
 from ..repositories.audit_repository import SwissAuditRepository
 from ..repositories.factory import RepositoryFactory, get_rag_repository
-from ..repositories.interfaces import (IDocumentRepository,
-                                       IVectorSearchRepository)
+from ..repositories.interfaces import IDocumentRepository, IVectorSearchRepository
 from .container import DIContainer, get_container
 
 try:
     from ..config.config import config
 except ImportError:
     config = None
-from ..services import (DocumentProcessingService, QueryProcessingService,
-                        ValidationService)
+from ..services import (
+    DocumentProcessingService,
+    QueryProcessingService,
+    ValidationService,
+)
 
 logger = logging.getLogger(__name__)
 

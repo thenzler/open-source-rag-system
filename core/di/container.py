@@ -9,8 +9,7 @@ import logging
 import threading
 from enum import Enum
 from functools import wraps
-from typing import (Any, Callable, Dict, Optional, Type, TypeVar, Union,
-                    get_type_hints)
+from typing import Any, Callable, Dict, Optional, Type, TypeVar, Union, get_type_hints
 
 logger = logging.getLogger(__name__)
 
