@@ -1,9 +1,9 @@
 # RTX 3070 Training Requirements
 # Install with: pip install -r rtx3070_requirements.txt
 
-# Core ML libraries
-torch>=2.5.0
-transformers>=4.45.0
+# Core ML libraries (updated for security)
+torch>=2.5.1
+transformers>=4.46.0
 datasets>=2.12.0
 accelerate>=0.20.0
 
@@ -15,7 +15,7 @@ bitsandbytes>=0.39.0
 pandas>=1.5.0
 numpy>=1.24.0
 
-# Existing requirements
+# Existing requirements (updated for security)
 sentence-transformers>=2.2.0
-requests>=2.32.0
+requests>=2.32.3
 beautifulsoup4>=4.11.0

@@ -63,7 +63,9 @@ jobs:
         REDIS_URL: redis://localhost:6379
         ENABLE_REDIS_CACHE: false
         ENABLE_PROGRESS_TRACKING: true
+        PYTHONPATH: .
       run: |
+        export PYTHONPATH="${PYTHONPATH}:$(pwd)"
         pytest tests/test_basic_functionality.py tests/test_api.py tests/test_services.py --cov=core --cov-report=xml --cov-report=html -v
     
     - name: Upload coverage to Codecov
