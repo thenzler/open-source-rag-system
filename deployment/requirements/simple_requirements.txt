@@ -2,7 +2,7 @@
 # Core web framework
 fastapi>=0.104.0,<1.0.0
 uvicorn[standard]>=0.24.0,<1.0.0
-python-multipart>=0.0.6
+python-multipart>=0.0.18
 jinja2>=3.1.0,<4.0.0
 itsdangerous>=2.0.0,<3.0.0
 starlette>=0.27.0,<1.0.0
@@ -31,7 +31,7 @@ asyncpg>=0.29.0,<1.0.0
 sqlalchemy>=2.0.0,<3.0.0
 
 # Security & Encryption
-cryptography>=42.0.0
+cryptography>=45.0.5
 bcrypt>=4.0.0
 
 # Connection pooling

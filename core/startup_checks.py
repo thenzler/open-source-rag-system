@@ -10,7 +10,7 @@ import shutil
 import socket
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict
 
 import requests
 
@@ -281,8 +281,6 @@ class StartupChecker:
 
         try:
             # Check available disk space
-            import shutil
-
             total, used, free = shutil.disk_usage("C:")
             free_gb = free // (1024**3)
 

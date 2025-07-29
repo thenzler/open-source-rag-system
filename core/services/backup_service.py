@@ -3,17 +3,14 @@ Backup and Recovery Service
 Handles automated backups of databases and documents
 """
 
-import asyncio
-import gzip
 import json
 import logging
 import os
 import shutil
 import sqlite3
-import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -404,13 +401,13 @@ class BackupService:
             # Read manifest
             manifest_file = backup_path / "backup_manifest.json"
             if manifest_file.exists():
-                with open(manifest_file, "r") as f:
-                    manifest = json.load(f)
+                with open(manifest_file, "r"):
+                    # manifest = json.load(f)  # Reserved for future validation
+                    pass
             else:
                 logger.warning(
                     "No backup manifest found, proceeding with best effort restore"
                 )
-                manifest = {}
 
             # Restore components
             for component in components:

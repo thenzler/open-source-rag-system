@@ -6,7 +6,7 @@ Clean, maintainable RAG system with AI answers only
 import logging
 import os
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List
 
 from .response_cache import ResponseCache
 
@@ -206,7 +206,7 @@ class SimpleRAGService:
 Was gehört in den Bioabfall-Container?
 Das wird gesammelt:
 • Obst, Früchte, Salat, Gemüse
-• Schnittblumen, Laub, Sträucher, Rasenschnitt  
+• Schnittblumen, Laub, Sträucher, Rasenschnitt
 • Wurst, Fleisch, Fisch, Knochen
 • Brot, Teigwaren
 • Kaffee- und Teesatz (mit Filter/Beutel)
@@ -214,7 +214,7 @@ Das wird gesammelt:
 • Getreide- und Hülsenfrüchte
 
 Entsorgung organischer Abfälle:
-Bioabfälle richtig entsorgen und Geld sparen. Separat gesammelter Bioabfall 
+Bioabfälle richtig entsorgen und Geld sparen. Separat gesammelter Bioabfall
 entlastet die Haushaltskasse und ist günstiger als die Entsorgung im Gebührensack.
 Organisches Material ist ein kostbarer Rohstoff.
 """

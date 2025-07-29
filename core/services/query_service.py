@@ -3,10 +3,7 @@ Query Processing Service
 Handles business logic for document querying and LLM interactions
 """
 
-import asyncio
 import logging
-import re
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..models.api_models import DocumentChunk, QueryRequest, SmartQueryResponse

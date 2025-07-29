@@ -7,7 +7,7 @@ import base64
 import hashlib
 import logging
 import secrets
-from typing import Optional, Union
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -225,13 +225,12 @@ def sanitize_slug(text: str) -> str:
     return text
 
 
-# Global obfuscator instance
+# Global obfuscator instance (used by convenience functions)
 _id_obfuscator: Optional[IDObfuscator] = None
 
 
 def get_id_obfuscator() -> IDObfuscator:
     """Get global ID obfuscator"""
-    global _id_obfuscator
     if _id_obfuscator is None:
         raise RuntimeError("ID obfuscator not initialized")
     return _id_obfuscator

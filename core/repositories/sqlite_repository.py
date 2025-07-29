@@ -487,7 +487,6 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             cursor = conn.execute("SELECT COUNT(*) FROM documents")
             return cursor.fetchone()[0]
 
-
     async def get_statistics(self) -> Dict[str, Any]:
         """Get document statistics"""
         with self.get_connection() as conn:

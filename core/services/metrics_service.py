@@ -5,7 +5,6 @@ Provides comprehensive metrics collection for RAG system monitoring
 
 import logging
 import time
-from pathlib import Path
 from threading import Lock
 from typing import Any, Dict, Optional
 

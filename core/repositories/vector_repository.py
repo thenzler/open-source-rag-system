@@ -507,7 +507,7 @@ class ProductionVectorRepository(IVectorSearchRepository):
 
             logger.debug(f"Vector search returned {len(vector_results)} results")
             for i, (eid, score) in enumerate(vector_results[:3]):
-                logger.debug(f"  Result {i+1}: Embedding {eid}, Score: {score:.6f}")
+                logger.debug(f"  Result {i + 1}: Embedding {eid}, Score: {score:.6f}")
 
             # Convert results to QueryResult format
             from ..repositories.models import DocumentChunk

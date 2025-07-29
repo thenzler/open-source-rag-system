@@ -3,7 +3,6 @@ Connection Pool Management
 Handles database connection pooling for better performance
 """
 
-import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager

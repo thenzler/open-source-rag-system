@@ -6,7 +6,6 @@ Handles background document processing with queue management
 import asyncio
 import json
 import logging
-import time
 import uuid
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta

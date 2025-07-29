@@ -496,7 +496,7 @@ class DocumentProcessingService:
             if not (is_in_upload or is_in_processed):
                 logger.error(f"Path traversal attempt detected: {file_path}")
                 raise ValueError(
-                    f"Access denied: File path outside allowed directories"
+                    "Access denied: File path outside allowed directories"
                 )
 
             if not file_path.exists():
@@ -652,7 +652,7 @@ class DocumentProcessingService:
             for i, chunk_text in enumerate(chunks):
                 cursor = conn.execute(
                     """
-                    INSERT INTO chunks (document_id, chunk_index, text, 
+                    INSERT INTO chunks (document_id, chunk_index, text,
                                       character_count, word_count)
                     VALUES (?, ?, ?, ?, ?)
                 """,
@@ -716,7 +716,7 @@ class DocumentProcessingService:
 
                 cursor = conn.execute(
                     """
-                    INSERT INTO embeddings (chunk_id, embedding_data, 
+                    INSERT INTO embeddings (chunk_id, embedding_data,
                                           embedding_model, dimensions)
                     VALUES (?, ?, ?, ?)
                 """,

@@ -129,7 +129,7 @@ async def cleanup_problematic_documents(
     try:
         repos = get_repositories()
         doc_repo = repos["doc_repo"]
-        vector_repo = repos["vector_repo"]
+        # vector_repo = repos["vector_repo"]  # Reserved for future vector index rebuild
 
         # Analyze all documents first
         analyses = await analyze_all_documents()
@@ -414,7 +414,7 @@ async def _rebuild_clean_vector_index(
 ):
     """Rebuild vector index with only clean documents"""
     try:
-        vector_repo = repos["vector_repo"]
+        # vector_repo = repos["vector_repo"]  # Reserved for actual vector index operations
 
         logger.info(
             f"Rebuilding vector index with {len(clean_documents)} clean documents"

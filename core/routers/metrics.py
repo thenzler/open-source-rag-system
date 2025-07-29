@@ -200,7 +200,7 @@ async def get_sample_metrics():
                 sample["metrics_preview"].append(line.strip())
 
         sample["total_metrics_lines"] = len(
-            [l for l in lines if l.strip() and not l.startswith("#")]
+            [line for line in lines if line.strip() and not line.startswith("#")]
         )
 
         return sample

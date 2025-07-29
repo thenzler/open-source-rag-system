@@ -8,10 +8,9 @@ import json
 import logging
 import pickle
 import time
-import uuid
 from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
 try:
     import redis
@@ -24,7 +23,6 @@ except ImportError:
     REDIS_AVAILABLE = False
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
