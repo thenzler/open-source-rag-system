@@ -14,6 +14,8 @@ import asyncio
 from ..repositories.interfaces import IDocumentRepository, IVectorSearchRepository
 from ..repositories.audit_repository import SwissAuditRepository
 from ..models.api_models import DocumentResponse, DocumentUpdate
+from ..utils.encryption import get_encryption_manager, is_encryption_enabled
+from ..middleware import TenantContext
 try:
     from ..config.config import config
 except ImportError:
@@ -84,9 +86,20 @@ class DocumentProcessingService:
             if len(content) == 0:
                 return False, "File cannot be empty"
             
-            # Security: Check for suspicious filenames
-            if any(char in filename for char in ['..', '/', '\\', '<', '>', ':', '"', '|', '?', '*']):
-                return False, "Filename contains invalid characters"
+            # Security: Check for path traversal and suspicious filenames
+            if any(sequence in filename for sequence in ['..', '..\\', '../', '..\\']):
+                return False, "Path traversal attempt detected in filename"
+            
+            if any(char in filename for char in ['\x00', '\r', '\n', '\t']):
+                return False, "Control characters detected in filename"
+            
+            # Additional checks for Windows/Unix reserved names
+            reserved_names = {'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 
+                            'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 
+                            'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'}
+            base_name = Path(filename).stem.upper()
+            if base_name in reserved_names:
+                return False, f"Reserved filename '{base_name}' not allowed"
             
             return True, "Valid file"
             
@@ -99,14 +112,29 @@ class DocumentProcessingService:
         return hashlib.sha256(content).hexdigest()
     
     def _sanitize_filename(self, filename: str) -> str:
-        """Sanitize filename for safe storage"""
-        # Remove path components
+        """Sanitize filename for safe storage - SECURE against path traversal"""
+        # Remove path components completely (security critical)
         filename = os.path.basename(filename)
+        
+        # Remove any remaining path separators and dangerous sequences  
+        filename = filename.replace('..', '').replace('/', '').replace('\\', '')
+        filename = filename.replace('\x00', '')  # Null byte removal
         
         # Replace problematic characters
         invalid_chars = '<>:"/\\|?*'
         for char in invalid_chars:
             filename = filename.replace(char, '_')
+        
+        # Remove control characters
+        filename = ''.join(char for char in filename if ord(char) >= 32)
+        
+        # Ensure filename doesn't start with dot (hidden files)
+        if filename.startswith('.'):
+            filename = '_' + filename[1:]
+        
+        # Ensure it's not empty after sanitization
+        if not filename or filename.strip() == '':
+            filename = f"document_{int(datetime.now().timestamp())}"
         
         # Limit length
         if len(filename) > 255:
@@ -160,14 +188,46 @@ class DocumentProcessingService:
             stored_filename = f"{timestamp}_{safe_filename}"
             file_path = upload_dir / stored_filename
             
-            # Write file
-            with open(file_path, 'wb') as f:
-                f.write(content)
+            # Handle encryption if enabled
+            tenant_id = TenantContext.get_current_tenant_id()
+            encryption_salt = None
+            
+            if is_encryption_enabled():
+                try:
+                    encryption_manager = get_encryption_manager()
+                    encrypted_content, encryption_salt = encryption_manager.encrypt_document_content(content, tenant_id)
+                    
+                    # Write encrypted file
+                    with open(file_path, 'wb') as f:
+                        f.write(encrypted_content)
+                    
+                    logger.info(f"Document encrypted for tenant {tenant_id}")
+                except Exception as e:
+                    logger.error(f"Encryption failed, storing unencrypted: {e}")
+                    # Fallback to unencrypted storage
+                    with open(file_path, 'wb') as f:
+                        f.write(content)
+            else:
+                # Write file unencrypted
+                with open(file_path, 'wb') as f:
+                    f.write(content)
             
             # Create document record
             from ..repositories.models import Document, DocumentStatus
             
+            # Prepare metadata
+            metadata = {
+                'file_hash': file_hash,
+                'encrypted': is_encryption_enabled()
+            }
+            
+            # Add encryption salt to metadata if encryption is used
+            if encryption_salt:
+                import base64
+                metadata['encryption_salt'] = base64.b64encode(encryption_salt).decode()
+            
             document = Document(
+                tenant_id=tenant_id,
                 filename=safe_filename,
                 original_filename=filename,
                 file_path=str(file_path),
@@ -176,7 +236,7 @@ class DocumentProcessingService:
                 uploader=uploader_id or 'anonymous',
                 upload_timestamp=datetime.now(),
                 status=DocumentStatus.UPLOADING,
-                metadata={'file_hash': file_hash}
+                metadata=metadata
             )
             
             # Store in repository
@@ -339,7 +399,7 @@ class DocumentProcessingService:
             raise
     
     async def get_download_path(self, document_id: int) -> Path:
-        """Get file path for document download"""
+        """Get file path for document download - SECURE path resolution"""
         try:
             document = await self.doc_repo.get_by_id(document_id)
             if not document:
@@ -348,9 +408,63 @@ class DocumentProcessingService:
             if not hasattr(document, 'file_path') or not document.file_path:
                 raise ValueError(f"No file path for document {document_id}")
             
-            file_path = Path(document.file_path)
+            # SECURITY: Resolve path and validate it's within allowed directories
+            file_path = Path(document.file_path).resolve()
+            
+            # Get allowed storage directories
+            upload_dir = Path(config.UPLOAD_DIR if config and hasattr(config, 'UPLOAD_DIR') else 'data/storage/uploads').resolve()
+            processed_dir = Path(config.PROCESSED_DIR if config and hasattr(config, 'PROCESSED_DIR') else 'data/storage/processed').resolve()
+            
+            # Check if file is within allowed directories (prevent path traversal)
+            is_in_upload = upload_dir in file_path.parents or file_path == upload_dir
+            is_in_processed = processed_dir in file_path.parents or file_path == processed_dir
+            
+            if not (is_in_upload or is_in_processed):
+                logger.error(f"Path traversal attempt detected: {file_path}")
+                raise ValueError(f"Access denied: File path outside allowed directories")
+            
             if not file_path.exists():
                 raise ValueError(f"File not found: {file_path}")
+            
+            # Additional security: ensure it's a file, not a directory or symlink
+            if not file_path.is_file():
+                raise ValueError(f"Path is not a regular file: {file_path}")
+            
+            # Handle decryption if document is encrypted
+            if document.metadata.get('encrypted', False) and is_encryption_enabled():
+                try:
+                    # Get encryption salt from metadata
+                    salt_b64 = document.metadata.get('encryption_salt')
+                    if not salt_b64:
+                        logger.warning(f"Document {document_id} marked as encrypted but no salt found")
+                        return file_path
+                    
+                    import base64
+                    salt = base64.b64decode(salt_b64.encode())
+                    tenant_id = document.tenant_id
+                    
+                    # Read encrypted file
+                    with open(file_path, 'rb') as f:
+                        encrypted_content = f.read()
+                    
+                    # Decrypt content
+                    encryption_manager = get_encryption_manager()
+                    decrypted_content = encryption_manager.decrypt_document_content(
+                        encrypted_content, salt, tenant_id
+                    )
+                    
+                    # Create temporary decrypted file for download
+                    temp_path = file_path.with_suffix('.tmp')
+                    with open(temp_path, 'wb') as f:
+                        f.write(decrypted_content)
+                    
+                    logger.info(f"Decrypted document {document_id} for download")
+                    return temp_path
+                    
+                except Exception as e:
+                    logger.error(f"Failed to decrypt document {document_id}: {e}")
+                    # Return encrypted file as fallback
+                    return file_path
             
             return file_path
             

@@ -20,3 +20,20 @@ requests==2.31.0
 
 # File handling
 python-dotenv==1.0.0
+
+# Database support
+# PostgreSQL (optional - for production/enterprise deployments)
+asyncpg==0.29.0
+# SQLAlchemy for advanced database operations (optional)
+sqlalchemy==2.0.23
+
+# Security & Encryption
+cryptography==41.0.8
+bcrypt==4.1.2
+
+# Connection pooling
+aioredis==2.0.1
+
+# Monitoring & Metrics
+prometheus-client==0.19.0
+psutil==5.9.6

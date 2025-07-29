@@ -16,9 +16,35 @@ class DocumentStatus(Enum):
     DELETED = "deleted"
 
 @dataclass
-class Document:
-    """Document entity"""
+class Tenant:
+    """Multi-tenant organization entity"""
     id: Optional[int] = None
+    name: str = ""
+    slug: str = ""  # URL-safe identifier
+    domain: Optional[str] = None  # Custom domain for tenant
+    is_active: bool = True
+    created_at: Optional[datetime] = None
+    settings: Dict[str, Any] = field(default_factory=dict)
+    limits: Dict[str, Any] = field(default_factory=dict)  # Storage, API limits etc.
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary"""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "slug": self.slug,
+            "domain": self.domain,
+            "is_active": self.is_active,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "settings": self.settings,
+            "limits": self.limits
+        }
+
+@dataclass
+class Document:
+    """Document entity with multi-tenancy support"""
+    id: Optional[int] = None
+    tenant_id: int = 1  # Default tenant for backward compatibility
     filename: str = ""
     original_filename: str = ""
     file_path: str = ""
@@ -42,6 +68,7 @@ class Document:
         """Convert to dictionary"""
         return {
             "id": self.id,
+            "tenant_id": self.tenant_id,
             "filename": self.filename,
             "original_filename": self.original_filename,
             "file_path": self.file_path,
@@ -133,8 +160,9 @@ class SearchResult:
 
 @dataclass
 class User:
-    """User entity"""
+    """User entity with multi-tenancy support"""
     id: Optional[int] = None
+    tenant_id: int = 1  # Default tenant for backward compatibility
     username: str = ""
     email: str = ""
     password_hash: str = ""
@@ -148,6 +176,7 @@ class User:
         """Convert to dictionary (excluding password)"""
         return {
             "id": self.id,
+            "tenant_id": self.tenant_id,
             "username": self.username,
             "email": self.email,
             "role": self.role,

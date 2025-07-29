@@ -16,6 +16,7 @@ from ..repositories.interfaces import IDocumentRepository
 from ..repositories.audit_repository import SwissAuditRepository
 from ..di.services import get_document_repository, get_audit_repository, get_document_service, get_validation_service
 from ..services import DocumentProcessingService, ValidationService
+from ..utils.security import encode_document_id, decode_document_id
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
 logger = logging.getLogger(__name__)
@@ -36,6 +37,10 @@ async def upload_document(
             content=content,
             content_type=file.content_type or "application/octet-stream"
         )
+        
+        # Replace real ID with obfuscated ID
+        if hasattr(response, 'id') and response.id:
+            response.obfuscated_id = encode_document_id(response.id)
         
         return response
         
@@ -64,19 +69,29 @@ async def list_documents(
 
 @router.get("/{document_id}")
 async def get_document_details(
-    document_id: int,
+    document_id: str,  # Changed to string for obfuscated IDs
     doc_service: DocumentProcessingService = Depends(get_document_service),
     validation_service: ValidationService = Depends(get_validation_service)
 ):
     """Get detailed information about a specific document"""
     try:
+        # Decode obfuscated document ID
+        real_doc_id = decode_document_id(document_id)
+        if real_doc_id is None:
+            raise HTTPException(status_code=400, detail="Invalid document ID format")
+        
         # Validate document ID
-        is_valid, message = validation_service.validate_document_id(document_id)
+        is_valid, message = validation_service.validate_document_id(real_doc_id)
         if not is_valid:
             raise HTTPException(status_code=400, detail=message)
         
         # Get document details using service
-        details = await doc_service.get_document_details(document_id)
+        details = await doc_service.get_document_details(real_doc_id)
+        
+        # Replace real ID with obfuscated ID in response
+        if isinstance(details, dict) and "document" in details:
+            details["document"]["id"] = document_id  # Return the obfuscated ID
+        
         return details
         
     except HTTPException:

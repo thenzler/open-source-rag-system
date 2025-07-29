@@ -10,7 +10,15 @@ from .interfaces import IRAGRepository, IDocumentRepository, IVectorSearchReposi
 from .sqlite_repository import SQLiteDocumentRepository
 from .vector_repository import ProductionVectorRepository
 from .audit_repository import SwissAuditRepository
-from config.config import config
+try:
+    from .postgresql_repository import PostgreSQLRepository
+    POSTGRESQL_AVAILABLE = True
+except ImportError:
+    POSTGRESQL_AVAILABLE = False
+try:
+    from config.config import config
+except ImportError:
+    config = None
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +180,9 @@ class RepositoryFactory:
         db_path: Optional[str] = None,
         audit_db_path: Optional[str] = None,
         vector_cache_size: int = 1000,
-        force_new: bool = False
+        force_new: bool = False,
+        use_postgresql: bool = False,
+        postgres_url: Optional[str] = None
     ) -> ProductionRAGRepository:
         """Create or get singleton production repository instance"""
         

@@ -7,16 +7,34 @@ import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.sessions import SessionMiddleware
+import secrets
+import hmac
+import hashlib
+import time
 
 # Import routers
-from .routers import documents, query, system, llm, admin, document_manager
+from .routers import documents, query, system, llm, admin, document_manager, metrics
 
 # Import DI system
 from .di.services import ServiceConfiguration, initialize_services, shutdown_services
+
+# Import multi-tenancy
+from .middleware import tenant_middleware, initialize_tenant_resolver
+from .repositories.tenant_repository import TenantRepository
+
+# Import security
+from .utils.security import initialize_id_obfuscator
+from .utils.encryption import setup_encryption_from_config
+
+# Import metrics
+from .services.metrics_service import init_metrics_service
+from .middleware.metrics_middleware import MetricsMiddleware
 
 # Import configuration
 try:
@@ -50,6 +68,35 @@ async def lifespan(app: FastAPI):
         
         logger.info("All services initialized successfully")
         
+        # Initialize security
+        logger.info("Initializing security systems...")
+        secret_key = config.SECRET_KEY if CONFIG_AVAILABLE and config and hasattr(config, 'SECRET_KEY') else 'default-secret-key'
+        initialize_id_obfuscator(secret_key)
+        
+        # Initialize encryption if enabled
+        if CONFIG_AVAILABLE and config:
+            encryption_setup = setup_encryption_from_config(config)
+            if encryption_setup:
+                logger.info("Encryption enabled and configured")
+            else:
+                logger.info("Encryption disabled or not configured")
+        else:
+            logger.info("No config available, encryption disabled")
+        
+        logger.info("Security systems initialized successfully")
+        
+        # Initialize multi-tenancy
+        logger.info("Initializing multi-tenancy...")
+        db_path = config.DATABASE_PATH if CONFIG_AVAILABLE and config and hasattr(config, 'DATABASE_PATH') else 'data/rag_database.db'
+        tenant_repo = TenantRepository(db_path)
+        initialize_tenant_resolver(tenant_repo)
+        logger.info("Multi-tenancy initialized successfully")
+        
+        # Initialize metrics service
+        logger.info("Initializing metrics service...")
+        init_metrics_service()
+        logger.info("Metrics service initialized successfully")
+        
     except Exception as e:
         logger.error(f"Startup failed: {e}")
         raise
@@ -71,13 +118,130 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# CSRF Token Management
+CSRF_SECRET_KEY = getattr(config, 'SECRET_KEY', 'default-secret-key') if CONFIG_AVAILABLE and config else 'default-secret-key'
+
+def generate_csrf_token() -> str:
+    """Generate a secure CSRF token"""
+    token = secrets.token_urlsafe(32)
+    timestamp = str(int(time.time()))
+    message = f"{token}:{timestamp}"
+    signature = hmac.new(
+        CSRF_SECRET_KEY.encode(),
+        message.encode(),
+        hashlib.sha256
+    ).hexdigest()
+    return f"{token}:{timestamp}:{signature}"
+
+def validate_csrf_token(token: str) -> bool:
+    """Validate CSRF token"""
+    try:
+        parts = token.split(':')
+        if len(parts) != 3:
+            return False
+        
+        token_part, timestamp, signature = parts
+        message = f"{token_part}:{timestamp}"
+        expected_signature = hmac.new(
+            CSRF_SECRET_KEY.encode(),
+            message.encode(),
+            hashlib.sha256
+        ).hexdigest()
+        
+        # Check signature
+        if not hmac.compare_digest(signature, expected_signature):
+            return False
+        
+        # Check if token is not too old (24 hours)
+        token_age = time.time() - int(timestamp)
+        if token_age > 86400:  # 24 hours
+            return False
+        
+        return True
+    except (ValueError, TypeError):
+        return False
+
+# Security Headers Middleware
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """Add security headers to all responses"""
+    response = await call_next(request)
+    
+    # Content Security Policy
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data: https:; "
+        "font-src 'self'; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none';"
+    )
+    
+    # Security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    
+    # HSTS (only add if HTTPS)
+    if request.url.scheme == "https":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    
+    # Remove server information
+    response.headers.pop("server", None)
+    
+    return response
+
+# CSRF Middleware
+@app.middleware("http")
+async def csrf_middleware(request: Request, call_next):
+    """CSRF protection middleware"""
+    # Skip CSRF for GET, HEAD, OPTIONS requests
+    if request.method in ["GET", "HEAD", "OPTIONS"]:
+        response = await call_next(request)
+        return response
+    
+    # Skip CSRF for health checks and system endpoints
+    if request.url.path in ["/health", "/api/v1/health", "/api/v1/status"]:
+        response = await call_next(request)
+        return response
+    
+    # For state-changing requests, check CSRF token
+    csrf_token = request.headers.get("X-CSRF-Token")
+    if not csrf_token:
+        # Also check in form data for HTML forms
+        if request.headers.get("content-type", "").startswith("application/x-www-form-urlencoded"):
+            try:
+                form = await request.form()
+                csrf_token = form.get("csrf_token")
+            except:
+                pass
+    
+    if not csrf_token or not validate_csrf_token(csrf_token):
+        raise HTTPException(status_code=403, detail="CSRF token missing or invalid")
+    
+    response = await call_next(request)
+    return response
+
+# Add security middleware
+app.add_middleware(SessionMiddleware, secret_key=CSRF_SECRET_KEY)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])  # Configure for production
+
+# Add tenant middleware
+app.middleware("http")(tenant_middleware)
+
+# Add metrics middleware
+app.add_middleware(MetricsMiddleware, collect_detailed_metrics=True)
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure properly for production
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
 )
 
 # Mount static files
@@ -90,6 +254,11 @@ app.include_router(system.router)
 app.include_router(llm.router)
 app.include_router(admin.router)
 app.include_router(document_manager.router)
+app.include_router(metrics.router)
+
+# Include tenant router
+from .routers import tenants
+app.include_router(tenants.router)
 
 # Root endpoint - redirect to UI
 @app.get("/", response_class=HTMLResponse)
@@ -111,6 +280,15 @@ async def api_info():
         "docs": "/docs",
         "health": "/health",
         "ui": "/ui"
+    }
+
+# CSRF token endpoint
+@app.get("/api/v1/csrf-token")
+async def get_csrf_token():
+    """Get CSRF token for form submissions"""
+    return {
+        "csrf_token": generate_csrf_token(),
+        "expires_in": 86400  # 24 hours
     }
 
 # Modern frontend
@@ -158,9 +336,9 @@ if __name__ == "__main__":
     
     # Run the application
     uvicorn.run(
-        "main:app",
+        app,
         host=host,
         port=port,
-        reload=True,
+        reload=False,  # Disable reload to avoid import issues
         log_level="info"
     )

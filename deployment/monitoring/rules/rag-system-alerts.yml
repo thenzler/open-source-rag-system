@@ -1,0 +1,81 @@
+# RAG System Alerting Rules
+groups:
+  - name: rag-system-alerts
+    rules:
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors per second for {{ $labels.endpoint }}"
+
+      # High response time alert
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.endpoint }}"
+
+      # System resource alerts
+      - alert: HighCPUUsage
+        expr: system_cpu_usage_percent > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}%"
+
+      - alert: HighMemoryUsage
+        expr: (system_memory_usage_bytes{type="used"} / system_memory_usage_bytes{type="total"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value }}%"
+
+      # Application specific alerts
+      - alert: LLMRequestTimeout
+        expr: increase(llm_requests_total{status="timeout"}[10m]) > 5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "LLM requests timing out"
+          description: "{{ $value }} LLM requests have timed out in the last 10 minutes"
+
+      - alert: DatabaseConnectionsHigh
+        expr: database_connections_active > 80
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database connection count"
+          description: "Database has {{ $value }} active connections"
+
+      # Query processing alerts
+      - alert: SlowQueryProcessing
+        expr: histogram_quantile(0.95, rate(query_duration_seconds_bucket[10m])) > 30
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow query processing"
+          description: "95th percentile query processing time is {{ $value }}s"
+
+      # Service availability
+      - alert: ServiceDown
+        expr: up{job="rag-system"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG System service is down"
+          description: "RAG System service has been down for more than 1 minute"
