@@ -1,0 +1,12 @@
+{
+  "tasks": {},
+  "stats": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "failed_tasks": 0,
+    "cancelled_tasks": 0,
+    "processing_time_total": 0.0,
+    "average_processing_time": 0.0
+  },
+  "timestamp": "2025-07-29T14:19:15.224727"
+}

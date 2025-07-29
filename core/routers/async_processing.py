@@ -6,7 +6,7 @@ Provides endpoints for managing document processing queue
 import logging
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from ..middleware.metrics_middleware import get_doc_metrics

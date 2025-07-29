@@ -4,9 +4,8 @@ Provides Prometheus metrics endpoint and monitoring information
 """
 
 import logging
-from typing import Any, Dict
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import PlainTextResponse
 
 from ..middleware.metrics_middleware import (get_db_metrics, get_doc_metrics,

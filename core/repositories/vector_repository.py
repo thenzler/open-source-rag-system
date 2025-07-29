@@ -9,13 +9,13 @@ import pickle
 import threading
 import time
 from functools import lru_cache
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
 from .interfaces import IVectorSearchRepository
 from .models import Embedding
+from .base import QueryResult
 
 try:
     from config.config import config
@@ -510,7 +510,6 @@ class ProductionVectorRepository(IVectorSearchRepository):
                 logger.debug(f"  Result {i+1}: Embedding {eid}, Score: {score:.6f}")
 
             # Convert results to QueryResult format
-            from ..repositories.base import QueryResult
             from ..repositories.models import DocumentChunk
 
             # Load actual chunk data from database
@@ -571,8 +570,6 @@ class ProductionVectorRepository(IVectorSearchRepository):
 
             logger.error(f"Stack trace: {traceback.format_exc()}")
             # Return empty result on error
-            from ..repositories.base import QueryResult
-
             return QueryResult(items=[], total_count=0, has_more=False)
 
     async def is_index_ready(self) -> bool:
@@ -602,7 +599,7 @@ class ProductionVectorRepository(IVectorSearchRepository):
 
             cursor = conn.execute(
                 f"""
-                SELECT e.id as embedding_id, c.id as chunk_id, c.document_id, 
+                SELECT e.id as embedding_id, c.id as chunk_id, c.document_id,
                        c.text, c.chunk_index
                 FROM embeddings e
                 JOIN chunks c ON e.chunk_id = c.id
@@ -636,8 +633,6 @@ class ProductionVectorRepository(IVectorSearchRepository):
 
             logger.info("Loading existing embeddings into vector index...")
 
-            import gzip
-            import pickle
             import sqlite3
 
             # Get database path

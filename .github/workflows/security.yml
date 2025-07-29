@@ -149,25 +149,11 @@ jobs:
         sarif_file: snyk.sarif
 
   osv-scanner:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Run OSV-Scanner
-      uses: google/osv-scanner-action@v1.9.0
-      with:
-        scan-args: |-
-          -r
-          --skip-git
-          .
-        format: sarif
-        output: osv-results.sarif
-    
-    - name: Upload OSV scan results
-      uses: github/codeql-action/upload-sarif@v3
-      if: always()
-      with:
-        sarif_file: osv-results.sarif
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.0.3"
+    permissions:
+      actions: read
+      security-events: write
+      contents: read
 
   security-summary:
     runs-on: ubuntu-latest

@@ -3,12 +3,11 @@ Admin Router for Model Management and System Configuration
 """
 
 import logging
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import yaml
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -545,7 +544,7 @@ async def get_document_details(document_id: int):
             try:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     content_preview = f.read(1000)  # First 1000 chars
-            except:
+            except (IOError, OSError, UnicodeDecodeError):
                 content_preview = "Unable to read file content"
 
         return {

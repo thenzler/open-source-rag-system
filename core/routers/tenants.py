@@ -5,13 +5,12 @@ Handles tenant CRUD operations for multi-tenancy
 
 import logging
 import re
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, field_validator
 
-from ..middleware import TenantContext, require_tenant_access
+from ..middleware import TenantContext
 from ..repositories.models import Tenant
 from ..repositories.tenant_repository import TenantRepository
 

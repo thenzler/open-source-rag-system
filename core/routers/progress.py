@@ -9,7 +9,6 @@ from typing import List, Optional
 
 from fastapi import (APIRouter, Depends, HTTPException, Query, WebSocket,
                      WebSocketDisconnect)
-from fastapi.responses import JSONResponse
 
 try:
     from ..services.progress_tracking_service import (ProgressOperation,

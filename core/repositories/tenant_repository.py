@@ -6,7 +6,6 @@ Handles tenant management and data isolation
 import logging
 import sqlite3
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .base import BaseRepository
@@ -77,7 +76,7 @@ class TenantRepository(BaseRepository[Tenant, int]):
                 # Check if table exists
                 cursor = conn.execute(
                     """
-                    SELECT name FROM sqlite_master 
+                    SELECT name FROM sqlite_master
                     WHERE type='table' AND name=?
                 """,
                     (table_name,),
@@ -300,7 +299,7 @@ class TenantRepository(BaseRepository[Tenant, int]):
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
                     f"""
-                    UPDATE tenants 
+                    UPDATE tenants
                     SET {', '.join(set_clauses)}
                     WHERE id = ?
                 """,
@@ -371,7 +370,7 @@ class TenantRepository(BaseRepository[Tenant, int]):
                 # Query count (last 30 days)
                 cursor = conn.execute(
                     """
-                    SELECT COUNT(*) FROM query_logs 
+                    SELECT COUNT(*) FROM query_logs
                     WHERE tenant_id = ? AND timestamp > datetime('now', '-30 days')
                 """,
                     (tenant_id,),

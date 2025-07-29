@@ -4,7 +4,6 @@ Single AI-only endpoint for RAG queries
 """
 
 import logging
-from datetime import datetime
 from typing import Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException

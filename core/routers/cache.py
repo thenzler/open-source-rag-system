@@ -7,7 +7,6 @@ import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import JSONResponse
 
 try:
     from ..services.redis_cache_service import (CacheKeyType,
@@ -36,7 +35,6 @@ except ImportError:
 
 
 from ..middleware.tenant_middleware import get_current_tenant
-from ..utils.security import get_current_user
 
 logger = logging.getLogger(__name__)
 

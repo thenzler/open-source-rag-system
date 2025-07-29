@@ -4,19 +4,14 @@ Handles all document-related API endpoints
 """
 
 import logging
-import os
-import time
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
-from ..di.services import (get_audit_repository, get_document_repository,
+from ..di.services import (get_document_repository,
                            get_document_service, get_validation_service)
 from ..models.api_models import DocumentResponse, DocumentUpdate
-from ..repositories.audit_repository import SwissAuditRepository
 from ..repositories.interfaces import IDocumentRepository
 from ..services import DocumentProcessingService, ValidationService
 from ..utils.security import decode_document_id, encode_document_id

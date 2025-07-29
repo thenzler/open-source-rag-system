@@ -4,7 +4,6 @@ Handles system status, health checks, and admin endpoints
 """
 
 import logging
-from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 

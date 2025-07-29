@@ -487,8 +487,6 @@ class SQLiteDocumentRepository(SQLiteRepository, IDocumentRepository):
             cursor = conn.execute("SELECT COUNT(*) FROM documents")
             return cursor.fetchone()[0]
 
-    async def update_status(self, document_id: int, status: str) -> bool:
-        return await self.update(document_id, {"status": status}) is not None
 
     async def get_statistics(self) -> Dict[str, Any]:
         """Get document statistics"""
