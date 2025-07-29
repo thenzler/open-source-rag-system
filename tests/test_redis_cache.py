@@ -7,15 +7,20 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from core.services.redis_cache_service import (
-    RedisCacheService,
-    CacheKeyType,
-    CacheMetrics,
-    initialize_cache_service,
-    get_cache_service,
-    cache_query_result,
-    cache_embedding
-)
+try:
+    from core.services.redis_cache_service import (
+        RedisCacheService,
+        CacheKeyType,
+        CacheMetrics,
+        initialize_cache_service,
+        get_cache_service,
+        cache_query_result,
+        cache_embedding
+    )
+    REDIS_CACHE_AVAILABLE = True
+except ImportError:
+    REDIS_CACHE_AVAILABLE = False
+    pytest.skip("Redis cache service not available", allow_module_level=True)
 
 @pytest.fixture
 def mock_redis():

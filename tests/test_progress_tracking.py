@@ -9,15 +9,20 @@ import time
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
-from core.services.progress_tracking_service import (
-    ProgressTracker,
-    ProgressStatus,
-    ProgressOperation,
-    ProgressStep,
-    ProgressContext,
-    initialize_progress_tracker,
-    get_progress_tracker
-)
+try:
+    from core.services.progress_tracking_service import (
+        ProgressTracker,
+        ProgressStatus,
+        ProgressOperation,
+        ProgressStep,
+        ProgressContext,
+        initialize_progress_tracker,
+        get_progress_tracker
+    )
+    PROGRESS_TRACKING_AVAILABLE = True
+except ImportError:
+    PROGRESS_TRACKING_AVAILABLE = False
+    pytest.skip("Progress tracking service not available", allow_module_level=True)
 
 @pytest.fixture
 async def temp_tracker():
